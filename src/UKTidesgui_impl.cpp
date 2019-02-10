@@ -73,7 +73,10 @@ std::stringstream get_response(std::string_view url)
 	return str;
 }
 
-Dlg::Dlg( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DlgDef( parent, id, title, pos, size, style )
+
+Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
+	: DlgDef(parent),
+	m_UKTides_pi(_UKTides_pi)
 {	
     this->Fit();
     dbg=false; //for debug output set to true
@@ -81,6 +84,10 @@ Dlg::Dlg( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint&
 	wxIcon icon;
 	icon.CopyFromBitmap(*_img_uktides);
 	SetIcon(icon);
+}
+
+Dlg::~Dlg()
+{
 }
 
 void Dlg::OnInformation(wxCommandEvent& event)

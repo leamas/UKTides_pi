@@ -64,7 +64,8 @@ class Position;
 class Dlg : public DlgDef
 {
 public:
-        Dlg( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("UKTides"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+	Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent);
+	~Dlg();
 
         void OnDownload( wxCommandEvent& event );
 		
@@ -89,6 +90,8 @@ public:
 		wxString getPort(double m_lat, double m_lon);
 		wxString m_default_configuration_path;
 		void AutoSizeHeader(wxListCtrl *const list_ctrl);
+
+		UKTides_pi &m_UKTides_pi;
 
 private:
 	
