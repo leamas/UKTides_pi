@@ -126,7 +126,7 @@ void Dlg::OnDownload( wxCommandEvent& event )
 
 	using namespace std::string_literals;
 
-	auto key = "?key=cefba1163a81498c9a1e5d03ea1fed69"s;
+	auto key = "?key="s;
 	auto url = "https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations" + key;
 
 	auto json = get_response(url);
