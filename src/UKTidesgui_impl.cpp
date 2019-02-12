@@ -106,7 +106,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 
 	wxString s_lat, s_lon;
 
-	wxString urlString = _T("https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations?key=cefba1163a81498c9a1e5d03ea1fed69");
+	wxString urlString = _T("https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations?key=");
 	wxURI url(urlString);
 
 	wxString tmp_file = wxFileName::CreateTempFileName(_T(""));
@@ -218,7 +218,7 @@ void Dlg::getHWLW(string id)
 	auto duration = "?duration="s;
 	string urlDays = choiceDays.ToStdString();
 
-	auto key = "&key=cefba1163a81498c9a1e5d03ea1fed69"s;
+	auto key = "&key="s;
 	auto tidalevents = "/TidalEvents"s;
 
 
