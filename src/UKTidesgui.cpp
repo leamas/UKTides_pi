@@ -52,6 +52,10 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_buttonDownload = new wxButton( sbSizerFolder->GetStaticBox(), wxID_ANY, _(" Download  "), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerFolder->Add( m_buttonDownload, 0, wxALL|wxEXPAND, 5 );
 
+	m_stUKDownloadInfo = new wxStaticText( sbSizerFolder->GetStaticBox(), wxID_ANY, _("Status:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stUKDownloadInfo->Wrap( -1 );
+	sbSizerFolder->Add( m_stUKDownloadInfo, 0, wxALL|wxEXPAND, 5 );
+
 
 	bSizerMain->Add( sbSizerFolder, 0, wxEXPAND, 5 );
 

@@ -68,7 +68,6 @@ public:
 	~Dlg();
 
         void OnDownload( wxCommandEvent& event );
-		
 		bool OpenXML();
 		
 		vector<Position> my_positions;
@@ -77,10 +76,7 @@ public:
         void Calculate( wxCommandEvent& event, bool Export, int Pattern );
 
 		void OnInformation(wxCommandEvent& event);
-        void Addpoint(TiXmlElement* Route, wxString ptlat, wxString ptlon, wxString ptname, wxString ptsym, wxString pttype);
-
-        
-		
+        void Addpoint(TiXmlElement* Route, wxString ptlat, wxString ptlon, wxString ptname, wxString ptsym, wxString pttype);	
 			
 		UKTides_pi *plugin; 
 
@@ -98,8 +94,7 @@ private:
 	wxString m_titlePortName;
 	list<myPorts>myports;
 	list<myTidalEvents>myevents;
-	
-	
+
 	void getHWLW(string id);
 	wxString getPortId(double m_lat, double m_lon);
 	wxString ProcessDate(wxString myLongDate);

@@ -36,14 +36,10 @@
 #include <iostream>
 #include <ostream>
 #include <string>
-#include <string_view>
 #include <map>
 
-#include "curl_easy.h"
-#include "curl_form.h"
-#include "curl_ios.h"
-#include "curl_exception.h"
-
+#include <wx/ffile.h>
+#include <wx/url.h>
 #include "json/json.h"
 
 class Position;
@@ -51,34 +47,13 @@ class UKTides_pi;
 
 #define FAIL(X) do { error = X; goto failed; } while(0)
 
-std::stringstream get_response(std::string_view url)
-{
-	std::stringstream str;
-	curl::curl_ios<std::stringstream> writer(str);
-
-	curl::curl_easy easy(writer);
-
-	easy.add<CURLOPT_URL>(url.data());
-	easy.add<CURLOPT_FOLLOWLOCATION>(1L);
-	try
-	{
-		easy.perform();
-	}
-	catch (curl::curl_easy_exception error)
-	{
-		auto errors = error.get_traceback();
-		error.print_traceback();
-	}
-
-	return str;
-}
-
 
 Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	: DlgDef(parent),
 	m_UKTides_pi(_UKTides_pi)
 {	
-    this->Fit();
+	
+	this->Fit();
     dbg=false; //for debug output set to true
 
 	wxIcon icon;
@@ -124,23 +99,44 @@ void Dlg::Addpoint(TiXmlElement* Route, wxString ptlat, wxString ptlon, wxString
 //done adding point
 }
 
-void Dlg::OnDownload( wxCommandEvent& event )
-{
+void Dlg::OnDownload(wxCommandEvent& event) {
+
 	myports.clear();
 	myPorts outPort;
-	
+
 	wxString s_lat, s_lon;
 
-	using namespace std::string_literals;
+	wxString urlString = _T("https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations?key=cefba1163a81498c9a1e5d03ea1fed69");
+	wxURI url(urlString);
 
-	auto key = "?key="s;
-	auto url = "https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations" + key;
+	wxString tmp_file = wxFileName::CreateTempFileName(_T(""));
 
-	auto json = get_response(url);
+	_OCPN_DLStatus ret = OCPN_downloadFile(url.BuildURI(), tmp_file,
+		_T("UKTides"), _T(""), wxNullBitmap, this,
+		OCPN_DLDS_ELAPSED_TIME | OCPN_DLDS_ESTIMATED_TIME | OCPN_DLDS_REMAINING_TIME | OCPN_DLDS_SPEED | OCPN_DLDS_SIZE | OCPN_DLDS_CAN_PAUSE | OCPN_DLDS_CAN_ABORT | OCPN_DLDS_AUTO_CLOSE,
+		10);
 
-	string myjson = json.str();
-	wxString mywxjson(myjson.c_str(), wxConvUTF8);
-	//wxMessageBox(mywxjson);
+	if (ret == OCPN_DL_ABORTED) {
+		
+		m_stUKDownloadInfo->SetLabel(_("Aborted"));
+		return;
+	} else
+
+	if (ret == OCPN_DL_FAILED) {
+		wxMessageBox(_("Download failed.\n\nAre you connected to the Internet?"));
+
+		m_stUKDownloadInfo->SetLabel(_("Failed"));
+		return;
+	}
+
+	else {
+		m_stUKDownloadInfo->SetLabel(_("Success"));
+	}
+
+    wxString myjson;
+	wxFFile fileData;
+	fileData.Open(tmp_file, wxT("r"));
+	fileData.ReadAll(&myjson);
 
 	// construct the JSON root object
 	Json::Value  root;
@@ -155,7 +151,7 @@ void Dlg::OnDownload( wxCommandEvent& event )
 
 	if (!root.isMember("features")) {
 		// Originator
-		wxMessageBox("No Source found in message");		
+		wxMessageBox("No Source found in message");
 	}
 
 	//Json::Value  rootfeatures = root["features"];
@@ -204,18 +200,18 @@ void Dlg::OnDownload( wxCommandEvent& event )
 
 		myports.push_back(outPort);
 	}
-	
+
 	RequestRefresh(m_parent);
-	root.clear();		
+	root.clear();
+
 }
+
 
 void Dlg::getHWLW(string id)
 {
 	myevents.clear();
 	myTidalEvents outTidalEvents;
-	
-	using namespace std::string_literals;
-	
+
 	int daysAhead = m_choice3->GetSelection();
 	wxString choiceDays = m_choice3->GetString(daysAhead);
 
@@ -224,16 +220,21 @@ void Dlg::getHWLW(string id)
 
 	auto key = "&key=cefba1163a81498c9a1e5d03ea1fed69"s;
 	auto tidalevents = "/TidalEvents"s;
+
+
+	wxString urlString = "https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations/" + id + tidalevents + duration + urlDays + key;
+	wxURI url(urlString);
+
+	wxString tmp_file = wxFileName::CreateTempFileName(_T(""));
+
+	_OCPN_DLStatus ret = OCPN_downloadFile(url.BuildURI(), tmp_file,
+		_T(""), _T(""), wxNullBitmap, this, OCPN_DLDS_AUTO_CLOSE,
+		10);
 	
-	auto url = "https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations/" + id + tidalevents + duration + urlDays + key;
-
-	auto json = get_response(url);
-
-	string myjson = json.str();
-	wxString mywxjson(myjson.c_str(), wxConvUTF8);
-
-	wxString myurl(url.c_str(), wxConvUTF8);
-	//wxMessageBox(_T("Process Tides"));
+	wxString myjson;
+	wxFFile fileData;
+	fileData.Open(tmp_file, wxT("r"));
+	fileData.ReadAll(&myjson);
 
 	// construct the JSON root object
 	Json::Value  root2;
