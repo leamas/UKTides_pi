@@ -13,7 +13,6 @@ extern wxBitmap *_img_uktides;
 
 #ifdef UKTIDES_USE_SVG
 extern wxString _svg_uktides;
-extern wxString _svg_uktides_rollover;
 extern wxString _svg_uktides_toggled;
 #endif
 

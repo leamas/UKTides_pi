@@ -55,9 +55,11 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	
 	this->Fit();
     dbg=false; //for debug output set to true
+ 
+	wxString blank_name = *GetpSharedDataLocation()
+		+ _T("plugins/UKTides_pi/data/blank.ico");
 
-	wxIcon icon;
-	icon.CopyFromBitmap(*_img_uktides);
+	wxIcon icon(blank_name, wxBITMAP_TYPE_ICO);
 	SetIcon(icon);
 }
 

@@ -103,7 +103,7 @@ int UKTides_pi::Init(void)
 	if(m_bUKTidesShowIcon)
      
 #ifdef UKTIDES_USE_SVG
-	m_leftclick_tool_id = InsertPlugInToolSVG(_T("UKTides"), _svg_uktides, _svg_uktides_rollover, _svg_uktides_toggled,
+	m_leftclick_tool_id = InsertPlugInToolSVG(_T("UKTides"), _svg_uktides, _svg_uktides, _svg_uktides_toggled,
 		wxITEM_CHECK, _("UKTides"), _T(""), NULL, UKTIDES_TOOL_POSITION, 0, this);
 #else
 	 m_leftclick_tool_id  = InsertPlugInTool(_T(""), _img_uktides, _img_uktides, wxITEM_CHECK,
