@@ -58,7 +58,7 @@ extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p)
 //
 //---------------------------------------------------------------------------------------------------------
 
-#define UKTIDES_TOOL_POSITION    -1 
+#define UKTIDES_TOOL_POSITION    -1
 #include "icons.h"
 
 //---------------------------------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ UKTides_pi::UKTides_pi(void *ppimgr)
 
 	  wxString shareLocn = *GetpSharedDataLocation() +
 		  _T("plugins") + wxFileName::GetPathSeparator() +
-		  _T("uktides_pi") + wxFileName::GetPathSeparator()
+		  _T("UKTides_pi") + wxFileName::GetPathSeparator()
 		  + _T("data") + wxFileName::GetPathSeparator();
 	  wxImage panelIcon(shareLocn + _T("uktides_panel_icon.png"));
 	  if (panelIcon.IsOk())
@@ -89,7 +89,7 @@ UKTides_pi::UKTides_pi(void *ppimgr)
 UKTides_pi::~UKTides_pi(void)
 {
      delete _img_uktides;
-     
+
 }
 
 int UKTides_pi::Init(void)
@@ -112,7 +112,7 @@ int UKTides_pi::Init(void)
 
       //    This PlugIn needs a toolbar icon, so request its insertion
 	if(m_bUKTidesShowIcon)
-     
+
 #ifdef UKTIDES_USE_SVG
 	m_leftclick_tool_id = InsertPlugInToolSVG(_T("UKTides"), _svg_uktides, _svg_uktides, _svg_uktides_toggled,
 		wxITEM_CHECK, _("UKTides"), _T(""), NULL, UKTIDES_TOOL_POSITION, 0, this);
@@ -131,11 +131,11 @@ int UKTides_pi::Init(void)
      m_pDialog = NULL;
 
       return (WANTS_OVERLAY_CALLBACK |
-              WANTS_OPENGL_OVERLAY_CALLBACK |		      
+              WANTS_OPENGL_OVERLAY_CALLBACK |
 		      WANTS_CURSOR_LATLON      |
               WANTS_TOOLBAR_CALLBACK    |
               INSTALLS_TOOLBAR_TOOL     |
-              WANTS_CONFIG            
+              WANTS_CONFIG
            );
 }
 
@@ -155,8 +155,8 @@ bool UKTides_pi::DeInit(void)
 			m_bShowUKTides = false;
 			SetToolbarItemState( m_leftclick_tool_id, m_bShowUKTides );
 
-      }	
-    
+      }
+
     SaveConfig();
 
     RequestRefresh(m_parent_window); // refresh mainn window
@@ -220,7 +220,7 @@ void UKTides_pi::SetColorScheme(PI_ColorScheme cs)
 
 void UKTides_pi::OnToolbarToolCallback(int id)
 {
-    
+
 	if(NULL == m_pDialog)
       {
             m_pDialog = new Dlg(*this, m_parent_window);
@@ -229,15 +229,15 @@ void UKTides_pi::OnToolbarToolCallback(int id)
       }
 
 	  m_pDialog->Fit();
-	  //Toggle 
-	  m_bShowUKTides = !m_bShowUKTides;	  
+	  //Toggle
+	  m_bShowUKTides = !m_bShowUKTides;
 
-      //    Toggle dialog? 
+      //    Toggle dialog?
       if(m_bShowUKTides) {
-          m_pDialog->Show();         
+          m_pDialog->Show();
       } else
           m_pDialog->Hide();
-     
+
       // Toggle is handled by the toolbar but we must keep plugin manager b_toggle updated
       // to actual status to ensure correct status upon toolbar rebuild
       SetToolbarItemState( m_leftclick_tool_id, m_bShowUKTides );
@@ -253,10 +253,10 @@ bool UKTides_pi::LoadConfig(void)
       {
             pConf->SetPath ( _T( "/Settings/UKTides_pi" ) );
 			 pConf->Read ( _T( "ShowUKTidesIcon" ), &m_bUKTidesShowIcon, 1 );
-           
+
             m_route_dialog_x =  pConf->Read ( _T ( "DialogPosX" ), 20L );
             m_route_dialog_y =  pConf->Read ( _T ( "DialogPosY" ), 20L );
-         
+
             if((m_route_dialog_x < 0) || (m_route_dialog_x > m_display_width))
                   m_route_dialog_x = 5;
             if((m_route_dialog_y < 0) || (m_route_dialog_y > m_display_height))
@@ -275,10 +275,10 @@ bool UKTides_pi::SaveConfig(void)
       {
             pConf->SetPath ( _T ( "/Settings/UKTides_pi" ) );
 			pConf->Write ( _T ( "ShowUKTidesIcon" ), m_bUKTidesShowIcon );
-          
+
             pConf->Write ( _T ( "DialogPosX" ),   m_route_dialog_x );
             pConf->Write ( _T ( "DialogPosY" ),   m_route_dialog_y );
-            
+
             return true;
       }
       else
@@ -305,7 +305,7 @@ void UKTides_pi::OnContextMenuItemCallback(int id)
 		m_cursor_lat = GetCursorLat();
 		m_cursor_lon = GetCursorLon();
 		m_pDialog->getPort(m_cursor_lat, m_cursor_lon);
-	}	
+	}
 }
 
 void UKTides_pi::SetCursorLatLon(double lat, double lon)
