@@ -68,10 +68,21 @@ extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p)
 //---------------------------------------------------------------------------------------------------------
 
 UKTides_pi::UKTides_pi(void *ppimgr)
-      :opencpn_plugin_17 (ppimgr)
+      :opencpn_plugin_116 (ppimgr)
 {
       // Create the PlugIn icons
       initialize_images();
+
+	  wxString shareLocn = *GetpSharedDataLocation() +
+		  _T("plugins") + wxFileName::GetPathSeparator() +
+		  _T("uktides_pi") + wxFileName::GetPathSeparator()
+		  + _T("data") + wxFileName::GetPathSeparator();
+	  wxImage panelIcon(shareLocn + _T("uktides_panel_icon.png"));
+	  if (panelIcon.IsOk())
+		  m_panelBitmap = wxBitmap(panelIcon);
+	  else
+		  wxLogMessage(_T("    UKTides panel icon NOT loaded"));
+
 	  m_bShowUKTides = false;
 }
 
@@ -175,7 +186,7 @@ int UKTides_pi::GetPlugInVersionMinor()
 
 wxBitmap *UKTides_pi::GetPlugInBitmap()
 {
-      return _img_uktides;
+      return &m_panelBitmap;
 }
 
 wxString UKTides_pi::GetCommonName()

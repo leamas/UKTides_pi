@@ -1,136 +1,223 @@
-<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!--Generator: Xara Designer (www.xara.com), SVG filter version: 5.0.0.2-->
-<svg stroke-width="0.501" stroke-linejoin="bevel" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" overflow="visible" width="18pt" height="18pt" viewBox="0 0 18 18">
- <defs>
-  <marker id="DefaultArrow2" markerUnits="strokeWidth" viewBox="0 0 1 1" markerWidth="1" markerHeight="1" overflow="visible" orient="auto">
-   <!-- REF_ARROW_STRAIGHT (-2) -->
-   <g transform="scale(0.0092592592)">
-    <!-- 1/108 -->
-    <path d="M -9 54 L -9 -54 L 117 0 z"/>
-   </g>
-  </marker>
-  <marker id="DefaultArrow3" markerUnits="strokeWidth" viewBox="0 0 1 1" markerWidth="1" markerHeight="1" overflow="visible" orient="auto">
-   <!-- REF_ARROW_ANGLED -->
-   <g transform="scale(0.0092592592)">
-    <path d="M -27 54 L -9 0 L -27 -54 L 135 0 z"/>
-   </g>
-  </marker>
-  <marker id="DefaultArrow4" markerUnits="strokeWidth" viewBox="0 0 1 1" markerWidth="1" markerHeight="1" overflow="visible" orient="auto">
-   <!-- REF_ARROW_ROUNDED -->
-   <g transform="scale(0.0092592592)">
-    <path d="M -9,0 L -9,-45 C -9,-51.708 2.808,-56.580 9,-54 L 117,-9 C 120.916,-7.369 126.000,-4.242 126,0 C 126,4.242 120.916,7.369 117,9 L 9,54 C 2.808,56.580 -9,51.708 -9,45 z"/>
-   </g>
-  </marker>
-  <marker id="DefaultArrow5" markerUnits="strokeWidth" viewBox="0 0 1 1" markerWidth="1" markerHeight="1" overflow="visible" orient="auto">
-   <!-- REF_ARROW_SPOT -->
-   <g transform="scale(0.0092592592)">
-    <path d="M -54, 0 C -54,29.807 -29.807,54 0,54 C 29.807,54 54,29.807 54,0 C 54,-29.807 29.807,-54 0,-54 C -29.807,-54 -54,-29.807 -54,0 z"/>
-   </g>
-  </marker>
-  <marker id="DefaultArrow6" markerUnits="strokeWidth" viewBox="0 0 1 1" markerWidth="1" markerHeight="1" overflow="visible" orient="auto">
-   <!-- REF_ARROW_DIAMOND -->
-   <g transform="scale(0.0092592592)">
-    <path d="M -63,0 L 0,63 L 63,0 L 0,-63 z"/>
-   </g>
-  </marker>
-  <marker id="DefaultArrow7" markerUnits="strokeWidth" viewBox="0 0 1 1" markerWidth="1" markerHeight="1" overflow="visible" orient="auto">
-   <!-- REF_ARROW_FEATHER -->
-   <g transform="scale(0.0092592592)">
-    <path d="M 18,-54 L 108,-54 L 63,0 L 108,54 L 18, 54 L -36,0 z"/>
-   </g>
-  </marker>
-  <marker id="DefaultArrow8" markerUnits="strokeWidth" viewBox="0 0 1 1" markerWidth="1" markerHeight="1" overflow="visible" orient="auto">
-   <!-- REF_ARROW_FEATHER2 -->
-   <g transform="scale(0.0092592592)">
-    <path d="M -36,0 L 18,-54 L 54,-54 L 18,-18 L 27,-18 L 63,-54 L 99,-54 L 63,-18 L 72,-18 L 108,-54 L 144,-54 L 90,0 L 144,54 L 108,54 L 72,18 L 63,18 L 99,54 L 63,54 L 27,18 L 18,18 L 54,54 L 18,54 z"/>
-   </g>
-  </marker>
-  <marker id="DefaultArrow9" markerUnits="strokeWidth" viewBox="0 0 1 1" markerWidth="1" markerHeight="1" overflow="visible" orient="auto">
-   <!-- REF_ARROW_HOLLOWDIAMOND -->
-   <g transform="scale(0.0092592592)">
-    <path d="M 0,45 L -45,0 L 0, -45 L 45, 0 z M 0, 63 L-63, 0 L 0, -63 L 63, 0 z"/>
-   </g>
-  </marker>
-  <filter id="StainedFilter">
-   <feBlend mode="multiply" in2="BackgroundImage" in="SourceGraphic" result="blend"/>
-   <feComposite in="blend" in2="SourceAlpha" operator="in" result="comp"/>
-  </filter>
-  <filter id="BleachFilter">
-   <feBlend mode="screen" in2="BackgroundImage" in="SourceGraphic" result="blend"/>
-   <feComposite in="blend" in2="SourceAlpha" operator="in" result="comp"/>
-  </filter>
-  <filter id="InvertTransparencyBitmapFilter">
-   <feComponentTransfer>
-    <feFuncR type="gamma" amplitude="1.055" exponent=".416666666" offset="-0.055"/>
-    <feFuncG type="gamma" amplitude="1.055" exponent=".416666666" offset="-0.055"/>
-    <feFuncB type="gamma" amplitude="1.055" exponent=".416666666" offset="-0.055"/>
-   </feComponentTransfer>
-   <feComponentTransfer>
-    <feFuncR type="linear" slope="-1" intercept="1"/>
-    <feFuncG type="linear" slope="-1" intercept="1"/>
-    <feFuncB type="linear" slope="-1" intercept="1"/>
-    <feFuncA type="linear" slope="1" intercept="0"/>
-   </feComponentTransfer>
-   <feComponentTransfer>
-    <feFuncR type="gamma" amplitude="1" exponent="2.4" offset="0"/>
-    <feFuncG type="gamma" amplitude="1" exponent="2.4" offset="0"/>
-    <feFuncB type="gamma" amplitude="1" exponent="2.4" offset="0"/>
-   </feComponentTransfer>
-  </filter>
- </defs>
- <g id="Document" fill="none" stroke="black" font-family="Times New Roman" font-size="16" transform="scale(1 1)">
-  <g id="Spread" transform="translate(0 -18)">
-   <g id="Layer 1">
-    <path d="M 25.057,9.418 L 49.057,9.418 L 49.057,-14.582 L 25.057,-14.582 L 25.057,9.418" stroke="none"/>
-    <path d="M 33.471,-1.769 C 33.471,0.472 35.351,2.291 37.667,2.291 C 39.983,2.291 41.863,0.472 41.863,-1.769 C 41.863,-4.01 39.983,-5.829 37.667,-5.829 C 35.351,-5.829 33.471,-4.01 33.471,-1.769 Z" stroke="none" stroke-opacity="0.850980" fill="#800000" stroke-width="0" fill-rule="evenodd" stroke-linejoin="round" marker-start="none" marker-end="none" stroke-miterlimit="79.8403193612775" fill-opacity="0.000000"/>
-    <g id="Group">
-     <path d="M 18.004,18.007 L 18.004,0.006 L 0.003,0.006 L 0.003,18.007 L 18.004,18.007 Z" stroke="none" fill="#282828" stroke-width="0.75" stroke-linejoin="miter" marker-start="none" marker-end="none" stroke-miterlimit="79.8403193612775"/>
-     <g id="Group_1">
-      <g id="Group_2" stroke-linejoin="miter" stroke="none" stroke-width="0.75" stroke-miterlimit="79.8403193612775">
-       <path d="M 0.853,1.355 L 0.853,14.548 L 6.117,14.548 L 6.117,1.355 L 0.853,1.355 Z" fill="#b4b4b4" marker-start="none" marker-end="none"/>
-       <g id="Group_3" fill="#282828">
-        <path d="M 3.399,13.343 L 3.399,14.028 L 6.116,14.028 L 6.116,13.343 L 3.399,13.343 Z" marker-start="none" marker-end="none"/>
-        <path d="M 3.399,11.714 L 3.399,12.399 L 6.116,12.399 L 6.116,11.714 L 3.399,11.714 Z" marker-start="none" marker-end="none"/>
-        <path d="M 3.399,10.085 L 3.399,10.77 L 6.116,10.77 L 6.116,10.085 L 3.399,10.085 Z" marker-start="none" marker-end="none"/>
-        <path d="M 3.399,8.456 L 3.399,9.141 L 6.116,9.141 L 6.116,8.456 L 3.399,8.456 Z" marker-start="none" marker-end="none"/>
-        <path d="M 3.399,6.827 L 3.399,7.512 L 6.116,7.512 L 6.116,6.827 L 3.399,6.827 Z" marker-start="none" marker-end="none"/>
-        <path d="M 3.399,5.198 L 3.399,5.883 L 6.116,5.883 L 6.116,5.198 L 3.399,5.198 Z" marker-start="none" marker-end="none"/>
-        <path d="M 3.399,3.569 L 3.399,4.254 L 6.116,4.254 L 6.116,3.569 L 3.399,3.569 Z" marker-start="none" marker-end="none"/>
-        <path d="M 3.399,1.94 L 3.399,2.625 L 6.116,2.625 L 6.116,1.94 L 3.399,1.94 Z" marker-start="none" marker-end="none"/>
-       </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   fill="none"
+   stroke="currentColor"
+   stroke-width="2"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="UKTides_pi.svg">
+  <metadata
+     id="metadata14">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs12">
+    <linearGradient
+       id="linearGradient3754"
+       osb:paint="gradient">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3756" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop3758" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1063"
+     inkscape:window-height="797"
+     id="namedview10"
+     showgrid="false"
+     inkscape:zoom="13.906433"
+     inkscape:cx="10.807793"
+     inkscape:cy="8.2811651"
+     inkscape:window-x="689"
+     inkscape:window-y="98"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <g
+     transform="matrix(1.3374796,0,0,1.3364539,0.03874237,0.02630654)"
+     style="font-size:16px;font-family:'Times New Roman';fill:none;stroke:#000000"
+     id="Group">
+    <path
+       d="M 18.004,18.007 V 0.006 H 0.003 v 18.001 z"
+       stroke-miterlimit="79.8403193612775"
+       id="path85"
+       inkscape:connector-curvature="0"
+       style="fill:#282828;stroke:none;stroke-width:0.75;stroke-linejoin:miter;stroke-miterlimit:79.84031677;marker-start:none;marker-end:none" />
+    <g
+       id="Group_1">
+      <g
+         id="Group_2"
+         stroke-miterlimit="79.8403193612775"
+         style="stroke:none;stroke-width:0.75;stroke-linejoin:miter;stroke-miterlimit:79.84031677">
+        <path
+           d="M 0.853,1.355 V 14.548 H 6.117 V 1.355 Z"
+           id="path87"
+           inkscape:connector-curvature="0"
+           style="fill:#b4b4b4;marker-start:none;marker-end:none" />
+        <g
+           id="Group_3"
+           style="fill:#282828">
+          <path
+             d="m 3.399,13.343 v 0.685 h 2.717 v -0.685 z"
+             id="path89"
+             inkscape:connector-curvature="0"
+             style="marker-start:none;marker-end:none" />
+          <path
+             d="m 3.399,11.714 v 0.685 h 2.717 v -0.685 z"
+             id="path91"
+             inkscape:connector-curvature="0"
+             style="marker-start:none;marker-end:none" />
+          <path
+             d="M 3.399,10.085 V 10.77 H 6.116 V 10.085 Z"
+             id="path93"
+             inkscape:connector-curvature="0"
+             style="marker-start:none;marker-end:none" />
+          <path
+             d="M 3.399,8.456 V 9.141 H 6.116 V 8.456 Z"
+             id="path95"
+             inkscape:connector-curvature="0"
+             style="marker-start:none;marker-end:none" />
+          <path
+             d="M 3.399,6.827 V 7.512 H 6.116 V 6.827 Z"
+             id="path97"
+             inkscape:connector-curvature="0"
+             style="marker-start:none;marker-end:none" />
+          <path
+             d="M 3.399,5.198 V 5.883 H 6.116 V 5.198 Z"
+             id="path99"
+             inkscape:connector-curvature="0"
+             style="marker-start:none;marker-end:none" />
+          <path
+             d="M 3.399,3.569 V 4.254 H 6.116 V 3.569 Z"
+             id="path101"
+             inkscape:connector-curvature="0"
+             style="marker-start:none;marker-end:none" />
+          <path
+             d="M 3.399,1.94 V 2.625 H 6.116 V 1.94 Z"
+             id="path103"
+             inkscape:connector-curvature="0"
+             style="marker-start:none;marker-end:none" />
+        </g>
       </g>
-      <g id="Group_4">
-       <g id="Group_5">
-        <g id="Group_6">
-         <path d="M 6.888,5.529 C 7.54,5.512 7.857,5.164 7.912,4.554" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-width="0.75" stroke="#b4b4b4" stroke-miterlimit="79.8403193612775"/>
-         <path d="M 9.05,5.529 C 8.398,5.512 8.079,5.164 8.025,4.554" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-width="0.75" stroke="#b4b4b4" stroke-miterlimit="79.8403193612775"/>
+      <g
+         id="Group_4">
+        <g
+           id="Group_5">
+          <g
+             id="Group_6">
+            <path
+               d="M 6.888,5.529 C 7.54,5.512 7.857,5.164 7.912,4.554"
+               stroke-miterlimit="79.8403193612775"
+               id="path107"
+               inkscape:connector-curvature="0"
+               style="fill:none;stroke:#b4b4b4;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:79.84031677" />
+            <path
+               d="M 9.05,5.529 C 8.398,5.512 8.079,5.164 8.025,4.554"
+               stroke-miterlimit="79.8403193612775"
+               id="path109"
+               inkscape:connector-curvature="0"
+               style="fill:none;stroke:#b4b4b4;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:79.84031677" />
+          </g>
+          <g
+             id="Group_7">
+            <path
+               d="M 9.162,5.529 C 9.814,5.512 10.133,5.164 10.186,4.554"
+               stroke-miterlimit="79.8403193612775"
+               id="path112"
+               inkscape:connector-curvature="0"
+               style="fill:none;stroke:#b4b4b4;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:79.84031677" />
+            <path
+               d="M 11.324,5.529 C 10.673,5.512 10.355,5.164 10.3,4.554"
+               stroke-miterlimit="79.8403193612775"
+               id="path114"
+               inkscape:connector-curvature="0"
+               style="fill:none;stroke:#b4b4b4;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:79.84031677" />
+          </g>
         </g>
-        <g id="Group_7">
-         <path d="M 9.162,5.529 C 9.814,5.512 10.133,5.164 10.186,4.554" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-width="0.75" stroke="#b4b4b4" stroke-miterlimit="79.8403193612775"/>
-         <path d="M 11.324,5.529 C 10.673,5.512 10.355,5.164 10.3,4.554" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-width="0.75" stroke="#b4b4b4" stroke-miterlimit="79.8403193612775"/>
+        <g
+           id="Group_8"
+           stroke-miterlimit="79.8403193612775"
+           style="fill:#282828;stroke:#b4b4b4;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:79.84031677">
+          <g
+             id="Group_9">
+            <path
+               d="M 11.526,5.529 C 12.178,5.512 12.495,5.164 12.55,4.554"
+               id="path118"
+               inkscape:connector-curvature="0"
+               style="fill:none" />
+            <path
+               d="M 13.688,5.529 C 13.036,5.512 12.717,5.164 12.663,4.554"
+               id="path120"
+               inkscape:connector-curvature="0"
+               style="fill:none" />
+          </g>
+          <g
+             id="Group_10">
+            <path
+               d="M 13.8,5.529 C 14.452,5.512 14.771,5.164 14.824,4.554"
+               id="path123"
+               inkscape:connector-curvature="0"
+               style="fill:none" />
+            <path
+               d="M 15.962,5.529 C 15.311,5.512 14.993,5.164 14.938,4.554"
+               id="path125"
+               inkscape:connector-curvature="0"
+               style="fill:none" />
+          </g>
         </g>
-       </g>
-       <g id="Group_8" stroke-linejoin="round" stroke-linecap="round" stroke="#b4b4b4" stroke-width="0.75" fill="#282828" stroke-miterlimit="79.8403193612775">
-        <g id="Group_9">
-         <path d="M 11.526,5.529 C 12.178,5.512 12.495,5.164 12.55,4.554" fill="none"/>
-         <path d="M 13.688,5.529 C 13.036,5.512 12.717,5.164 12.663,4.554" fill="none"/>
-        </g>
-        <g id="Group_10">
-         <path d="M 13.8,5.529 C 14.452,5.512 14.771,5.164 14.824,4.554" fill="none"/>
-         <path d="M 15.962,5.529 C 15.311,5.512 14.993,5.164 14.938,4.554" fill="none"/>
-        </g>
-       </g>
       </g>
-      <g id="Group_11" fill-rule="nonzero" stroke-linejoin="round" stroke-linecap="round" stroke="none" stroke-width="0.375" fill="#b4b4b4" stroke-miterlimit="79.8403193612775">
-       <g id="Group_12">
-        <path d="M 11.176,14.711 C 11.176,15.34 10.984,15.822 10.602,16.157 C 10.219,16.492 9.655,16.659 8.91,16.659 C 8.164,16.659 7.601,16.492 7.219,16.157 C 6.837,15.822 6.647,15.341 6.647,14.714 L 6.647,11.463 L 7.966,11.463 L 7.966,14.639 C 7.966,14.992 8.04,15.255 8.188,15.428 C 8.336,15.602 8.577,15.688 8.91,15.688 C 9.238,15.688 9.478,15.605 9.629,15.439 C 9.781,15.272 9.856,15.006 9.856,14.639 L 9.856,11.463 L 11.176,11.463 L 11.176,14.711 Z" marker-start="none" marker-end="none"/>
-        <path d="M 17.154,16.553 L 15.544,16.553 L 14.023,14.516 L 13.715,14.888 L 13.715,16.553 L 12.402,16.553 L 12.402,11.463 L 13.715,11.463 L 13.715,13.767 L 15.534,11.463 L 17.055,11.463 L 15.065,13.818 L 17.154,16.553 Z" marker-start="none" marker-end="none"/>
-       </g>
+      <g
+         id="Group_11"
+         stroke-miterlimit="79.8403193612775"
+         style="fill:#b4b4b4;fill-rule:nonzero;stroke:none;stroke-width:0.375;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:79.84031677">
+        <g
+           id="Group_12">
+          <path
+             d="m 11.176,14.711 c 0,0.629 -0.192,1.111 -0.574,1.446 -0.383,0.335 -0.947,0.502 -1.692,0.502 -0.746,0 -1.309,-0.167 -1.691,-0.502 C 6.837,15.822 6.647,15.341 6.647,14.714 v -3.251 h 1.319 v 3.176 c 0,0.353 0.074,0.616 0.222,0.789 0.148,0.174 0.389,0.26 0.722,0.26 0.328,0 0.568,-0.083 0.719,-0.249 0.152,-0.167 0.227,-0.433 0.227,-0.8 v -3.176 h 1.32 z"
+             id="path130"
+             inkscape:connector-curvature="0"
+             style="marker-start:none;marker-end:none" />
+          <path
+             d="m 17.154,16.553 h -1.61 l -1.521,-2.037 -0.308,0.372 v 1.665 h -1.313 v -5.09 h 1.313 v 2.304 l 1.819,-2.304 h 1.521 l -1.99,2.355 z"
+             id="path132"
+             inkscape:connector-curvature="0"
+             style="marker-start:none;marker-end:none" />
+        </g>
       </g>
-     </g>
     </g>
-   </g>
   </g>
- </g>
 </svg>

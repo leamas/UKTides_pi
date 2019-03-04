@@ -43,8 +43,8 @@
 
 #include "version.h"
 
-#define     MY_API_VERSION_MAJOR 0
-#define     MY_API_VERSION_MINOR 2.1
+#define     MY_API_VERSION_MAJOR 1
+#define     MY_API_VERSION_MINOR 16
 
 class Dlg;
 
@@ -54,7 +54,7 @@ class Dlg;
 
 #define UKTIDES_TOOL_POSITION    -1          // Request default positioning of toolbar tool
 
-class UKTides_pi : public opencpn_plugin_17
+class UKTides_pi : public opencpn_plugin_116
 {
 public:
       UKTides_pi(void *ppimgr);
@@ -123,6 +123,7 @@ private:
 
 	  bool             m_bUKTidesShowIcon;
 	  bool             m_bShowUKTides;
+	  wxBitmap         m_panelBitmap;
 };
 
 #endif
