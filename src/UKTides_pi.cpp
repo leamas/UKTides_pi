@@ -75,7 +75,7 @@ UKTides_pi::UKTides_pi(void *ppimgr)
 
 	  wxString shareLocn = *GetpSharedDataLocation() +
 		  _T("plugins") + wxFileName::GetPathSeparator() +
-		  _T("uktides_pi") + wxFileName::GetPathSeparator()
+		  _T("UKTides_pi") + wxFileName::GetPathSeparator()
 		  + _T("data") + wxFileName::GetPathSeparator();
 	  wxImage panelIcon(shareLocn + _T("uktides_panel_icon.png"));
 	  if (panelIcon.IsOk())
