@@ -1,0 +1,173 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the UKTides_pi package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: UKTides_pi 0.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-01 11:55+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/UKTides_pi.cpp:84
+msgid "    UKTides panel icon NOT loaded"
+msgstr ""
+
+#: src/UKTides_pi.cpp:118 src/UKTides_pi.cpp:121 src/UKTides_pi.cpp:194
+#: src/UKTides_pi.cpp:200 src/UKTidesgui_impl.cpp:520
+msgid "UKTides"
+msgstr ""
+
+#: src/UKTides_pi.cpp:128
+msgid "Select UK Tidal Station"
+msgstr ""
+
+#: src/UKTides_pi.cpp:205
+msgid "Downloads UKHO Tidal Data for UK ports"
+msgstr ""
+
+#: src/UKTidesgui.cpp:21
+msgid "Download"
+msgstr ""
+
+#: src/UKTidesgui.cpp:24
+msgid "Locations"
+msgstr ""
+
+#: src/UKTidesgui.cpp:27
+msgid "Guide"
+msgstr ""
+
+#: src/UKTidesgui.cpp:30
+msgid "Help"
+msgstr ""
+
+#: src/UKTidesgui.cpp:38
+msgid "Important"
+msgstr ""
+
+#: src/UKTidesgui.cpp:40
+msgid "All times UTC"
+msgstr ""
+
+#: src/UKTidesgui.cpp:50
+msgid "Port Locations"
+msgstr ""
+
+#: src/UKTidesgui.cpp:52
+msgid " Download  "
+msgstr ""
+
+#: src/UKTidesgui.cpp:55
+msgid "Status:"
+msgstr ""
+
+#: src/UKTidesgui.cpp:65
+msgid "Days ahead: "
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:75
+msgid ""
+"On first use please re-start OpenCPN\n"
+"... to enable the tidal station icons"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:87
+msgid "UKTides.html"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:136
+msgid "Aborted"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:141
+msgid ""
+"Download failed.\n"
+"\n"
+"Are you connected to the Internet?"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:143
+msgid "Failed"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:148
+msgid "Success"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:160
+msgid "No ports found, please download the locations"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:169
+msgid "No Source found in message"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:184
+msgid "No properties found in message"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:315
+msgid "Tides"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:316
+msgid "      (Times are UTC)  "
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:316
+msgid " (Height in metres)"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:325
+msgid ""
+"No tidal data found. Please use right click to select the UK tidal station"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:394
+msgid "No Ports found. Please download locations"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:419
+msgid "Port not found"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:448
+msgid "Import GPX Route file"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:472
+msgid "Failed to load file: "
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:477
+msgid "rte Invalid xml file"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:491
+msgid "Route"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:491
+msgid "Loading"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:551
+msgid "Export UKTides Positions in GPX file as"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:567
+msgid "error in input range validation"
+msgstr ""
+
+#: src/UKTidesgui_impl.cpp:806 src/UKTidesgui_impl.cpp:807
+msgid "Error in calculation. Please check input!"
+msgstr ""

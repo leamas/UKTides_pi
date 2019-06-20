@@ -37,6 +37,7 @@
 #include "NavFunc.h"
 #include "tidetable.h"
 #include "tinyxml.h"
+#include "wx/stdpaths.h"
 
 #include <list>
 #include <vector>
@@ -88,6 +89,7 @@ public:
 		void AutoSizeHeader(wxListCtrl *const list_ctrl);
 
 		UKTides_pi &m_UKTides_pi;
+		wxString StandardPath();
 
 private:
 	

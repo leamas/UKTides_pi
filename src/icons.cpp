@@ -33,6 +33,6 @@ void initialize_images(void)
 	fn.SetFullName(_T("UKTides_pi_toggled.svg"));
 	_svg_uktides_toggled = fn.GetFullPath();
 #endif
-	
+
 	return;
 }

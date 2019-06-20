@@ -39,6 +39,7 @@
 #include <map>
 
 #include <wx/ffile.h>
+#include <wx/filefn.h>
 #include <wx/url.h>
 #include "json/json.h"
 
@@ -51,16 +52,28 @@ class UKTides_pi;
 Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	: DlgDef(parent),
 	m_UKTides_pi(_UKTides_pi)
-{
-
+{	
+	
 	this->Fit();
     dbg=false; //for debug output set to true
-
+ 
 	wxString blank_name = *GetpSharedDataLocation()
 		+ _T("plugins/UKTides_pi/data/blank.ico");
 
 	wxIcon icon(blank_name, wxBITMAP_TYPE_ICO);
 	SetIcon(icon);
+
+	wxString station_icon_name = *GetpSharedDataLocation()
+		+ _T("plugins/UKTides_pi/data/station_icon.png");	
+
+	wxString myOpenCPNiconsPath = StandardPath();
+	wxString s = wxFileName::GetPathSeparator();
+	wxString destination = myOpenCPNiconsPath + _T("station_icon.png");
+
+	if (!wxFileExists(destination)) {
+		wxCopyFile(station_icon_name, destination, true);		
+		wxMessageBox(_("On first use please re-start OpenCPN\n... to enable the tidal station icons"));		
+	}
 }
 
 Dlg::~Dlg()
@@ -101,14 +114,14 @@ void Dlg::Addpoint(TiXmlElement* Route, wxString ptlat, wxString ptlon, wxString
 //done adding point
 }
 
-void Dlg::OnDownload(wxCommandEvent& event) {
+void Dlg::OnDownload(wxCommandEvent& event) {	
 
 	myports.clear();
 	myPorts outPort;
 
 	wxString s_lat, s_lon;
 
-	wxString urlString = _T("https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations?key=");
+	wxString urlString = _T("https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations?key=cefba1163a81498c9a1e5d03ea1fed69");
 	wxURI url(urlString);
 
 	wxString tmp_file = wxFileName::CreateTempFileName(_T(""));
@@ -119,7 +132,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 		10);
 
 	if (ret == OCPN_DL_ABORTED) {
-
+		
 		m_stUKDownloadInfo->SetLabel(_("Aborted"));
 		return;
 	} else
@@ -144,7 +157,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 	Json::Value  root;
 	// construct a JSON parser
 	Json::Reader reader;
-	wxString error = _T("No ports found, please download the locations");
+	wxString error = _("No ports found, please download the locations");
 
 	if (!reader.parse((std::string)myjson, root)) {
 		wxMessageBox(error);
@@ -153,7 +166,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 
 	if (!root.isMember("features")) {
 		// Originator
-		wxMessageBox("No Source found in message");
+		wxMessageBox(_("No Source found in message"));
 	}
 
 	//Json::Value  rootfeatures = root["features"];
@@ -168,7 +181,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 
 		if (!features.isMember("properties")) {
 			// Originator
-			wxMessageBox("No properties found in message");
+			wxMessageBox(_("No properties found in message"));
 		}
 
 		string name = features["properties"]["Name"].asString();
@@ -194,9 +207,9 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 		outPort.coordLon = myLon;
 
 		PlugIn_Waypoint * pPoint = new PlugIn_Waypoint(myLat, myLon,
-			"", myname, "");
+			"", myname, "");	
 
-		pPoint->m_IconName = _T("anchorage");
+		pPoint->m_IconName = _T("station_icon");
 		pPoint->m_MarkDescription = myId;
 		bool added = AddSingleWaypoint(pPoint, false);
 
@@ -217,11 +230,11 @@ void Dlg::getHWLW(string id)
 	int daysAhead = m_choice3->GetSelection();
 	wxString choiceDays = m_choice3->GetString(daysAhead);
 
-	string duration = "?duration=";
+	auto duration = "?duration="s;
 	string urlDays = choiceDays.ToStdString();
 
-	string key = "&key=";
-	string tidalevents = "/TidalEvents";
+	auto key = "&key=cefba1163a81498c9a1e5d03ea1fed69"s;
+	auto tidalevents = "/TidalEvents"s;
 
 
 	wxString urlString = "https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations/" + id + tidalevents + duration + urlDays + key;
@@ -232,7 +245,7 @@ void Dlg::getHWLW(string id)
 	_OCPN_DLStatus ret = OCPN_downloadFile(url.BuildURI(), tmp_file,
 		_T(""), _T(""), wxNullBitmap, this, OCPN_DLDS_AUTO_CLOSE,
 		10);
-
+	
 	wxString myjson;
 	wxFFile fileData;
 	fileData.Open(tmp_file, wxT("r"));
@@ -248,7 +261,7 @@ void Dlg::getHWLW(string id)
 		wxMessageBox(error);
 		return;
 	}
-
+	
 	if (!root2.isArray()) {
 		wxMessageBox(error);
 	}
@@ -289,7 +302,7 @@ void Dlg::getHWLW(string id)
 			myevents.push_back(outTidalEvents);
 
 		}
-
+		
 	}
 	root2.clear();
 
@@ -299,9 +312,9 @@ void Dlg::getHWLW(string id)
 void Dlg::OnShow()
 {
 
-TideTable* tidetable = new TideTable(this, 7000, _T("Tides"), wxPoint(200, 200), wxSize(-1, -1), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
-
-tidetable->itemStaticBoxSizer14Static->SetLabel(m_titlePortName);
+TideTable* tidetable = new TideTable(this, 7000, _("Tides"), wxPoint(200, 200), wxSize(-1, -1), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+wxString label = m_titlePortName + _("      (Times are UTC)  ") + _(" (Height in metres)");
+tidetable->itemStaticBoxSizer14Static->SetLabel(label);
 
 wxString Event;
 wxString EventDT;
@@ -309,8 +322,7 @@ wxString EventHeight;
 
 
 if (myevents.empty()) {
-
-	wxMessageBox(_("No Events found. Please download tides"));
+	wxMessageBox(_("No tidal data found. Please use right click to select the UK tidal station"));
 	return;
 }
 
@@ -323,20 +335,21 @@ for (std::list<myTidalEvents>::iterator it = myevents.begin();
 	Event = (*it).EventType;
 	EventDT = (*it).DateTime;
 	EventHeight = (*it).Height;
-
+	
 
 	tidetable->m_wpList->InsertItem(in, _T(""), -1);
 	tidetable->m_wpList->SetItem(in, 0, EventDT);
 	tidetable->m_wpList->SetItem(in, 1, Event);
 	tidetable->m_wpList->SetItem(in, 2, EventHeight);
-
+	
 
 	in++;
 
 }
 
 AutoSizeHeader(tidetable->m_wpList);
-
+tidetable->Fit();
+tidetable->Layout();
 tidetable->Show();
 
 GetParent()->Refresh();
@@ -399,8 +412,8 @@ wxString Dlg::getPortId(double m_lat, double m_lon) {
 						//wxMessageBox((*it).Name);
 						return m_portId;
 					}
-				}
-		}
+				}				
+		}	
 		radius += 0.1;
 	}
 	return _("Port not found");
@@ -410,7 +423,7 @@ wxString Dlg::ProcessDate(wxString myLongDate) {
 
 	wxDateTime myDateTime;
 	myDateTime.ParseISOCombined(myLongDate);
-	return myDateTime.Format(_T(" %a %d-%b-%Y %H:%M  UTC"));
+	return myDateTime.Format(_T(" %a %d-%b-%Y   %H:%M"));
 
 }
 
@@ -424,12 +437,12 @@ void Dlg::OnClose(wxCloseEvent& event)
 bool Dlg::OpenXML()
 {
     Position my_position;
-
+	
     my_positions.clear();
-
+	
 	int response = wxID_CANCEL;
 	int my_count = 0;
-
+    
 	wxArrayString file_array;
     wxString filename;
 	wxFileDialog openDialog( this, _( "Import GPX Route file" ), m_gpx_path, wxT ( "" ),
@@ -449,12 +462,12 @@ bool Dlg::OpenXML()
 		else if(response = wxID_CANCEL){
 		return false;
 		}
-
+    
     TiXmlDocument doc;
     wxString error;
     wxProgressDialog *progressdialog = NULL;
 
-
+    
 	if(!doc.LoadFile(filename.mb_str())){
         FAIL(_("Failed to load file: ") + filename);
 	}
@@ -479,20 +492,20 @@ bool Dlg::OpenXML()
                         wxPD_CAN_ABORT | wxPD_ELAPSED_TIME | wxPD_REMAINING_TIME);
                 }
             }
-
+              				
                 for(TiXmlElement* f = e->FirstChildElement(); f; f = f->NextSiblingElement()) {
                     if(!strcmp(f->Value(), "rtept")) {
                         wxString rte_lat = wxString::FromUTF8(f->Attribute("lat"));
 						wxString rte_lon = wxString::FromUTF8(f->Attribute("lon"));
-
+                        		
 						my_position.lat = rte_lat;
 						my_position.lon = rte_lon;
-						my_positions.push_back(my_position);
+						my_positions.push_back(my_position);					   
 					}  //else if(!strcmp(f->Value(), "extensions")) {
                         //rte_start = wxString::FromUTF8(f->Attribute("opencpn:start"));
 						//rte_end = wxString::FromUTF8(f->Attribute("opencpn:end"));
 
-                    //}
+                    //}				
                 }
 
         }
@@ -513,7 +526,7 @@ failed:
 
 void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  ){
    if(OpenXML()){
-
+  
 	bool error_occured=false;
    // double dist, fwdAz, revAz;
 
@@ -524,7 +537,7 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  ){
 	int num_hours;
 
 	num_hours = 1;
-
+	
 	// wxString str_countPts =  wxString::Format(wxT("%d"), (int)num_hours);
     // wxMessageBox(str_countPts,_T("count_hours"));
 
@@ -540,7 +553,7 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  ){
             error_occured=true;     // the user changed idea...
 		    return;
 		}
-
+			
 		//dlg.ShowModal();
         s=dlg.GetPath();
         //  std::cout<<s<< std::endl;
@@ -592,12 +605,12 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  ){
 
     switch ( Pattern ) {
     case 1:
-        {
-        if (dbg) cout<<"UKTides Calculation\n";
+        {		
+        if (dbg) cout<<"UKTides Calculation\n";      
         double speed=0;
 		int    interval=1;
-
-
+        		
+		
 		speed = speed*interval;
 
         int n=0;
@@ -605,13 +618,13 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  ){
         double lati, loni;
         double latN[100], lonN[100];
 		double latF, lonF;
-
-		Position my_point;
-
+		
+		Position my_point;		
+       
 		double value, value1;
-
+		
 		for(std::vector<Position>::iterator it = my_positions.begin();  it != my_positions.end(); it++){
-
+       
 			if(!(*it).lat.ToDouble(&value)){ /* error! */ }
 				lati = value;
 			if(!(*it).lon.ToDouble(&value1)){ /* error! */ }
@@ -622,13 +635,13 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  ){
 
 		n++;//0,1,2,3
 		}
-
+		
 		my_positions.clear();
 
 		n--;//n = 2,  0,1,2
 		int routepoints = n+1; //3
-
-
+		
+		
 		double myDist, myBrng, myDistForBrng;
 		int count_pts;
 		double remaining_dist, myLast, route_dist;
@@ -646,15 +659,15 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  ){
 		lonF = lonN[0];
 
 		// Start of new logic
-		for (i=0; i<n; i++){	// n is number of routepoints
+		for (i=0; i<n; i++){	// n is number of routepoints		
 
 			// save the routepoint
 			my_point.lat = wxString::Format(wxT("%f"),latN[i]);
 			my_point.lon = wxString::Format(wxT("%f"),lonN[i]);
 			my_point.routepoint = 1;
 			my_point.wpt_num =  wxString::Format(wxT("%d"),(int)i);
-			my_points.push_back(my_point);
-
+			my_points.push_back(my_point);	
+            			
 			if (i==0){ // First F is a routepoint
 				latF = latN[i];
 				lonF = lonN[i];
@@ -664,10 +677,10 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  ){
 
 			total_dist = total_dist + myDist;
 
-			if (total_dist > speed){
+			if (total_dist > speed){	
 						// UKTides point after route point
 				        //
-						route_dist = total_dist - myDist;
+						route_dist = total_dist - myDist; 			
 						remaining_dist = speed - route_dist;
 
 						DistanceBearingMercator( latN[i + 1], lonN[i + 1], latN[i], lonN[i],&myDist, &myBrng);
@@ -676,54 +689,54 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  ){
 						// Put in DR after many route points
 						my_point.lat = wxString::Format(wxT("%f"),lati);
 						my_point.lon = wxString::Format(wxT("%f"),loni);
-						my_point.routepoint = 0;
+						my_point.routepoint = 0;			
 						my_points.push_back(my_point);
-
+			            
 						latF = lati;
 						lonF = loni;
 
 						total_dist = 0;
-
-						//
-				        //
+			    
+						// 
+				        // 
 						DistanceBearingMercator(latN[i + 1], lonN[i + 1], latF, lonF, &myDistForBrng, &myBrng);
-
+				
 				        if (myDistForBrng > speed){
-
+													
 							// put in the UKTides positions
 							//
 							count_pts = (int)floor(myDistForBrng/speed);
 							//
 							remaining_dist = myDistForBrng - (count_pts*speed);
 							DistanceBearingMercator(latN[i + 1], lonN[i + 1], latF, lonF, &myDistForBrng, &myBrng);
-
-							for (c = 1; c <= count_pts ; c++){
-								destLoxodrome(latF, lonF, myBrng, speed*c, &lati, &loni);
+							
+							for (c = 1; c <= count_pts ; c++){							
+								destLoxodrome(latF, lonF, myBrng, speed*c, &lati, &loni);				
 								// print mid points
 								my_point.lat = wxString::Format(wxT("%f"),lati);
 								my_point.lon = wxString::Format(wxT("%f"),loni);
 								my_point.routepoint = 0;
 								my_points.push_back(my_point);
-								//	End of prints
-								}
-
+								//	End of prints					
+								}													
+						
 							latF = lati;
 							lonF = loni;
-
-							total_dist = 0;
+						
+							total_dist = 0; 
 							//
 							//
 							// All the UKTides positions inserted
 						}
-
+			
 						if (total_dist == 0){
 							DistanceBearingMercator(latN[i + 1], lonN[i + 1], latF, lonF, &myDistForBrng, &myBrng);
 							total_dist = myDistForBrng;
 							latF = latN[i+1];
 							lonF = lonN[i+1];
 						}
-
-			}
+			
+			}															
 			else{
 				//
 				latF = latN[i+1];
@@ -732,7 +745,7 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  ){
 				//
 				//
 				//
-			}   //
+			}   //			
 
 		}
 		// End of new logic
@@ -747,30 +760,30 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  ){
 
 		for(std::vector<Position>::iterator itOut = my_points.begin();  itOut != my_points.end(); itOut++){
 			//wxMessageBox((*it).lat, _T("*it.lat"));
-
+		
         double value, value1;
 		if(!(*itOut).lat.ToDouble(&value)){ /* error! */ }
 			lati = value;
 		if(!(*itOut).lon.ToDouble(&value1)){ /* error! */ }
 			loni = value1;
-
+		
 		if ((*itOut).routepoint == 1){
 			if (write_file){Addpoint(Route, wxString::Format(wxT("%f"),lati), wxString::Format(wxT("%f"),loni), (*itOut).wpt_num ,_T("diamond"),_T("WPT"));}
 		}
 		else{
 			if ((*itOut).routepoint == 0){
-				if (write_file){Addpoint(Route, wxString::Format(wxT("%f"),lati), wxString::Format(wxT("%f"),loni), _T("UKTides") ,_T("square"),_T("WPT"));}
+				if (write_file){Addpoint(Route, wxString::Format(wxT("%f"),lati), wxString::Format(wxT("%f"),loni), _T("UKTides") ,_T("square"),_T("WPT"));}			
 			}
 		}
-
+        
 		}
-
-		my_points.clear();
+		
+		my_points.clear();		
         break;
-
+		
 		}
 
-
+    
       default:
       {            // Note the colon, not a semicolon
         cout<<"Error, bad input, quitting\n";
@@ -794,4 +807,37 @@ void Dlg::Calculate( wxCommandEvent& event, bool write_file, int Pattern  ){
         wxMessageBox(_("Error in calculation. Please check input!") );
     }
   }
+}
+
+wxString Dlg::StandardPath()
+{
+	wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
+	wxString s = wxFileName::GetPathSeparator();
+
+#if defined(__WXMSW__)
+	wxString stdPath = std_path.GetConfigDir();
+#elif defined(__WXGTK__) || defined(__WXQT__)
+	wxString stdPath = std_path.GetUserDataDir();
+#elif defined(__WXOSX__)
+	wxString stdPath = (std_path.GetUserConfigDir() + s + _T("opencpn"));
+#endif
+
+	stdPath += s + _T("UserIcons");
+	if (!wxDirExists(stdPath)) 
+		wxMkdir(stdPath);		
+
+#ifdef __WXOSX__
+	// Compatibility with pre-OCPN-4.2; move config dir to
+	// ~/Library/Preferences/opencpn if it exists
+	wxString oldPath = (std_path.GetUserConfigDir());
+	if (wxDirExists(oldPath) && !wxDirExists(stdPath)) {
+		wxLogMessage("UKTides_pi: moving config dir %s to %s", oldPath, stdPath);
+		wxRenameFile(oldPath, stdPath);
+	}
+#endif
+
+	
+
+	stdPath += s; // is this necessary?
+	return stdPath;
 }

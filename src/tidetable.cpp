@@ -176,7 +176,7 @@ void TideTable::CreateControls()
       
 	  m_wpList->InsertColumn(0, _("Date/Time"), wxLIST_FORMAT_LEFT, char_size * 14);
 	  m_wpList->InsertColumn(1, _("HW/LW"), wxLIST_FORMAT_LEFT, char_size * 14);
-	  m_wpList->InsertColumn(2, _("Height (metres)"), wxLIST_FORMAT_RIGHT, char_size * 9);
+	  m_wpList->InsertColumn(2, _("Height"), wxLIST_FORMAT_RIGHT, char_size * 9);
 
       //Set the maximum size of the entire  dialog
       int width, height;

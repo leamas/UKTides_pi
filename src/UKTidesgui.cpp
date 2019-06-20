@@ -66,7 +66,7 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_staticText9->Wrap( -1 );
 	bSizer5->Add( m_staticText9, 0, wxALL, 5 );
 
-	wxString m_choice3Choices[] = { _("1"), _("2"), _("3"), _("4"), _("5"), _("6"), _("7") };
+	wxString m_choice3Choices[] = { _T("1"), _T("2"), _T("3"), _T("4"), _T("5"), _T("6"), _T("7") };
 	int m_choice3NChoices = sizeof( m_choice3Choices ) / sizeof( wxString );
 	m_choice3 = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choice3NChoices, m_choice3Choices, 0 );
 	m_choice3->SetSelection( 0 );
