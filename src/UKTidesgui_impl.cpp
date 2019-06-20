@@ -230,11 +230,11 @@ void Dlg::getHWLW(string id)
 	int daysAhead = m_choice3->GetSelection();
 	wxString choiceDays = m_choice3->GetString(daysAhead);
 
-	auto duration = "?duration="s;
+	string duration = "?duration="s;
 	string urlDays = choiceDays.ToStdString();
 
-	auto key = "&key="s;
-	auto tidalevents = "/TidalEvents"s;
+	string key = "&key="s;
+	string tidalevents = "/TidalEvents"s;
 
 
 	wxString urlString = "https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations/" + id + tidalevents + duration + urlDays + key;
