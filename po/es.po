@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opencpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-02 11:42+0100\n"
+"POT-Creation-Date: 2019-07-02 12:28+0100\n"
 "PO-Revision-Date: 2016-02-27 08:04-0500\n"
 "Last-Translator: nohal <pavel@kalian.cz>\n"
 "Language-Team: Spanish\n"
@@ -94,10 +94,13 @@ msgstr ""
 msgid "Locations"
 msgstr ""
 #
-msgid "No Source found in message"
+msgid "No UK tide locations available"
 msgstr ""
 #
-msgid "No UK tide locations available"
+msgid "No active tidal stations found. Please download the locations"
+msgstr ""
+#
+msgid "No features found in message"
 msgstr ""
 #
 msgid "No properties found in message"
@@ -112,13 +115,10 @@ msgid ""
 "No tidal data found. Please use right click to select the UK tidal station"
 msgstr ""
 #
-msgid "No tidal stations found, please download the locations"
+msgid "No tidal stations found"
 msgstr ""
 #
 msgid "No tidal stations found. Please download locations when online"
-msgstr ""
-#
-msgid "No tidal stations found. Please download the locations"
 msgstr ""
 #
 msgid "OK"

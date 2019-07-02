@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UKTides_pi 0.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-02 11:42+0100\n"
+"POT-Creation-Date: 2019-07-02 12:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgid "    UKTides panel icon has NOT been loaded"
 msgstr ""
 
 #: src/UKTides_pi.cpp:118 src/UKTides_pi.cpp:121 src/UKTides_pi.cpp:194
-#: src/UKTides_pi.cpp:200 src/UKTidesgui_impl.cpp:712
+#: src/UKTides_pi.cpp:200 src/UKTidesgui_impl.cpp:736
 msgid "UKTides"
 msgstr ""
 
@@ -126,80 +126,80 @@ msgid "Success"
 msgstr ""
 
 #: src/UKTidesgui_impl.cpp:152
-msgid "No tidal stations found, please download the locations"
+msgid "No tidal stations found"
 msgstr ""
 
 #: src/UKTidesgui_impl.cpp:161
-msgid "No Source found in message"
+msgid "No features found in message"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:172
+#: src/UKTidesgui_impl.cpp:173
 msgid "No properties found in message"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:220
+#: src/UKTidesgui_impl.cpp:230
 msgid "Select the Port"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:404
+#: src/UKTidesgui_impl.cpp:423
 msgid "Tides"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:405 src/UKTidesgui_impl.cpp:465
+#: src/UKTidesgui_impl.cpp:424 src/UKTidesgui_impl.cpp:484
 msgid "      (Times are UTC)  "
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:405 src/UKTidesgui_impl.cpp:465
+#: src/UKTidesgui_impl.cpp:424 src/UKTidesgui_impl.cpp:484
 msgid " (Height in metres)"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:414
+#: src/UKTidesgui_impl.cpp:433
 msgid ""
 "No tidal data found. Please use right click to select the UK tidal station"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:448
+#: src/UKTidesgui_impl.cpp:467
 msgid ""
 "No tidal data found. Please download the locations \n"
 " and use right click to select the UK tidal station"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:452
+#: src/UKTidesgui_impl.cpp:471
 msgid "Port Tides Saved"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:534
-msgid "No tidal stations found. Please download the locations"
+#: src/UKTidesgui_impl.cpp:558
+msgid "No active tidal stations found. Please download the locations"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:558 src/UKTidesgui_impl.cpp:594
+#: src/UKTidesgui_impl.cpp:582 src/UKTidesgui_impl.cpp:618
 msgid "Port not found"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:572
+#: src/UKTidesgui_impl.cpp:596
 msgid "No tidal stations found. Please download locations when online"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:712
+#: src/UKTidesgui_impl.cpp:736
 msgid "Failed to save xml file: "
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:731
+#: src/UKTidesgui_impl.cpp:755
 msgid "Tidal Events"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:736
+#: src/UKTidesgui_impl.cpp:758
 msgid "No UK tide locations available"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:741
+#: src/UKTidesgui_impl.cpp:763
 msgid "Invalid xml file"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:842
+#: src/UKTidesgui_impl.cpp:864
 msgid "OK"
 msgstr ""
 
-#: src/UKTidesgui_impl.cpp:844
+#: src/UKTidesgui_impl.cpp:866
 msgid "Cancel"
 msgstr ""

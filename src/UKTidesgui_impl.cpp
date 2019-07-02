@@ -149,16 +149,17 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 	Json::Value  root;
 	// construct a JSON parser
 	Json::Reader reader;
-	wxString error = _("No tidal stations found, please download the locations");
+	wxString error = _("No tidal stations found");
 
 	if (!reader.parse((std::string)myjson, root)) {
-		wxMessageBox(error);
+		wxLogMessage(error);
 		return;
 	}
 
 	if (!root.isMember("features")) {
 		// Originator
-		wxMessageBox(_("No Source found in message"));
+		wxLogMessage(_("No features found in message"));
+		return;
 	}
 
 	int i = root["features"].size();
@@ -169,7 +170,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 
 		if (!features.isMember("properties")) {
 			// Originator
-			wxMessageBox(_("No properties found in message"));
+			wxLogMessage(_("No properties found in message"));
 		}
 
 		string name = features["properties"]["Name"].asString();
@@ -189,6 +190,8 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 		s_lat.ToDouble(&myLat);
 		s_lon.ToDouble(&myLon);
 
+		//bool rmWpt = DeleteSingleWaypoint(myId);
+
 		outPort.coordLat = myLat;
 		outPort.coordLon = myLon;
 
@@ -197,6 +200,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 
 		pPoint->m_IconName = "station_icon";
 		pPoint->m_MarkDescription = myId;
+		pPoint->m_GUID = myId;
 		bool added = AddSingleWaypoint(pPoint, false);
 
 		myports.push_back(outPort);
@@ -210,6 +214,12 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 	
 	wxString portName;	
+	wxString sId;
+
+	double myLat, myLon;
+	myLat = 0;
+	myLon = 0;
+
 	LoadTidalEventsFromXml();
 
 	if (mySavedPorts.size() == 0) {
@@ -230,6 +240,19 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 	for (list<myPort>::iterator it = mySavedPorts.begin(); it != mySavedPorts.end(); it++) {
 
 		portName = (*it).Name;
+
+		sId = (*it).Id;
+		myLat = (*it).coordLat;
+		myLon = (*it).coordLon;
+
+		PlugIn_Waypoint * pPoint = new PlugIn_Waypoint(myLat, myLon,
+			"", portName, "");
+
+		pPoint->m_IconName = "station_icon";
+		pPoint->m_MarkDescription = sId;
+		pPoint->m_GUID = sId;
+		bool added = AddSingleWaypoint(pPoint, false);
+		GetParent()->Refresh();
 
 		GetPortDialog.dialogText->InsertItem(in, "", -1);
 		GetPortDialog.dialogText->SetItem(in, 0, portName);
@@ -280,12 +303,7 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 			// Get the info and store it in row_info variable.   
 			GetPortDialog.dialogText->GetItem(row_info);
 			// Extract the text out that cell
-			cell_contents_string = row_info.m_text;
-
-			double value = 0;			
-			double myLat, myLon;
-			myLat = 0;
-			myLon = 0;
+			cell_contents_string = row_info.m_text;								
 
 			for (list<myPort>::iterator it = mySavedPorts.begin(); it != mySavedPorts.end(); it++) {
 				wxString portName = (*it).Name;
@@ -343,7 +361,8 @@ void Dlg::getHWLW(string id)
 	}
 	
 	if (!root2.isArray()) {
-		wxMessageBox(error);
+		wxLogMessage(error);
+		return;
 	}
 	else {
 
@@ -515,6 +534,11 @@ wxString Dlg::getPort(double m_lat, double m_lon) {
 	wxString m_portId;	
 	
 	m_portId = getPortId(m_lat, m_lon);
+
+	if (m_portId.IsEmpty()) {		
+		return wxEmptyString;
+	}
+
 	getHWLW(m_portId.ToStdString());		
 
 	return mylat;
@@ -531,7 +555,7 @@ wxString Dlg::getPortId(double m_lat, double m_lon) {
 	wxString m_portId;
 
 	if (myports.empty()) {
-		wxMessageBox(_("No tidal stations found. Please download the locations"));
+		wxMessageBox(_("No active tidal stations found. Please download the locations"));
 		return wxEmptyString;
 	}
 
@@ -729,8 +753,6 @@ list<myPort>Dlg::LoadTidalEventsFromXml()
 	wxFileName fn(filename);
 
 	SetTitle(_("Tidal Events"));
-
-	wxDateTime start = wxDateTime::UNow();
 
 	if (!doc.LoadFile(filename.mb_str()))
 		wxLogMessage(_("No UK tide locations available"));
