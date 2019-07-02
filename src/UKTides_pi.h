@@ -100,10 +100,12 @@ public:
 
 	  double GetCursorLon(void) { return m_cursor_lon; }
 	  double GetCursorLat(void) { return m_cursor_lat; }
+	  
+	  int m_position_menu_id;
 
 private:
       
-	int m_position_menu_id;
+	
 
 	double m_cursor_lon;
 	double m_cursor_lat;

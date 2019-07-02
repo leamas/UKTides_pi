@@ -113,7 +113,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 
 	wxString s_lat, s_lon;
 
-	wxString urlString = "https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations?key=";
+	wxString urlString = "https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations?key=cefba1163a81498c9a1e5d03ea1fed69";
 	wxURI url(urlString);
 
 	wxString tmp_file = wxFileName::CreateTempFileName("");
@@ -206,6 +206,8 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 		myports.push_back(outPort);
 	}
 
+	SetCanvasContextMenuItemViz(plugin->m_position_menu_id, true);
+
 	RequestRefresh(m_parent);
 	root.clear();
 
@@ -227,13 +229,13 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 		return;
 	}
 
-	GetTidalEventDialog GetPortDialog(this, -1, _("Select the Port"), wxPoint(200, 200), wxSize(300, 200), wxRESIZE_BORDER);
+	GetTidalEventDialog* GetPortDialog = new GetTidalEventDialog(this, -1, _("Select the Port"), wxPoint(200, 200), wxSize(300, 200), wxRESIZE_BORDER);
 
-	GetPortDialog.dialogText->InsertColumn(0, "", 0, wxLIST_AUTOSIZE);
-	GetPortDialog.dialogText->SetColumnWidth(0, 290);
-	GetPortDialog.dialogText->InsertColumn(1, "", 0, wxLIST_AUTOSIZE);
-	GetPortDialog.dialogText->SetColumnWidth(1, 0);
-	GetPortDialog.dialogText->DeleteAllItems();
+	GetPortDialog->dialogText->InsertColumn(0, "", 0, wxLIST_AUTOSIZE);
+	GetPortDialog->dialogText->SetColumnWidth(0, 290);
+	GetPortDialog->dialogText->InsertColumn(1, "", 0, wxLIST_AUTOSIZE);
+	GetPortDialog->dialogText->SetColumnWidth(1, 0);
+	GetPortDialog->dialogText->DeleteAllItems();
 
 	int in = 0;
 	wxString routeName = "";
@@ -254,8 +256,8 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 		bool added = AddSingleWaypoint(pPoint, false);
 		GetParent()->Refresh();
 
-		GetPortDialog.dialogText->InsertItem(in, "", -1);
-		GetPortDialog.dialogText->SetItem(in, 0, portName);
+		GetPortDialog->dialogText->InsertItem(in, "", -1);
+		GetPortDialog->dialogText->SetItem(in, 0, portName);
 		in++;
 	}
 	this->Fit();
@@ -271,20 +273,20 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 	wxString       cell_contents_string = wxEmptyString;
 	bool foundPort = false;
 
-	if (GetPortDialog.ShowModal() != wxID_OK) {
+	if (GetPortDialog->ShowModal() != wxID_OK) {
 		// Do nothing
 	}
 	else {
 
 		for (;;) {
-			itemIndex = GetPortDialog.dialogText->GetNextItem(itemIndex,
+			itemIndex = GetPortDialog->dialogText->GetNextItem(itemIndex,
 				wxLIST_NEXT_ALL,
 				wxLIST_STATE_SELECTED);
 
 			if (itemIndex == -1) break;
 
 			// Got the selected item index
-			if (GetPortDialog.dialogText->IsSelected(itemIndex)) {
+			if (GetPortDialog->dialogText->IsSelected(itemIndex)) {
 				si = itemIndex;
 				foundPort = true;
 				break;
@@ -301,7 +303,7 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 			row_info.m_mask = wxLIST_MASK_TEXT;
 
 			// Get the info and store it in row_info variable.   
-			GetPortDialog.dialogText->GetItem(row_info);
+			GetPortDialog->dialogText->GetItem(row_info);
 			// Extract the text out that cell
 			cell_contents_string = row_info.m_text;								
 
@@ -331,7 +333,7 @@ void Dlg::getHWLW(string id)
 	string duration = "?duration=";
 	string urlDays = choiceDays.ToStdString();
 
-	string key = "&key=";
+	string key = "&key=cefba1163a81498c9a1e5d03ea1fed69";
 	string tidalevents = "/TidalEvents";
 
 

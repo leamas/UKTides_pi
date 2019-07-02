@@ -126,7 +126,7 @@ int UKTides_pi::Init(void)
 	m_position_menu_id = AddCanvasContextMenuItem
 
 	(new wxMenuItem(&dummy_menu, -1, _("Select UK Tidal Station")), this);
-	SetCanvasContextMenuItemViz(m_position_menu_id, true);
+	SetCanvasContextMenuItemViz(m_position_menu_id, false);
 
      m_pDialog = NULL;	 
 
@@ -226,6 +226,7 @@ void UKTides_pi::OnToolbarToolCallback(int id)
             m_pDialog = new Dlg(*this, m_parent_window);
             m_pDialog->plugin = this;
             m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
+			
       }
 
 	  m_pDialog->Fit();
@@ -300,7 +301,7 @@ void UKTides_pi::OnContextMenuItemCallback(int id)
 {
 	if (!m_pDialog)
 		return;
-
+	
 	if (id == m_position_menu_id) {
 		m_cursor_lat = GetCursorLat();
 		m_cursor_lon = GetCursorLon();

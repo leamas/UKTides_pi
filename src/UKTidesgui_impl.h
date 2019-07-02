@@ -86,12 +86,13 @@ public:
 		void AutoSizeHeader(wxListCtrl *const list_ctrl);
 
 		UKTides_pi &m_UKTides_pi;
-		wxString StandardPath();		
+		wxString StandardPath();	
+		list<myPort>myports;	
 
 private:
 	
 	wxString m_titlePortName;
-	list<myPort>myports;
+	
 	list<TidalEvent>myevents;
 	list<TidalEvent>mySavedEvents;
 
@@ -140,24 +141,6 @@ class GetTidalEventDialog : public wxDialog
 public:
 
 	GetTidalEventDialog(wxWindow * parent, wxWindowID id, const wxString & title,
-		const wxPoint & pos = wxDefaultPosition,
-		const wxSize & size = wxDefaultSize,
-		long style = wxDEFAULT_DIALOG_STYLE);
-
-	wxListView * dialogText;
-	wxString GetText();
-
-private:
-
-	void OnOk(wxCommandEvent & event);
-
-};
-
-class TideTableDialog : public wxDialog
-{
-public:
-
-	TideTableDialog(wxWindow * parent, wxWindowID id, const wxString & title,
 		const wxPoint & pos = wxDefaultPosition,
 		const wxSize & size = wxDefaultSize,
 		long style = wxDEFAULT_DIALOG_STYLE);
