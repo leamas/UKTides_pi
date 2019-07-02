@@ -708,7 +708,7 @@ void Dlg::SaveTidalEventsToXml(list<myPort>myPorts)
 	wxString filename = "tidalevents.xml";
 	wxString tidal_events_path = StandardPath();
 
-	if (!doc.SaveFile((tidal_events_path + filename).mb_str()))
+	if (!doc.SaveFile(tidal_events_path + filename))
 		wxLogMessage(_("UKTides") + wxString(": ") + _("Failed to save xml file: ") + filename);
 }
 

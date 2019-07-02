@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opencpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-27 09:53-0300\n"
+"POT-Creation-Date: 2019-07-02 11:42+0100\n"
 "PO-Revision-Date: 2016-02-27 08:04-0500\n"
 "Last-Translator: nohal <pavel@kalian.cz>\n"
 "Language-Team: Danish\n"
@@ -15,129 +15,144 @@ msgstr ""
 "X-Crowdin-Project: opencpn\n"
 "X-Crowdin-Language: da\n"
 "X-Crowdin-File: /plugins/DR_pi/po/DR_pi.pot\n"
-
-#: src/DR_pi.cpp:103 src/DR_pi.cpp:174 src/DRgui.h:58 src/DRgui_impl.cpp:170
-msgid "DR"
+#
+msgid "      (Times are UTC)  "
 msgstr ""
-
-#: src/DR_pi.cpp:180
-msgid "DR Positions"
+#
+msgid "    UKTides panel icon has NOT been loaded"
 msgstr ""
-
-#: src/DR_pi.cpp:185
-msgid "Creates GPX files with\n"
-"DR Positions"
+#
+msgid " (Height in metres)"
 msgstr ""
-
-#: src/DR_pi.cpp:271
-msgid "Route Preferences"
+#
+msgid " Download  "
 msgstr ""
-
-#: src/DRgui.cpp:21
-msgid "DR Options"
-msgstr ""
-
-#: src/DRgui.cpp:33
-msgid "Speed             "
-msgstr ""
-
-#: src/DRgui.cpp:41
-msgid "kts"
-msgstr ""
-
-#: src/DRgui.cpp:51
-msgid "Interval"
-msgstr ""
-
-#: src/DRgui.cpp:55
-msgid "0"
-msgstr ""
-
-#: src/DRgui.cpp:55
+#
 msgid "1"
 msgstr ""
-
-#: src/DRgui.cpp:55
+#
 msgid "2"
 msgstr ""
-
-#: src/DRgui.cpp:55
+#
 msgid "3"
 msgstr ""
-
-#: src/DRgui.cpp:55
+#
 msgid "4"
 msgstr ""
-
-#: src/DRgui.cpp:55
+#
 msgid "5"
 msgstr ""
-
-#: src/DRgui.cpp:55
+#
 msgid "6"
 msgstr ""
-
-#: src/DRgui.cpp:61
-msgid "Hours"
+#
+msgid "7"
 msgstr ""
-
-#: src/DRgui.cpp:71
-msgid "Generate &GPX"
+#
+msgid "Aborted"
 msgstr ""
-
-#: src/DRgui.cpp:86
-msgid "Route Name"
+#
+msgid "All times UTC"
 msgstr ""
-
-#: src/DRgui.cpp:126
-msgid "General settings"
+#
+msgid "Cancel"
 msgstr ""
-
-#: src/DRgui.cpp:133
-msgid "Speed"
+#
+msgid "Days ahead: "
 msgstr ""
-
-#: src/DRgui.cpp:144
-msgid "DR Interval"
+#
+msgid "Download"
 msgstr ""
-
-#: src/DRgui.h:78 src/DRgui_impl.h:52
-msgid "DR preferences"
+#
+msgid ""
+"Download failed.\n"
+"\n"
+"Are you connected to the Internet?"
 msgstr ""
-
-#: src/DRgui_impl.cpp:98
-msgid "Import GPX Route file"
+#
+msgid "Downloads UKHO Tidal Data for UK ports"
 msgstr ""
-
-#: src/DRgui_impl.cpp:122
-msgid "Failed to load file: "
+#
+msgid "Failed"
 msgstr ""
-
-#: src/DRgui_impl.cpp:127
-msgid "rte Invalid xml file"
+#
+msgid "Failed to save xml file: "
 msgstr ""
-
-#: src/DRgui_impl.cpp:141
-msgid "Route"
+#
+msgid "Guide"
 msgstr ""
-
-#: src/DRgui_impl.cpp:141
-msgid "Loading"
+#
+msgid "Help"
 msgstr ""
-
-#: src/DRgui_impl.cpp:201
-msgid "Export DR Positions in GPX file as"
+#
+msgid "Important"
 msgstr ""
-
-#: src/DRgui_impl.cpp:217
-msgid "error in input range validation"
+#
+msgid "Invalid xml file"
 msgstr ""
-
-#: src/DRgui_impl.cpp:460 src/DRgui_impl.cpp:461
-msgid "Error in calculation. Please check input!"
+#
+msgid "Locations"
 msgstr ""
-
-#: src/DRgui_impl.h:58
-msgid "DR Plugin"
+#
+msgid "No Source found in message"
 msgstr ""
-
+#
+msgid "No UK tide locations available"
+msgstr ""
+#
+msgid "No properties found in message"
+msgstr ""
+#
+msgid ""
+"No tidal data found. Please download the locations \n"
+" and use right click to select the UK tidal station"
+msgstr ""
+#
+msgid ""
+"No tidal data found. Please use right click to select the UK tidal station"
+msgstr ""
+#
+msgid "No tidal stations found, please download the locations"
+msgstr ""
+#
+msgid "No tidal stations found. Please download locations when online"
+msgstr ""
+#
+msgid "No tidal stations found. Please download the locations"
+msgstr ""
+#
+msgid "OK"
+msgstr ""
+#
+msgid "Port Locations"
+msgstr ""
+#
+msgid "Port Tides Saved"
+msgstr ""
+#
+msgid "Port not found"
+msgstr ""
+#
+msgid "Saved"
+msgstr ""
+#
+msgid "Select UK Tidal Station"
+msgstr ""
+#
+msgid "Select the Port"
+msgstr ""
+#
+msgid "Status:"
+msgstr ""
+#
+msgid "Success"
+msgstr ""
+#
+msgid "Tidal Events"
+msgstr ""
+#
+msgid "Tides"
+msgstr ""
+#
+msgid "UKTides"
+msgstr ""
