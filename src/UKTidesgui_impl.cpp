@@ -229,7 +229,7 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 		return;
 	}
 
-	GetTidalEventDialog* GetPortDialog = new GetTidalEventDialog(this, -1, _("Select the Port"), wxPoint(200, 200), wxSize(300, 200), wxRESIZE_BORDER);
+	GetTidalEventDialog* GetPortDialog = new GetTidalEventDialog(this, -1, _("Select the Location"), wxPoint(200, 200), wxSize(300, 200), wxRESIZE_BORDER);
 
 	GetPortDialog->dialogText->InsertColumn(0, "", 0, wxLIST_AUTOSIZE);
 	GetPortDialog->dialogText->SetColumnWidth(0, 290);
@@ -844,6 +844,24 @@ GetTidalEventDialog::GetTidalEventDialog(wxWindow * parent, wxWindowID id, const
 	const wxPoint & position, const wxSize & size, long style)
 	: wxDialog(parent, id, title, position, size, style)
 {
+	wxBoxSizer* itemBoxSizer1 = new wxBoxSizer(wxVERTICAL);
+	SetSizer(itemBoxSizer1);
+	
+	itemStaticBoxSizer14Static = new wxStaticBox(this, wxID_ANY, "Locations");
+	m_pListSizer = new wxStaticBoxSizer(itemStaticBoxSizer14Static, wxVERTICAL);
+	itemBoxSizer1->Add(m_pListSizer, 2, wxEXPAND | wxALL, 1);
+
+	wxBoxSizer* itemBoxSizerBottom = new wxBoxSizer(wxHORIZONTAL);
+	itemBoxSizer1->Add(itemBoxSizerBottom, 0, wxALIGN_LEFT | wxALL | wxEXPAND, 5);
+
+	wxBoxSizer* itemBoxSizer16 = new wxBoxSizer(wxHORIZONTAL);
+	itemBoxSizerBottom->Add(itemBoxSizer16, 0, wxALIGN_RIGHT | wxALL, 3);
+
+	m_OKButton = new wxButton(this, wxID_OK, _("OK"), wxDefaultPosition,
+		wxDefaultSize, 0);
+	itemBoxSizer16->Add(m_OKButton, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 1);
+	m_OKButton->SetDefault();
+
 
 	wxString dimensions = wxT(""), s;
 	wxPoint p;
@@ -855,15 +873,25 @@ GetTidalEventDialog::GetTidalEventDialog(wxWindow * parent, wxWindowID id, const
 	p.x = 6; p.y = 2;
 
 	dialogText = new wxListView(this, wxID_ANY, p, sz, wxLC_NO_HEADER | wxLC_REPORT | wxLC_SINGLE_SEL, wxDefaultValidator, wxT(""));
+	m_pListSizer->Add(dialogText, 1, wxEXPAND | wxALL, 6);
 
 	wxFont *pVLFont = wxTheFontList->FindOrCreateFont(12, wxFONTFAMILY_SWISS, wxNORMAL, wxFONTWEIGHT_NORMAL,
 		FALSE, wxString("Arial"));
 	dialogText->SetFont(*pVLFont);
 
-	p.y += sz.GetHeight() + 10;
+	//p.y += sz.GetHeight() + 10;
 
-	p.x += 30;
-	wxButton * b = new wxButton(this, wxID_OK, _("OK"), p, wxDefaultSize);
-	p.x += 140;
-	wxButton * c = new wxButton(this, wxID_CANCEL, _("Cancel"), p, wxDefaultSize);
+	//p.x += 30;
+	//wxButton * b = new wxButton(this, wxID_OK, _("OK"), p, wxDefaultSize);
+	//p.x += 140;
+	//wxButton * c = new wxButton(this, wxID_CANCEL, _("Cancel"), p, wxDefaultSize);
+
+	m_OKButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(GetTidalEventDialog::OnOk), NULL, this);
+}
+
+void GetTidalEventDialog::OnOk(wxCommandEvent & event) {
+
+	Hide();
+	event.Skip();
+
 };

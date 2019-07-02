@@ -148,6 +148,12 @@ public:
 	wxListView * dialogText;
 	wxString GetText();
 
+	wxStaticBoxSizer* m_pListSizer;
+	wxScrolledWindow *itemDialog1;
+	wxStaticBox* itemStaticBoxSizer14Static;
+
+	wxButton*     m_OKButton;
+
 private:
 
 	void OnOk(wxCommandEvent & event);

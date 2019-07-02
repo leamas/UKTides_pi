@@ -156,6 +156,8 @@ void TideTable::CreateControls()
       int width, height;
       ::wxDisplaySize( &width, &height );
       SetSizeHints( -1, -1, -1);
+
+
  }
       
 	  void TideTable::SetDialogTitle(const wxString & title)
