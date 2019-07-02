@@ -468,7 +468,7 @@ void Dlg::OnShowSavedPortTides(wxString thisPortId) {
 		return;
 	}
 
-	TideTable* tidetable = new TideTable(this, 7000, _("Port Tides Saved"), wxPoint(200, 200), wxSize(-1, -1), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+	TideTable* tidetable = new TideTable(this, 7000, _("Locations Saved"), wxPoint(200, 200), wxSize(-1, -1), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
 	
 	wxString Event;
 	wxString EventDT;

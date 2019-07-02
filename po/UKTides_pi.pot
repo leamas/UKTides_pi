@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UKTides_pi 0.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-02 12:28+0100\n"
+"POT-Creation-Date: 2019-07-02 13:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,7 +165,7 @@ msgid ""
 msgstr ""
 
 #: src/UKTidesgui_impl.cpp:471
-msgid "Port Tides Saved"
+msgid "Locations Saved"
 msgstr ""
 
 #: src/UKTidesgui_impl.cpp:558
