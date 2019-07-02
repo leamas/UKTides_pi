@@ -74,14 +74,14 @@ UKTides_pi::UKTides_pi(void *ppimgr)
       initialize_images();
 
 	  wxString shareLocn = *GetpSharedDataLocation() +
-		  _T("plugins") + wxFileName::GetPathSeparator() +
-		  _T("UKTides_pi") + wxFileName::GetPathSeparator()
-		  + _T("data") + wxFileName::GetPathSeparator();
-	  wxImage panelIcon(shareLocn + _T("uktides_panel_icon.png"));
+		  "plugins" + wxFileName::GetPathSeparator() +
+		  "UKTides_pi" + wxFileName::GetPathSeparator()
+		  + "data" + wxFileName::GetPathSeparator();
+	  wxImage panelIcon(shareLocn + "uktides_panel_icon.png");
 	  if (panelIcon.IsOk())
 		  m_panelBitmap = wxBitmap(panelIcon);
 	  else
-		  wxLogMessage(_("    UKTides panel icon NOT loaded"));
+		  wxLogMessage(_("    UKTides panel icon has NOT been loaded"));
 
 	  m_bShowUKTides = false;
 }
@@ -94,7 +94,7 @@ UKTides_pi::~UKTides_pi(void)
 
 int UKTides_pi::Init(void)
 {
-      AddLocaleCatalog( _T("opencpn-UKTides_pi") );
+      AddLocaleCatalog("opencpn-UKTides_pi");
 
       // Set some default private member parameters
       m_route_dialog_x = 0;
@@ -114,11 +114,11 @@ int UKTides_pi::Init(void)
 	if(m_bUKTidesShowIcon)
      
 #ifdef UKTIDES_USE_SVG
-	m_leftclick_tool_id = InsertPlugInToolSVG(_T("UKTides"), _svg_uktides, _svg_uktides, _svg_uktides_toggled,
-		wxITEM_CHECK, _("UKTides"), _T(""), NULL, UKTIDES_TOOL_POSITION, 0, this);
+	m_leftclick_tool_id = InsertPlugInToolSVG("UKTides", _svg_uktides, _svg_uktides, _svg_uktides_toggled,
+		wxITEM_CHECK, _("UKTides"), "", NULL, UKTIDES_TOOL_POSITION, 0, this);
 #else
-	 m_leftclick_tool_id  = InsertPlugInTool(_T(""), _img_uktides, _img_uktides, wxITEM_CHECK,
-            _("UKTides"), _T(""), NULL,
+	 m_leftclick_tool_id  = InsertPlugInTool("", _img_uktides, _img_uktides, wxITEM_CHECK,
+            _("UKTides"), "", NULL,
              UKTIDES_TOOL_POSITION, 0, this);
 #endif
 
@@ -128,7 +128,7 @@ int UKTides_pi::Init(void)
 	(new wxMenuItem(&dummy_menu, -1, _("Select UK Tidal Station")), this);
 	SetCanvasContextMenuItemViz(m_position_menu_id, true);
 
-     m_pDialog = NULL;
+     m_pDialog = NULL;	 
 
       return (WANTS_OVERLAY_CALLBACK |
               WANTS_OPENGL_OVERLAY_CALLBACK |		      

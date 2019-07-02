@@ -38,13 +38,6 @@
 #include "tidetable.h"
 
 
-#define    pi        (4.*atan(1.0))
-#define    tpi        (2.*pi)
-#define    twopi    (2.*pi)
-#define    degs    (180./pi)
-#define    rads    (pi/180.)
-
-
 
 /*!
  * TideTable type definition
@@ -55,16 +48,9 @@ IMPLEMENT_DYNAMIC_CLASS( TideTable, wxDialog )
  // RouteProp event table definition
 
 BEGIN_EVENT_TABLE( TideTable, wxDialog )
-    //EVT_TEXT( ID_PLANSPEEDCTL, RouteProp::OnPlanSpeedCtlUpdated )
-   // EVT_TEXT_ENTER( ID_STARTTIMECTL, RouteProp::OnStartTimeCtlUpdated )
-   // EVT_RADIOBOX ( ID_TIMEZONESEL, RouteProp::OnTimeZoneSelected )
-  //  EVT_BUTTON( ID_ROUTEPROP_CANCEL, RouteProp::OnRoutepropCancelClick )
+  
   EVT_BUTTON(ID_ROUTEPROP_OK, TideTable::OnRoutepropOkClick)
-   // EVT_LIST_ITEM_SELECTED( ID_LISTCTRL, RouteProp::OnRoutepropListClick )
-  //  EVT_LIST_ITEM_SELECTED( ID_TRACKLISTCTRL, RouteProp::OnRoutepropListClick )
-  //  EVT_BUTTON( ID_ROUTEPROP_SPLIT, RouteProp::OnRoutepropSplitClick )
-  //  EVT_BUTTON( ID_ROUTEPROP_EXTEND, RouteProp::OnRoutepropExtendClick )
- //   EVT_BUTTON( ID_ROUTEPROP_PRINT, RouteProp::OnRoutepropPrintClick )
+ 
 END_EVENT_TABLE()
 
 /*!
@@ -94,17 +80,9 @@ TideTable::TideTable()
 TideTable::TideTable(wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos,
         const wxSize& size, long style )
 {
-    m_TotalDistCtl = NULL;
+    
     m_wpList = NULL;
-    m_nSelected = 0;
-    m_pHead = NULL;
-    m_pTail = NULL;
-    m_pEnroutePoint = NULL;
-    m_bStartNow = false;
-
-    m_pRoute = 0;
-    m_pEnroutePoint = NULL;
-    m_bStartNow = false;
+    
     long wstyle = style;
 #ifdef __WXOSX__
     wstyle |= wxSTAY_ON_TOP;
@@ -113,8 +91,6 @@ TideTable::TideTable(wxWindow* parent, wxWindowID id, const wxString& caption, c
     SetExtraStyle( GetExtraStyle() | wxWS_EX_BLOCK_EVENTS );
     wxDialog::Create( parent, id, caption, pos, size, style );
         
-    m_bcompact = false;
-    
     CreateControls();
 }
 
@@ -143,21 +119,19 @@ void TideTable::CreateControls()
     SetSizer( itemBoxSizer1 );
     
         
-	itemStaticBoxSizer14Static = new wxStaticBox(this, wxID_ANY, _T("Tides"));
-        m_pListSizer = new wxStaticBoxSizer( itemStaticBoxSizer14Static, wxVERTICAL );
-        itemBoxSizer1->Add( m_pListSizer, 2, wxEXPAND | wxALL, 1 );
-        
-        //      Create the list control
-        m_wpList = new wxListCtrl( this, ID_LISTCTRL, wxDefaultPosition, wxSize( -1, -1 ),
-			wxLC_REPORT | wxLC_HRULES | wxLC_VRULES | wxLC_EDIT_LABELS );
-        
-        m_wpList->SetMinSize(wxSize(-1, 100) );
-        m_pListSizer->Add( m_wpList, 1, wxEXPAND | wxALL, 6 );
-          
-        
-        
-        wxBoxSizer* itemBoxSizerBottom = new wxBoxSizer( wxHORIZONTAL );
-        itemBoxSizer1->Add( itemBoxSizerBottom, 0, wxALIGN_LEFT | wxALL | wxEXPAND, 5 );      
+	itemStaticBoxSizer14Static = new wxStaticBox(this, wxID_ANY, "Tides");
+	m_pListSizer = new wxStaticBoxSizer(itemStaticBoxSizer14Static, wxVERTICAL);
+	itemBoxSizer1->Add(m_pListSizer, 2, wxEXPAND | wxALL, 1);
+
+	//      Create the list control
+	m_wpList = new wxListCtrl(this, ID_LISTCTRL, wxDefaultPosition, wxSize(-1, -1),
+		wxLC_REPORT | wxLC_HRULES | wxLC_VRULES | wxLC_EDIT_LABELS);
+
+	m_wpList->SetMinSize(wxSize(-1, 100));
+	m_pListSizer->Add(m_wpList, 1, wxEXPAND | wxALL, 6);
+
+	wxBoxSizer* itemBoxSizerBottom = new wxBoxSizer(wxHORIZONTAL);
+	itemBoxSizer1->Add(itemBoxSizerBottom, 0, wxALIGN_LEFT | wxALL | wxEXPAND, 5);
              
       wxBoxSizer* itemBoxSizer16 = new wxBoxSizer( wxHORIZONTAL );
       itemBoxSizerBottom->Add( itemBoxSizer16, 0, wxALIGN_RIGHT | wxALL, 3 );
@@ -182,18 +156,8 @@ void TideTable::CreateControls()
       int width, height;
       ::wxDisplaySize( &width, &height );
       SetSizeHints( -1, -1, -1);
-      }
+ }
       
-
-/*
- * Should we show tooltips?
- */
-
-	  bool TideTable::ShowToolTips()
-{
-    return TRUE;
-}
-
 	  void TideTable::SetDialogTitle(const wxString & title)
 {
     SetTitle(title);

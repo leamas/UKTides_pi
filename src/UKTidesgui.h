@@ -46,6 +46,7 @@ class DlgDef : public wxFrame
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnDownload( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGetSavedTides( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInformation( wxCommandEvent& event ) { event.Skip(); }
 
 

@@ -25,12 +25,12 @@ void initialize_images(void)
 #ifdef UKTIDES_USE_SVG
 	wxFileName fn;
 	fn.SetPath(*GetpSharedDataLocation());
-	fn.AppendDir(_T("plugins"));
-	fn.AppendDir(_T("UKTides_pi"));
-	fn.AppendDir(_T("data"));
-	fn.SetFullName(_T("UKTides_pi.svg"));
+	fn.AppendDir("plugins");
+	fn.AppendDir("UKTides_pi");
+	fn.AppendDir("data");
+	fn.SetFullName("UKTides_pi.svg");
 	_svg_uktides = fn.GetFullPath();
-	fn.SetFullName(_T("UKTides_pi_toggled.svg"));
+	fn.SetFullName("UKTides_pi_toggled.svg");
 	_svg_uktides_toggled = fn.GetFullPath();
 #endif
 

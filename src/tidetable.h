@@ -45,15 +45,7 @@
 #include "scrollingdialog.h"
 #endif
 
-/*!
- * Forward declarations
- */
 
-class   wxListCtrl;
-class   Route;
-class   RoutePoint;
-class   HyperlinkList;
-class   otidalroute_pi;
 
 /*!
  * Control identifiers
@@ -150,72 +142,14 @@ public:
     static bool getInstanceFlag(){ return instanceFlag; } 
     
     void CreateControls();
-    void CreateControlsCompact();
+ 
 	
     void SetDialogTitle(const wxString & title);
 	void OnRoutepropOkClick( wxCommandEvent& event );
-	/*
-    void OnRoutepropCancelClick( wxCommandEvent& event );
-    
-    void OnPlanSpeedCtlUpdated( wxCommandEvent& event );
-    void OnStartTimeCtlUpdated( wxCommandEvent& event );
-    void OnTimeZoneSelected( wxCommandEvent& event );
-    void OnRoutepropListClick( wxListEvent& event );
-    void OnRoutepropSplitClick( wxCommandEvent& event );
-    void OnRoutepropExtendClick( wxCommandEvent& event );
-    void OnRoutepropPrintClick( wxCommandEvent& event );
-    void OnRoutepropCopyTxtClick( wxCommandEvent& event );
-    void OnRoutePropMenuSelected( wxCommandEvent &event );
-    bool IsThisRouteExtendable();
-    void OnEvtColDragEnd(wxListEvent& event);
-    void InitializeList();
-    */
-    /// Should we show tooltips?
-    static bool ShowToolTips();
 
-    bool SaveChanges(void);
-
-    wxTextCtrl  *m_TotalDistCtl;
-    wxTextCtrl  *m_PlanSpeedCtl;
-    wxTextCtrl	*m_StartTimeCtl;
-    wxTextCtrl  *m_TimeEnrouteCtl;
-
-    wxStaticText *m_PlanSpeedLabel;
-    wxStaticText *m_StartTimeLabel;
-
-    wxTextCtrl  *m_RouteNameCtl;
-    wxTextCtrl  *m_RouteStartCtl;
-    wxTextCtrl  *m_RouteDestCtl;
-	wxTextCtrl  *m_TypeRouteCtl;
 
     wxListCtrl        *m_wpList;
-
     wxButton*     m_OKButton;
-    wxButton*     m_CopyTxtButton;
-
-
-    Route       *m_pRoute;
-    Route       *m_pHead; // for route splitting
-    Route       *m_pTail;
-    RoutePoint *m_pExtendPoint;
-    Route *m_pExtendRoute;
-    RoutePoint    *m_pEnroutePoint;
-    bool          m_bStartNow;
-
-    double      m_planspeed;
-    double      m_avgspeed;
-
-    int         m_nSelected; // index of point selected in Properties dialog row
-    int         m_tz_selection;
-
-    wxDateTime	 m_starttime; // kept as UTC
-//    wxRadioBox	*pDispTz;
-    wxStaticText  *m_staticText1;
-    wxStaticText  *m_staticText2;
-    wxStaticText  *m_staticText3;
-    wxChoice      *m_chColor;
-    wxChoice      *m_chStyle;
-    wxChoice      *m_chWidth;
 
     wxStaticBoxSizer* m_pListSizer;
     wxScrolledWindow *itemDialog1;
@@ -232,11 +166,6 @@ public:
     
     static bool instanceFlag;
 	static TideTable *single;
-    
-    wxRadioButton  *m_prb_tzUTC;
-    wxRadioButton  *m_prb_tzLocal;
-    wxRadioButton  *m_prb_tzLMT;
-    bool m_bcompact;
     
 };
 

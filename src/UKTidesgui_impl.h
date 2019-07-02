@@ -44,19 +44,21 @@
 
 using namespace std;
 
-struct myTidalEvents
+struct TidalEvent
 {
 	wxString EventType;
 	wxString DateTime;
 	wxString Height;
 };
 
-struct myPorts
+struct myPort
 {
 	wxString Name;
+	wxString DownloadDate;
 	wxString Id;
 	double coordLat;
 	double coordLon;
+	list<TidalEvent>tidalevents;
 };
 
 class UKTides_pi;
@@ -68,13 +70,8 @@ public:
 	Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent);
 	~Dlg();
 
-        void OnDownload( wxCommandEvent& event );
-		bool OpenXML();
-		
-		vector<Position> my_positions;
-		vector<Position> my_points;
-
-        void Calculate( wxCommandEvent& event, bool Export, int Pattern );
+        void OnDownload( wxCommandEvent& event );	
+		void OnGetSavedTides(wxCommandEvent& event);
 
 		void OnInformation(wxCommandEvent& event);
         void Addpoint(TiXmlElement* Route, wxString ptlat, wxString ptlon, wxString ptname, wxString ptsym, wxString pttype);	
@@ -89,18 +86,33 @@ public:
 		void AutoSizeHeader(wxListCtrl *const list_ctrl);
 
 		UKTides_pi &m_UKTides_pi;
-		wxString StandardPath();
+		wxString StandardPath();		
 
 private:
 	
 	wxString m_titlePortName;
-	list<myPorts>myports;
-	list<myTidalEvents>myevents;
+	list<myPort>myports;
+	list<TidalEvent>myevents;
+	list<TidalEvent>mySavedEvents;
+
+	myPort mySavedPort;
+	list<myPort>mySavedPorts;
+
+	myPort SavePortTidalEvents(list<TidalEvent>myEvents, string portId);
+	void SaveTidalEventsToXml(list<myPort>myPorts);
+
+	list<myPort> LoadTidalEventsFromXml();
+
+	double AttributeDouble(TiXmlElement *e, const char *name, double def);
+	wxString GetDateStringNow();
+	void RemoveOldDownloads();
 
 	void getHWLW(string id);
 	wxString getPortId(double m_lat, double m_lon);
+	wxString getSavedPortId(double m_lat, double m_lon);
 	wxString ProcessDate(wxString myLongDate);
 	void OnShow();
+	void OnShowSavedPortTides(wxString thisPortId);
 
 	void OnClose( wxCloseEvent& event );
 	
@@ -108,7 +120,8 @@ private:
     bool error_found;
     bool dbg;
 
-	wxString     m_gpx_path;		
+	wxString     m_gpx_path;	
+	wxDateTime m_dtNow;
 };
 
 
@@ -119,6 +132,42 @@ public:
     wxString lat, lon, wpt_num;
     Position *prev, *next; /* doubly linked circular list of positions */
     int routepoint;
+
+};
+
+class GetTidalEventDialog : public wxDialog
+{
+public:
+
+	GetTidalEventDialog(wxWindow * parent, wxWindowID id, const wxString & title,
+		const wxPoint & pos = wxDefaultPosition,
+		const wxSize & size = wxDefaultSize,
+		long style = wxDEFAULT_DIALOG_STYLE);
+
+	wxListView * dialogText;
+	wxString GetText();
+
+private:
+
+	void OnOk(wxCommandEvent & event);
+
+};
+
+class TideTableDialog : public wxDialog
+{
+public:
+
+	TideTableDialog(wxWindow * parent, wxWindowID id, const wxString & title,
+		const wxPoint & pos = wxDefaultPosition,
+		const wxSize & size = wxDefaultSize,
+		long style = wxDEFAULT_DIALOG_STYLE);
+
+	wxListView * dialogText;
+	wxString GetText();
+
+private:
+
+	void OnOk(wxCommandEvent & event);
 
 };
 

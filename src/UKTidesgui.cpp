@@ -21,6 +21,10 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_menuItem1 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Download") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu1->Append( m_menuItem1 );
 
+	wxMenuItem* m_menuItem3;
+	m_menuItem3 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Saved") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu1->Append( m_menuItem3 );
+
 	m_menubar1->Append( m_menu1, _("Locations") );
 
 	m_menu2 = new wxMenu();
@@ -66,7 +70,7 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_staticText9->Wrap( -1 );
 	bSizer5->Add( m_staticText9, 0, wxALL, 5 );
 
-	wxString m_choice3Choices[] = { _T("1"), _T("2"), _T("3"), _T("4"), _T("5"), _T("6"), _T("7") };
+	wxString m_choice3Choices[] = { _("1"), _("2"), _("3"), _("4"), _("5"), _("6"), _("7") };
 	int m_choice3NChoices = sizeof( m_choice3Choices ) / sizeof( wxString );
 	m_choice3 = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choice3NChoices, m_choice3Choices, 0 );
 	m_choice3->SetSelection( 0 );
@@ -85,6 +89,7 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DlgDef::OnClose ) );
 	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DlgDef::OnDownload ), this, m_menuItem1->GetId());
+	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DlgDef::OnGetSavedTides ), this, m_menuItem3->GetId());
 	m_menu2->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DlgDef::OnInformation ), this, m_menuItem2->GetId());
 	m_buttonDownload->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgDef::OnDownload ), NULL, this );
 }
