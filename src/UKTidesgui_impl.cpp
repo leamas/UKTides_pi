@@ -492,7 +492,7 @@ void Dlg::OnShowSavedPortTides(wxString thisPortId) {
 
 			for (list<TidalEvent>::iterator itt = savedevents.begin(); itt != savedevents.end(); itt++) {
 
-				Event = (*itt).EventType;
+				Event = (*itt).EventType;				
 				EventDT = (*itt).DateTime;
 				EventHeight = (*itt).Height;
 
@@ -782,7 +782,7 @@ list<myPort>Dlg::LoadTidalEventsFromXml()
 
 				for (TiXmlElement* f = e->FirstChildElement(); f; f = f->NextSiblingElement()) {
 					if (!strcmp(f->Value(), "TidalEvent")) {
-						thisEvent.EventType = f->Attribute("TidalEvent");						
+						thisEvent.EventType = f->Attribute("Event");						
 						thisEvent.DateTime = f->Attribute("DateTime");
 						thisEvent.Height = f->Attribute("Height");
 					}
