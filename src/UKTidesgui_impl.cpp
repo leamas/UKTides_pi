@@ -879,19 +879,4 @@ GetTidalEventDialog::GetTidalEventDialog(wxWindow * parent, wxWindowID id, const
 		FALSE, wxString("Arial"));
 	dialogText->SetFont(*pVLFont);
 
-	//p.y += sz.GetHeight() + 10;
-
-	//p.x += 30;
-	//wxButton * b = new wxButton(this, wxID_OK, _("OK"), p, wxDefaultSize);
-	//p.x += 140;
-	//wxButton * c = new wxButton(this, wxID_CANCEL, _("Cancel"), p, wxDefaultSize);
-
-	m_OKButton->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(GetTidalEventDialog::OnOk), NULL, this);
 }
-
-void GetTidalEventDialog::OnOk(wxCommandEvent & event) {
-
-	Hide();
-	event.Skip();
-
-};
