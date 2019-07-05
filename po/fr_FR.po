@@ -1,213 +1,198 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the UKTides_pi package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UKTides_pi 0.4\n"
+"Project-Id-Version: opencpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-05 21:09+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2019-07-03 12:54+0100\n"
+"PO-Revision-Date: 2019-07-05 12:07\n"
+"Last-Translator: Pavel Kalian (nohal)\n"
+"Language-Team: French\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: crowdin.com\n"
+"X-Crowdin-Project: opencpn\n"
+"X-Crowdin-Language: fr\n"
+"X-Crowdin-File: /plugins/UKTides_pi/po/UKTides_pi.pot\n"
 
 #: src/UKTides_pi.cpp:84
 msgid "    UKTides panel icon has NOT been loaded"
-msgstr ""
+msgstr "    L'icône du panneau de marées GB n'a PAS été chargée"
 
 #: src/UKTides_pi.cpp:118 src/UKTides_pi.cpp:121 src/UKTides_pi.cpp:194
 #: src/UKTides_pi.cpp:200 src/UKTidesgui_impl.cpp:738
 msgid "UKTides"
-msgstr ""
+msgstr "Marées GB"
 
 #: src/UKTides_pi.cpp:128
 msgid "Select UK Tidal Station"
-msgstr ""
+msgstr "Sélectionner la station de marée GB"
 
 #: src/UKTides_pi.cpp:205
 msgid "Downloads UKHO Tidal Data for UK ports"
-msgstr ""
+msgstr "Téléchargement des données des marées pour les ports britanniques"
 
 #: src/UKTidesgui.cpp:21
 msgid "Download"
-msgstr ""
+msgstr "Télécharger"
 
 #: src/UKTidesgui.cpp:25
 msgid "Saved"
-msgstr ""
+msgstr "Sauvegardé"
 
 #: src/UKTidesgui.cpp:28
 msgid "Locations"
-msgstr ""
+msgstr "Emplacement"
 
 #: src/UKTidesgui.cpp:31
 msgid "Guide"
-msgstr ""
+msgstr "Guide"
 
 #: src/UKTidesgui.cpp:34
 msgid "Help"
-msgstr ""
+msgstr "Aide"
 
 #: src/UKTidesgui.cpp:42
 msgid "Important"
-msgstr ""
+msgstr "Important"
 
 #: src/UKTidesgui.cpp:44
 msgid "All times UTC"
-msgstr ""
+msgstr "Heures UTC"
 
 #: src/UKTidesgui.cpp:54
 msgid "Port Locations"
-msgstr ""
+msgstr "Localisation du port"
 
 #: src/UKTidesgui.cpp:56
 msgid " Download  "
-msgstr ""
+msgstr " Télécharger  "
 
 #: src/UKTidesgui.cpp:59
 msgid "Status:"
-msgstr ""
+msgstr "Statut :"
 
 #: src/UKTidesgui.cpp:69
 msgid "Days ahead: "
-msgstr ""
+msgstr "Jours à venir: "
 
 #: src/UKTidesgui.cpp:73
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: src/UKTidesgui.cpp:73
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: src/UKTidesgui.cpp:73
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: src/UKTidesgui.cpp:73
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #: src/UKTidesgui.cpp:73
 msgid "5"
-msgstr ""
+msgstr "5"
 
 #: src/UKTidesgui.cpp:73
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: src/UKTidesgui.cpp:73
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: src/UKTidesgui_impl.cpp:128
 msgid "Aborted"
-msgstr ""
+msgstr "Abandonné"
 
 #: src/UKTidesgui_impl.cpp:133
-msgid ""
-"Download failed.\n"
-"\n"
+msgid "Download failed.\n\n"
 "Are you connected to the Internet?"
-msgstr ""
+msgstr "Le téléchargement a échoué.\n\n"
+"Êtes-vous connecté à Internet ?"
 
 #: src/UKTidesgui_impl.cpp:135
 msgid "Failed"
-msgstr ""
+msgstr "Echec"
 
 #: src/UKTidesgui_impl.cpp:140
 msgid "Success"
-msgstr ""
+msgstr "C'est réussi"
 
 #: src/UKTidesgui_impl.cpp:152
 msgid "No tidal stations found"
-msgstr ""
+msgstr "Aucune station de marée trouvée."
 
 #: src/UKTidesgui_impl.cpp:161
 msgid "No features found in message"
-msgstr ""
+msgstr "Aucune fonctionnalité trouvée dans le message"
 
 #: src/UKTidesgui_impl.cpp:173
 msgid "No properties found in message"
-msgstr ""
+msgstr "Aucune propriété trouvée dans le message"
 
 #: src/UKTidesgui_impl.cpp:232
 msgid "Select the Location"
-msgstr ""
+msgstr "Choisissez un lieu"
 
 #: src/UKTidesgui_impl.cpp:425
 msgid "Tides"
-msgstr ""
+msgstr "Marées"
 
 #: src/UKTidesgui_impl.cpp:426 src/UKTidesgui_impl.cpp:486
 msgid "      (Times are UTC)  "
-msgstr ""
+msgstr "      (Les heures sont UTC)  "
 
 #: src/UKTidesgui_impl.cpp:426 src/UKTidesgui_impl.cpp:486
 msgid " (Height in metres)"
-msgstr ""
+msgstr " (Hauteur en mètres)"
 
 #: src/UKTidesgui_impl.cpp:435
-msgid ""
-"No tidal data found. Please use right click to select the UK tidal station"
-msgstr ""
+msgid "No tidal data found. Please use right click to select the UK tidal station"
+msgstr "Aucune donnée marée trouvée. Veuillez utiliser le bouton droit pour sélectionner la station de marée britannique"
 
 #: src/UKTidesgui_impl.cpp:469
-msgid ""
-"No tidal data found. Please download the locations \n"
+msgid "No tidal data found. Please download the locations \n"
 " and use right click to select the UK tidal station"
-msgstr ""
+msgstr "Aucune donnée marée trouvée. Veuillez télécharger les stations et utiliser le bouton droit pour sélectionner la station de marée britannique"
 
 #: src/UKTidesgui_impl.cpp:473
 msgid "Locations Saved"
-msgstr ""
+msgstr "Emplacement enregistré"
 
 #: src/UKTidesgui_impl.cpp:560
 msgid "No active tidal stations found. Please download the locations"
-msgstr ""
+msgstr "Aucune station de marée active trouvée. Veuillez télécharger les stations"
 
 #: src/UKTidesgui_impl.cpp:584 src/UKTidesgui_impl.cpp:620
 msgid "Port not found"
-msgstr ""
+msgstr "Port non trouvé"
 
 #: src/UKTidesgui_impl.cpp:598
 msgid "No tidal stations found. Please download locations when online"
-msgstr ""
+msgstr "Aucune station de marée trouvée. Veuillez télécharger les stations en ligne"
 
 #: src/UKTidesgui_impl.cpp:738
 msgid "Failed to save xml file: "
-msgstr ""
+msgstr "Echec de sauvegarde du fichier xml : "
 
 #: src/UKTidesgui_impl.cpp:757
 msgid "Tidal Events"
-msgstr ""
+msgstr "Événements de marées"
 
 #: src/UKTidesgui_impl.cpp:760
 msgid "No UK tide locations available"
-msgstr ""
+msgstr "Aucune station de marée britannique disponible"
 
 #: src/UKTidesgui_impl.cpp:765
 msgid "Invalid xml file"
-msgstr ""
+msgstr "Fichier xml invalide"
 
-#: src/UKTidesgui_impl.cpp:860 src/tidetable.cpp:139
+#: src/UKTidesgui_impl.cpp:860
 msgid "OK"
-msgstr ""
+msgstr "Ok"
 
-#: src/tidetable.cpp:151
-msgid "Date/Time"
-msgstr ""
-
-#: src/tidetable.cpp:152
-msgid "HW/LW"
-msgstr ""
-
-#: src/tidetable.cpp:153
-msgid "Height"
-msgstr ""
