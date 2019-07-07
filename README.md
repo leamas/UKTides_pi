@@ -8,4 +8,4 @@ At present only a Windows version is available.
 
 If you want to compile your own version you will need to obtain an API key from the UKHO.
 
-No data is saved by the plugin, at the request of the UKHO.
+Data is saved by the plugin for a maximum period of 7 days, at the request of the UKHO.
