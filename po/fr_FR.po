@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opencpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-03 12:54+0100\n"
-"PO-Revision-Date: 2019-07-05 12:07\n"
+"POT-Creation-Date: 2019-07-05 21:09+0100\n"
+"PO-Revision-Date: 2019-07-06 17:07\n"
 "Last-Translator: Pavel Kalian (nohal)\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 #: src/UKTides_pi.cpp:84
 msgid "    UKTides panel icon has NOT been loaded"
-msgstr "    L'icône du panneau de marées GB n'a PAS été chargée"
+msgstr "    L'icône du panneau de marées GB n' a PAS été chargée"
 
 #: src/UKTides_pi.cpp:118 src/UKTides_pi.cpp:121 src/UKTides_pi.cpp:194
 #: src/UKTides_pi.cpp:200 src/UKTidesgui_impl.cpp:738
@@ -192,7 +192,19 @@ msgstr "Aucune station de marée britannique disponible"
 msgid "Invalid xml file"
 msgstr "Fichier xml invalide"
 
-#: src/UKTidesgui_impl.cpp:860
+#: src/UKTidesgui_impl.cpp:860 src/tidetable.cpp:139
 msgid "OK"
 msgstr "Ok"
+
+#: src/tidetable.cpp:151
+msgid "Date/Time"
+msgstr "Date/Heure"
+
+#: src/tidetable.cpp:152
+msgid "HW/LW"
+msgstr "PM/BM"
+
+#: src/tidetable.cpp:153
+msgid "Height"
+msgstr "Hauteur"
 
