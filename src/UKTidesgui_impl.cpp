@@ -225,7 +225,7 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 	LoadTidalEventsFromXml();
 
 	if (mySavedPorts.size() == 0) {
-		wxMessageBox("No locations are available, please download and select a tidal station");
+		wxMessageBox(_("No locations are available, please download and select a tidal station"));
 		return;
 	}
 
