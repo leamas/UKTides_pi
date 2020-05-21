@@ -40,11 +40,11 @@ class Position;
 Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	: DlgDef(parent),
 	m_UKTides_pi(_UKTides_pi)
-{	
-	
+{
+
 	this->Fit();
     dbg=false; //for debug output set to true
- 
+
 	wxString blank_name = *GetpSharedDataLocation()
 		+ "plugins/UKTides_pi/data/blank.ico";
 
@@ -53,35 +53,38 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 
 	wxString station_icon_name = *GetpSharedDataLocation()
 		+ "plugins/UKTides_pi/data/station_icon.png";
-    
+
     wxString myOpenCPNiconsPath;
-    
+
     /* ensure the directories exist */
     wxFileName fn;
     fn.Mkdir(Dlg::StandardPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
-    
+
     wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
     myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/opencpn/UserIcons/";
+#if defined (__unix__)
+    myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/.opencpn/UserIcons/";
+#endif
 
 #if defined(__WXMSW__)
 	wxString win_stdPath = std_path.GetConfigDir();
 	myOpenCPNiconsPath = win_stdPath + "/UserIcons/";
 #endif
-    
+
     if (!wxDirExists(myOpenCPNiconsPath)) {
         fn.Mkdir(myOpenCPNiconsPath,wxS_DIR_DEFAULT,wxPATH_MKDIR_FULL);
     }
-    
+
     wxString destination = myOpenCPNiconsPath + "station_icon.png";
-    
+
 	if (!wxFileExists(destination)) {
-		wxCopyFile(station_icon_name, destination, true);		
-		wxMessageBox(_("On first use please re-start OpenCPN\n... to enable the tidal station icons"));		
+		wxCopyFile(station_icon_name, destination, true);
+		wxMessageBox(_("On first use please re-start OpenCPN\n... to enable the tidal station icons"));
 	}
-	
+
 	LoadTidalEventsFromXml();
 	RemoveOldDownloads();
-	
+
 }
 
 Dlg::~Dlg()
@@ -122,7 +125,7 @@ void Dlg::Addpoint(TiXmlElement* Route, wxString ptlat, wxString ptlon, wxString
 //done adding point
 }
 
-void Dlg::OnDownload(wxCommandEvent& event) {		
+void Dlg::OnDownload(wxCommandEvent& event) {
 
 	myports.clear();
 	myPort outPort;
@@ -140,7 +143,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 		10);
 
 	if (ret == OCPN_DL_ABORTED) {
-		
+
 		m_stUKDownloadInfo->SetLabel(_("Aborted"));
 		return;
 	} else
@@ -179,7 +182,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 	}
 
 	int i = root["features"].size();
-	
+
 	for (int j = 0; j < i; j++) {
 
 		Json::Value  features = root["features"][j];
@@ -190,7 +193,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 		}
 
 		string name = features["properties"]["Name"].asString();
-		wxString myname(name.c_str(), wxConvUTF8);		
+		wxString myname(name.c_str(), wxConvUTF8);
 		outPort.Name = myname;
 
 		string id = features["properties"]["Id"].asString();
@@ -212,7 +215,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 		outPort.coordLon = myLon;
 
 		PlugIn_Waypoint * pPoint = new PlugIn_Waypoint(myLat, myLon,
-			"", myname, "");	
+			"", myname, "");
 
 		pPoint->m_IconName = "station_icon";
 		pPoint->m_MarkDescription = myId;
@@ -230,8 +233,8 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 }
 
 void Dlg::OnGetSavedTides(wxCommandEvent& event) {
-	
-	wxString portName;	
+
+	wxString portName;
 	wxString sId;
 
 	double myLat, myLon;
@@ -318,10 +321,10 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 			// Set text mask
 			row_info.m_mask = wxLIST_MASK_TEXT;
 
-			// Get the info and store it in row_info variable.   
+			// Get the info and store it in row_info variable.
 			GetPortDialog->dialogText->GetItem(row_info);
 			// Extract the text out that cell
-			cell_contents_string = row_info.m_text;								
+			cell_contents_string = row_info.m_text;
 
 			for (list<myPort>::iterator it = mySavedPorts.begin(); it != mySavedPorts.end(); it++) {
 				wxString portName = (*it).Name;
@@ -329,8 +332,8 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 				if (portName == cell_contents_string) {
 					OnShowSavedPortTides(portId);
 				}
-			}			
-		}		
+			}
+		}
 	}
 
 	GetParent()->Refresh();
@@ -339,7 +342,7 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 
 void Dlg::getHWLW(string id)
 {
-	
+
 	myevents.clear();
 	TidalEvent outTidalEvent;
 
@@ -361,7 +364,7 @@ void Dlg::getHWLW(string id)
 	_OCPN_DLStatus ret = OCPN_downloadFile(url.BuildURI(), tmp_file,
 		"", "", wxNullBitmap, this, OCPN_DLDS_AUTO_CLOSE,
 		10);
-	
+
 	wxString myjson;
 	wxFFile fileData;
 	fileData.Open(tmp_file, wxT("r"));
@@ -377,7 +380,7 @@ void Dlg::getHWLW(string id)
 		wxLogMessage(error);
 		return;
 	}
-	
+
 	if (!root2.isArray()) {
 		wxLogMessage(error);
 		return;
@@ -416,17 +419,17 @@ void Dlg::getHWLW(string id)
 
 			myevents.push_back(outTidalEvent);
 
-		}	
+		}
 	}
 
 	root2.clear();
-	
+
 	for (std::list<myPort>::iterator it = mySavedPorts.begin(); it != mySavedPorts.end(); it++) {
 
 		if ((*it).Id == id) {
 			mySavedPorts.erase((it));
 		}
-	}	
+	}
 
 	mySavedPort = SavePortTidalEvents(myevents, id);
 	mySavedPorts.push_back(mySavedPort);
@@ -473,7 +476,7 @@ void Dlg::OnShow()
 		AutoSizeHeader(tidetable->m_wpList);
 		tidetable->Fit();
 		tidetable->Layout();
-		tidetable->Show();		
+		tidetable->Show();
 
 	GetParent()->Refresh();
 
@@ -487,13 +490,13 @@ void Dlg::OnShowSavedPortTides(wxString thisPortId) {
 	}
 
 	TideTable* tidetable = new TideTable(this, 7000, _("Locations Saved"), wxPoint(200, 200), wxSize(-1, -1), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
-	
+
 	wxString Event;
 	wxString EventDT;
 	wxString EventHeight;
 
-	for (std::list<myPort>::iterator it = mySavedPorts.begin(); it != mySavedPorts.end(); it++) {	
-		
+	for (std::list<myPort>::iterator it = mySavedPorts.begin(); it != mySavedPorts.end(); it++) {
+
 		if ((*it).Id == thisPortId) {
 
 			wxString m_titlePortTides;
@@ -508,7 +511,7 @@ void Dlg::OnShowSavedPortTides(wxString thisPortId) {
 
 			for (list<TidalEvent>::iterator itt = savedevents.begin(); itt != savedevents.end(); itt++) {
 
-				Event = (*itt).EventType;				
+				Event = (*itt).EventType;
 				EventDT = (*itt).DateTime;
 				EventHeight = (*itt).Height;
 
@@ -529,7 +532,7 @@ void Dlg::OnShowSavedPortTides(wxString thisPortId) {
 	tidetable->Show();
 
 }
-	
+
 
 void Dlg::AutoSizeHeader(wxListCtrl *const list_ctrl)
 {
@@ -549,15 +552,15 @@ void Dlg::AutoSizeHeader(wxListCtrl *const list_ctrl)
 wxString Dlg::getPort(double m_lat, double m_lon) {
 
 	wxString mylat = wxString::Format("%f", m_lat);
-	wxString m_portId;	
-	
+	wxString m_portId;
+
 	m_portId = getPortId(m_lat, m_lon);
 
-	if (m_portId.IsEmpty()) {		
+	if (m_portId.IsEmpty()) {
 		return wxEmptyString;
 	}
 
-	getHWLW(m_portId.ToStdString());		
+	getHWLW(m_portId.ToStdString());
 
 	return mylat;
 }
@@ -587,11 +590,11 @@ wxString Dlg::getPortId(double m_lat, double m_lon) {
 					if (myDist < radius) {
 						m_portId = (*it).Id;
 						m_titlePortName = (*it).Name;
-						foundPort = true;						
+						foundPort = true;
 						return m_portId;
 					}
-				}				
-		}	
+				}
+		}
 		radius += 0.1;
 	}
 	return _("Port not found");
@@ -609,7 +612,7 @@ wxString Dlg::getSavedPortId(double m_lat, double m_lon) {
 	if (mySavedPorts.empty()) {
 		wxMessageBox(_("No tidal stations found. Please download locations when online"));
 		return wxEmptyString;
-	}	
+	}
 
 	while (!foundPort) {
 		for (std::list<myPort>::iterator it = mySavedPorts.begin(); it != mySavedPorts.end(); it++) {
@@ -622,7 +625,7 @@ wxString Dlg::getSavedPortId(double m_lat, double m_lon) {
 				if (myDist < radius) {
 					m_portId = (*it).Id;
 					m_titlePortName = (*it).Name;
-					foundPort = true;					
+					foundPort = true;
 					return m_portId;
 				}
 			}
@@ -684,7 +687,7 @@ wxString Dlg::StandardPath()
 myPort Dlg::SavePortTidalEvents(list<TidalEvent>myEvents, string portId)
 {
 	myPort thisPort;
-	
+
 	double plat, plon;
 	plat = 0;
 	plon = 0;
@@ -716,7 +719,7 @@ myPort Dlg::SavePortTidalEvents(list<TidalEvent>myEvents, string portId)
 
 void Dlg::SaveTidalEventsToXml(list<myPort>myPorts)
 {
-		
+
 	TiXmlDocument doc;
 	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "utf-8", "");
 	doc.LinkEndChild(decl);
@@ -724,7 +727,7 @@ void Dlg::SaveTidalEventsToXml(list<myPort>myPorts)
 	TiXmlElement * root = new TiXmlElement("TidalEventDataSet");
 	doc.LinkEndChild(root);
 
-	for (list<myPort>::iterator it = myPorts.begin(); it != myPorts.end(); it++) {		
+	for (list<myPort>::iterator it = myPorts.begin(); it != myPorts.end(); it++) {
 
 		TiXmlElement *Port = new TiXmlElement("Port");
 		Port->SetAttribute("Name", (*it).Name);
@@ -750,14 +753,14 @@ void Dlg::SaveTidalEventsToXml(list<myPort>myPorts)
 
 	wxString filename = "tidalevents.xml";
 	wxString tidal_events_path = StandardPath();
-    
+
     /* ensure the directory exists */
     wxFileName fn;
-    
+
     if (!wxDirExists(tidal_events_path)) {
         fn.Mkdir(Dlg::StandardPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
     }
-    
+
 	if (!doc.SaveFile(tidal_events_path + filename))
 		wxLogMessage(_("UKTides") + wxString(": ") + _("Failed to save xml file: ") + filename);
 }
@@ -767,8 +770,8 @@ list<myPort>Dlg::LoadTidalEventsFromXml()
 	mySavedPorts.clear();
 
 	myPort thisPort;
-	TidalEvent thisEvent;	
-	
+	TidalEvent thisEvent;
+
 	TiXmlDocument doc;
 	wxString name;
 	wxString tidal_events_path = StandardPath();
@@ -786,7 +789,7 @@ list<myPort>Dlg::LoadTidalEventsFromXml()
 		TiXmlHandle root(doc.RootElement());
 
 		if (strcmp(root.Element()->Value(), "TidalEventDataSet"))
-			wxMessageBox(_("Invalid xml file"));		
+			wxMessageBox(_("Invalid xml file"));
 
 		int count = 0;
 		for (TiXmlElement* e = root.FirstChild().Element(); e; e = e->NextSiblingElement())
@@ -794,9 +797,9 @@ list<myPort>Dlg::LoadTidalEventsFromXml()
 
 		int i = 0;
 		for (TiXmlElement* e = root.FirstChild().Element(); e; e = e->NextSiblingElement(), i++) {
-								
+
 			if (!strcmp(e->Value(), "Port")) {
-				thisPort.Name = e->Attribute("Name");	
+				thisPort.Name = e->Attribute("Name");
 				thisPort.DownloadDate = e->Attribute("DownloadDate");
 				thisPort.Id = e->Attribute("Id");
 				thisPort.coordLat = AttributeDouble(e, "Latitude", NAN);
@@ -806,7 +809,7 @@ list<myPort>Dlg::LoadTidalEventsFromXml()
 
 				for (TiXmlElement* f = e->FirstChildElement(); f; f = f->NextSiblingElement()) {
 					if (!strcmp(f->Value(), "TidalEvent")) {
-						thisEvent.EventType = f->Attribute("Event");						
+						thisEvent.EventType = f->Attribute("Event");
 						thisEvent.DateTime = f->Attribute("DateTime");
 						thisEvent.Height = f->Attribute("Height");
 					}
@@ -814,8 +817,8 @@ list<myPort>Dlg::LoadTidalEventsFromXml()
 				}
 
 				thisPort.tidalevents = listEvents;
-				mySavedPorts.push_back(thisPort);	
-			}				
+				mySavedPorts.push_back(thisPort);
+			}
 		}
 	}
 
@@ -870,7 +873,7 @@ GetTidalEventDialog::GetTidalEventDialog(wxWindow * parent, wxWindowID id, const
 {
 	wxBoxSizer* itemBoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	SetSizer(itemBoxSizer1);
-	
+
 	itemStaticBoxSizer14Static = new wxStaticBox(this, wxID_ANY, "Locations");
 	m_pListSizer = new wxStaticBoxSizer(itemStaticBoxSizer14Static, wxVERTICAL);
 	itemBoxSizer1->Add(m_pListSizer, 2, wxEXPAND | wxALL, 1);
