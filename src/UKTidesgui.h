@@ -37,9 +37,6 @@ class DlgDef : public wxFrame
 	private:
 
 	protected:
-		wxMenuBar* m_menubar1;
-		wxMenu* m_menu1;
-		wxMenu* m_menu2;
 		wxStaticText* m_staticText9;
 		wxChoice* m_choice3;
 
@@ -51,6 +48,11 @@ class DlgDef : public wxFrame
 
 
 	public:
+		wxMenuBar* m_menubar1;
+		wxMenu* m_menu1;
+		wxMenuItem* m_menuItem1;
+		wxMenuItem* m_menuItem3;
+		wxMenu* m_menu2;
 		wxMenuItem* m_menuItem2;
 		wxStaticText* m_stTimeZone;
 		wxButton* m_buttonDownload;

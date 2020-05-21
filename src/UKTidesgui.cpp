@@ -17,12 +17,10 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 
 	m_menubar1 = new wxMenuBar( 0 );
 	m_menu1 = new wxMenu();
-	wxMenuItem* m_menuItem1;
 	m_menuItem1 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Download") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu1->Append( m_menuItem1 );
 
-	wxMenuItem* m_menuItem3;
-	m_menuItem3 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Saved") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem3 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Ports Saved") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu1->Append( m_menuItem3 );
 
 	m_menubar1->Append( m_menu1, _("Locations") );

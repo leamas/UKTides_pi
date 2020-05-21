@@ -52,12 +52,23 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	SetIcon(icon);
 
 	wxString station_icon_name = *GetpSharedDataLocation()
-		+ "plugins/UKTides_pi/data/station_icon.png";	
-
-	wxString myOpenCPNiconsPath = StandardPath();
-	wxString s = wxFileName::GetPathSeparator();
-	wxString destination = myOpenCPNiconsPath + "station_icon.png";
-
+		+ "plugins/UKTides_pi/data/station_icon.png";
+    
+    wxString myOpenCPNiconsPath;
+    
+    /* ensure the directories exist */
+    wxFileName fn;
+    fn.Mkdir(Dlg::StandardPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+    
+    wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
+    myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/opencpn/UserIcons/";
+    
+    if (!wxDirExists(myOpenCPNiconsPath)) {
+        fn.Mkdir(myOpenCPNiconsPath,wxS_DIR_DEFAULT,wxPATH_MKDIR_FULL);
+    }
+    
+    wxString destination = myOpenCPNiconsPath + "station_icon.png";
+    
 	if (!wxFileExists(destination)) {
 		wxCopyFile(station_icon_name, destination, true);		
 		//wxMessageBox(_("On first use please re-start OpenCPN\n... to enable the tidal station icons"));		
@@ -113,7 +124,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 
 	wxString s_lat, s_lon;
 
-	wxString urlString = "https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations?key=";
+	wxString urlString = "https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations?key=cefba1163a81498c9a1e5d03ea1fed69";
 	wxURI url(urlString);
 
 	wxString tmp_file = wxFileName::CreateTempFileName("");
@@ -201,7 +212,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 		pPoint->m_IconName = "station_icon";
 		pPoint->m_MarkDescription = myId;
 		pPoint->m_GUID = myId;
-		bool added = AddSingleWaypoint(pPoint, false);
+		AddSingleWaypoint(pPoint, false);
 
 		myports.push_back(outPort);
 	}
@@ -253,7 +264,7 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 		pPoint->m_IconName = "station_icon";
 		pPoint->m_MarkDescription = sId;
 		pPoint->m_GUID = sId;
-		bool added = AddSingleWaypoint(pPoint, false);
+		AddSingleWaypoint(pPoint, false);
 		GetParent()->Refresh();
 
 		GetPortDialog->dialogText->InsertItem(in, "", -1);
@@ -265,7 +276,7 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 
 	long si = -1;
 	long itemIndex = -1;
-	int f = 0;
+
 
 	wxString portId;
 
@@ -333,7 +344,7 @@ void Dlg::getHWLW(string id)
 	string duration = "?duration=";
 	string urlDays = choiceDays.ToStdString();
 
-	string key = "&key=";
+	string key = "&key=cefba1163a81498c9a1e5d03ea1fed69";
 	string tidalevents = "/TidalEvents";
 
 
@@ -550,7 +561,6 @@ wxString Dlg::getPortId(double m_lat, double m_lon) {
 
 	bool foundPort = false;
 	double radius = 0.1;
-	double dist = 0;
 	double myDist, myBrng;
 	double plat;
 	double plon;
@@ -560,8 +570,6 @@ wxString Dlg::getPortId(double m_lat, double m_lon) {
 		wxMessageBox(_("No active tidal stations found. Please download the locations"));
 		return wxEmptyString;
 	}
-
-	int sizePorts = myports.size();
 
 	while (!foundPort) {
 		for (std::list<myPort>::iterator it = myports.begin();	it != myports.end(); it++) {
@@ -588,7 +596,6 @@ wxString Dlg::getSavedPortId(double m_lat, double m_lon) {
 
 	bool foundPort = false;
 	double radius = 0.1;
-	double dist = 0;
 	double myDist, myBrng;
 	double plat;
 	double plon;
@@ -637,32 +644,37 @@ void Dlg::OnClose(wxCloseEvent& event)
 
 wxString Dlg::StandardPath()
 {
-	wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
-	wxString s = wxFileName::GetPathSeparator();
+    wxString s = wxFileName::GetPathSeparator();
+    wxString stdPath  = *GetpPrivateApplicationDataLocation();
 
-#if defined(__WXMSW__)
-	wxString stdPath = std_path.GetConfigDir();
-#elif defined(__WXGTK__) || defined(__WXQT__)
-	wxString stdPath = std_path.GetUserDataDir();
-#elif defined(__WXOSX__)
-	wxString stdPath = (std_path.GetUserConfigDir() + s + "opencpn");
+    stdPath += s + _T("plugins");
+    if (!wxDirExists(stdPath))
+      wxMkdir(stdPath);
+
+    stdPath += s + _T("UKTides");
+
+#ifdef __WXOSX__
+    // Compatibility with pre-OCPN-4.2; move config dir to
+    // ~/Library/Preferences/opencpn if it exists
+    {
+        wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
+        wxString s = wxFileName::GetPathSeparator();
+        // should be ~/Library/Preferences/opencpn
+        wxString oldPath = (std_path.GetUserConfigDir() +s + _T("plugins") +s + _T("UKTides"));
+        if (wxDirExists(oldPath) && !wxDirExists(stdPath)) {
+            wxLogMessage("UKTides_pi: moving config dir %s to %s", oldPath, stdPath);
+            wxRenameFile(oldPath, stdPath);
+        }
+    }
 #endif
 
-	stdPath += s + "plugins" + s + "UKTides";
-	if (!wxDirExists(stdPath)) 
-		wxMkdir(stdPath);		
+    if (!wxDirExists(stdPath))
+      wxMkdir(stdPath);
 
-#ifdef __WXOSX__	
-	wxString oldPath = (std_path.GetUserConfigDir());
-	if (wxDirExists(oldPath) && !wxDirExists(stdPath)) {
-		wxLogMessage("UKTides_pi: moving config dir %s to %s", oldPath, stdPath);
-		wxRenameFile(oldPath, stdPath);
-	}
-#endif
-
-	stdPath += s; // is this necessary?
-	return stdPath;
+    stdPath += s;
+    return stdPath;
 }
+
 
 myPort Dlg::SavePortTidalEvents(list<TidalEvent>myEvents, string portId)
 {
@@ -733,7 +745,14 @@ void Dlg::SaveTidalEventsToXml(list<myPort>myPorts)
 
 	wxString filename = "tidalevents.xml";
 	wxString tidal_events_path = StandardPath();
-
+    
+    /* ensure the directory exists */
+    wxFileName fn;
+    
+    if (!wxDirExists(tidal_events_path)) {
+        fn.Mkdir(Dlg::StandardPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+    }
+    
 	if (!doc.SaveFile(tidal_events_path + filename))
 		wxLogMessage(_("UKTides") + wxString(": ") + _("Failed to save xml file: ") + filename);
 }
