@@ -62,6 +62,11 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
     
     wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
     myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/opencpn/UserIcons/";
+
+#if defined(__WXMSW__)
+	wxString win_stdPath = std_path.GetConfigDir();
+	myOpenCPNiconsPath = win_stdPath + "/UserIcons/";
+#endif
     
     if (!wxDirExists(myOpenCPNiconsPath)) {
         fn.Mkdir(myOpenCPNiconsPath,wxS_DIR_DEFAULT,wxPATH_MKDIR_FULL);
@@ -71,7 +76,7 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
     
 	if (!wxFileExists(destination)) {
 		wxCopyFile(station_icon_name, destination, true);		
-		//wxMessageBox(_("On first use please re-start OpenCPN\n... to enable the tidal station icons"));		
+		wxMessageBox(_("On first use please re-start OpenCPN\n... to enable the tidal station icons"));		
 	}
 	
 	LoadTidalEventsFromXml();
