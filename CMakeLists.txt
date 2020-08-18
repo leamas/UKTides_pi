@@ -29,7 +29,7 @@ set(LONG_DESCRIPTION "UKTides plugin is used to download UK Tide times. The plug
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "2")
+set(VERSION_PATCH "3")
 set(VERSION_TWEAK "0")
 set(VERSION_DATE "16/08/2020")
 set(OCPN_MIN_VERSION "ov50")
@@ -110,6 +110,7 @@ option(Plugin_CXX11 "Use c++11" OFF)
 ##
 
 include("PluginConfigure")
+include("cmake/PluginJSON.cmake")
 
 ##
 ## ----- do not change section above - needed to configure build process ----- ##
@@ -120,6 +121,8 @@ include("PluginConfigure")
 #
 
 add_definitions(-DUSE_S57)
+
+
 
 SET(SRC_UKTides
         src/UKTides_pi.h
@@ -145,44 +148,19 @@ set(OCPNSRC ocpnsrc/TexFont.cpp)
 
 set(OCPNHDRS ocpninclude/ocpn_plugin.h ocpninclude/pluginmanager.h ocpninclude/TexFont.h)
 
-set(EXTSRC)
-
-set(EXTINCLUDE extinclude/nlohmann/json.hpp extinclude/ODAPI.h)
-
-set(LIBSSRC libs/wxJSON/src/jsonreader.cpp libs/wxJSON/src/jsonval.cpp libs/wxJSON/src/jsonwriter.cpp)
-
 set(LIBHDRS
     libs/GL/include/gl.h
     libs/GL/include/gl_private.h
     libs/GL/include/glext.h
     libs/GL/include/glu.h
-    libs/wx/include/json_defs.h
-    libs/wx/include/jsonreader.h
-    libs/wx/include/jsonval.h
-    libs/wx/include/jsonwriter.h)
+)
     
 add_definitions(-DPLUGIN_USE_SVG)
 
-if(APPLE)
-    option(PI_JSON_SCHEMA_VALIDATOR "Use JSON Schema validator" OFF)
-else(APPLE)
-    option(PI_JSON_SCHEMA_VALIDATOR "Use JSON Schema validator" ON)
-endif(APPLE)
 
-if(PI_JSON_SCHEMA_VALIDATOR)
-    message(STATUS "${CMLOC}Using JSON Schema validation - warning this changes the 'flavour' of the executable and it may not be compatible with OpenCPN")
-    add_definitions(-DPI_JSON_SCHEMA_VALIDATOR)
-    message(STATUS "${CMLOC}Adding JSON Schema validation")
 
-    set(EXTSRC ${EXTSRC} extsrc/json-schema-validator/json-schema-draft7.json.cpp extsrc/json-schema-validator/json-uri.cpp extsrc/json-schema-validator/json-validator.cpp)
-    set(EXTINCLUDE ${EXTINCLUDE} extinclude/nlohmann/json.hpp extinclude/json-schema-validator/json-schema.hpp)
-    include_directories(BEFORE ${PROJECT_SOURCE_DIR}/extinclude/json-schema-validator)
-else(PI_JSON_SCHEMA_VALIDATOR)
-    message(STATUS "${CMLOC}Not using JSON Schema validation - warning invalid JSON 'may' cause unexpected crashes")
-endif(PI_JSON_SCHEMA_VALIDATOR)
 
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude)
-include_directories(BEFORE ${PROJECT_SOURCE_DIR}/extinclude)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/libs/wx/include)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl)
@@ -190,7 +168,9 @@ include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpninclude/wxcurl/include)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpnsrc/lz4)
 include_directories(BEFORE ${PROJECT_SOURCE_DIR}/ocpnsrc/bitmaps)
 
-add_library(${PACKAGE_NAME} SHARED ${SRC_UKTides} ${OCPNSRC} ${EXTSRC} ${LIBSSRC})
+ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRC_UKTides} ${SRC_JSON} ${OCPNSRC}  ${LIBSSRC})
+
+
 
 ADD_DEFINITIONS(-DTIXML_USE_STL)
 

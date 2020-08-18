@@ -34,14 +34,10 @@
 #include <wx/filefn.h>
 #include <wx/url.h>
 
-#include "wx/jsonreader.h"
-#include "wx/jsonwriter.h"
+#include "jsoncpp/json/json.h"
 
-wxJSONValue     root;
-wxJSONReader    reader;
-wxJSONValue     jMsg;
-wxJSONWriter    writer;
-wxString        MsgString;
+
+
 
 class Position;
 
@@ -109,8 +105,15 @@ Dlg::~Dlg()
 void Dlg::OnInformation(wxCommandEvent& event)
 {
 
-	wxString infolocation = *GetpSharedDataLocation()
-		+ "plugins/uktides_pi/data/pictures/" + "UKTides.html";
+	wxFileName fn;
+	wxString tmp_path;
+
+	tmp_path = GetPluginDataDir("uktides_pi");
+	fn.SetPath(tmp_path);
+	fn.AppendDir(_T("data"));
+	fn.AppendDir(_T("pictures"));
+	wxString picspath = fn.GetFullPath();
+	wxString infolocation = picspath + "/UKTides.html";
 	wxLaunchDefaultBrowser("file:///" + infolocation);
 
 }
@@ -141,105 +144,109 @@ void Dlg::Addpoint(TiXmlElement* Route, wxString ptlat, wxString ptlon, wxString
 }
 
 void Dlg::OnDownload(wxCommandEvent& event) {
+myports.clear();
+myPort outPort;
 
-	myports.clear();
-	myPort outPort;
+wxString s_lat, s_lon;
 
-	wxString s_lat, s_lon;
+wxString urlString = "https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations?key=cefba1163a81498c9a1e5d03ea1fed69";
+wxURI url(urlString);
 
-	wxString urlString = "https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations?key=cefba1163a81498c9a1e5d03ea1fed69";
-	wxURI url(urlString);
+wxString tmp_file = wxFileName::CreateTempFileName("");
 
-	wxString tmp_file = wxFileName::CreateTempFileName("");
+_OCPN_DLStatus ret = OCPN_downloadFile(url.BuildURI(), tmp_file,
+	"UKTides", "", wxNullBitmap, this,
+	OCPN_DLDS_ELAPSED_TIME | OCPN_DLDS_ESTIMATED_TIME | OCPN_DLDS_REMAINING_TIME | OCPN_DLDS_SPEED | OCPN_DLDS_SIZE | OCPN_DLDS_CAN_PAUSE | OCPN_DLDS_CAN_ABORT | OCPN_DLDS_AUTO_CLOSE,
+	10);
 
-	_OCPN_DLStatus ret = OCPN_downloadFile(url.BuildURI(), tmp_file,
-		"UKTides", "", wxNullBitmap, this,
-		OCPN_DLDS_ELAPSED_TIME | OCPN_DLDS_ESTIMATED_TIME | OCPN_DLDS_REMAINING_TIME | OCPN_DLDS_SPEED | OCPN_DLDS_SIZE | OCPN_DLDS_CAN_PAUSE | OCPN_DLDS_CAN_ABORT | OCPN_DLDS_AUTO_CLOSE,
-		10);
+if (ret == OCPN_DL_ABORTED) {
 
-	if (ret == OCPN_DL_ABORTED) {
+	m_stUKDownloadInfo->SetLabel(_("Aborted"));
+	return;
+}
+else
 
-		m_stUKDownloadInfo->SetLabel(_("Aborted"));
-		return;
-	} else
+if (ret == OCPN_DL_FAILED) {
+	wxMessageBox(_("Download failed.\n\nAre you connected to the Internet?"));
 
-	if (ret == OCPN_DL_FAILED) {
-		wxMessageBox(_("Download failed.\n\nAre you connected to the Internet?"));
+	m_stUKDownloadInfo->SetLabel(_("Failed"));
+	return;
+}
 
-		m_stUKDownloadInfo->SetLabel(_("Failed"));
-		return;
-	}
+else {
+	m_stUKDownloadInfo->SetLabel(_("Success"));
+}
 
-	else {
-		m_stUKDownloadInfo->SetLabel(_("Success"));
-	}
+wxString myjson;
+wxFFile fileData;
+fileData.Open(tmp_file, wxT("r"));
+fileData.ReadAll(&myjson);
 
-    wxString myjson;
-	wxFFile fileData;
-	fileData.Open(tmp_file, wxT("r"));
-	fileData.ReadAll(&myjson);
+// construct the JSON root object
+Json::Value  root;
+// construct a JSON parser
+Json::Reader reader;
+wxString error = _("No tidal stations found");
 
-	// construct the JSON root object
-	
-	wxString error = _("No tidal stations found");
+if (!reader.parse((std::string)myjson, root)) {
+	wxLogMessage(error);
+	return;
+}
 
-	if (!reader.Parse(myjson, &root)) {
-		wxLogMessage(error);
-		return;
-	}
+if (!root.isMember("features")) {
+	// Originator
+	wxLogMessage(_("No features found in message"));
+	return;
+}
 
-	if (!root.HasMember("features")) {
+int i = root["features"].size();
+
+for (int j = 0; j < i; j++) {
+
+	Json::Value  features = root["features"][j];
+
+	if (!features.isMember("properties")) {
 		// Originator
-		wxLogMessage(_("No features found in message"));
-		return;
+		wxLogMessage(_("No properties found in message"));
 	}
 
-	int i = root["features"].Size();
+	string name = features["properties"]["Name"].asString();
+	wxString myname(name.c_str(), wxConvUTF8);
+	outPort.Name = myname;
 
-	for (int j = 0; j < i; j++) {
+	string id = features["properties"]["Id"].asString();
+	wxString myId(id.c_str(), wxConvUTF8);
+	outPort.Id = myId;
 
-		jMsg  = root["features"][j];
+	string lon = features["geometry"]["coordinates"][0].asString();
+	s_lon = lon.c_str(), wxConvUTF8;
+	string lat = features["geometry"]["coordinates"][1].asString();
+	s_lat = lat.c_str(), wxConvUTF8;
 
-		if (!jMsg.HasMember("properties")) {
-			// Originator
-			wxLogMessage(_("No properties found in message"));
-		}
+	double myLat, myLon;
+	s_lat.ToDouble(&myLat);
+	s_lon.ToDouble(&myLon);
 
-		wxString myname = jMsg["properties"]["Name"].AsString();		
-		outPort.Name = myname;
+	//bool rmWpt = DeleteSingleWaypoint(myId);
 
-		wxString myId = jMsg["properties"]["Id"].AsString();		
-		outPort.Id = myId;
+	outPort.coordLat = myLat;
+	outPort.coordLon = myLon;
 
-		wxString s_lon = jMsg["geometry"]["coordinates"][0].AsString();		
-		
-		wxString s_lat = jMsg["geometry"]["coordinates"][1].AsString();
-		
+	PlugIn_Waypoint * pPoint = new PlugIn_Waypoint(myLat, myLon,
+		"", myname, "");
 
-		double myLat, myLon;
-		s_lat.ToDouble(&myLat);
-		s_lon.ToDouble(&myLon);
+	pPoint->m_IconName = "station_icon";
+	pPoint->m_MarkDescription = myId;
+	pPoint->m_GUID = myId;
+	AddSingleWaypoint(pPoint, false);
 
-		//bool rmWpt = DeleteSingleWaypoint(myId);
+	myports.push_back(outPort);
+}
 
-		outPort.coordLat = myLat;
-		outPort.coordLon = myLon;
+SetCanvasContextMenuItemViz(plugin->m_position_menu_id, true);
 
-		PlugIn_Waypoint * pPoint = new PlugIn_Waypoint(myLat, myLon,
-			"", myname, "");
-
-		pPoint->m_IconName = "station_icon";
-		pPoint->m_MarkDescription = myId;
-		pPoint->m_GUID = myId;
-		AddSingleWaypoint(pPoint, false);
-
-		myports.push_back(outPort);
-	}
-
-	SetCanvasContextMenuItemViz(plugin->m_position_menu_id, true);
-
-	RequestRefresh(m_parent);
-	root.Clear();
+RequestRefresh(m_parent);
+root.clear();
 
 }
 
@@ -381,41 +388,46 @@ void Dlg::getHWLW(string id)
 	fileData.Open(tmp_file, wxT("r"));
 	fileData.ReadAll(&myjson);
 
+	// construct the JSON root object
+	Json::Value  root2;
+	// construct a JSON parser
+	Json::Reader reader2;
 	wxString error = "Unable to parse json";
 
-	if (!reader.Parse(myjson, &root)) {
+	if (!reader2.parse((std::string)myjson, root2)) {
 		wxLogMessage(error);
 		return;
 	}
 
-	if (!root.IsArray()) {
+	if (!root2.isArray()) {
 		wxLogMessage(error);
 		return;
 	}
 	else {
 
-		int i = root.Size();
+		int i = root2.size();
 
 		for (int j = 0; j < i; j++) {
 
-			wxString mytype = root[j]["EventType"].AsString();
-			if (mytype == "HighWater") mytype = "HW";
-			else if (mytype == "LowWater") mytype = "LW";
-			
+			string type = root2[j]["EventType"].asString();
+			if (type == "HighWater") type = "HW";
+			else if (type == "LowWater") type = "LW";
+			wxString mytype(type.c_str(), wxConvUTF8);
 			outTidalEvent.EventType = mytype;
 
-			jMsg = root[j];
+			Json::Value  jdt = root2[j];
 
-			if (jMsg.HasMember("DateTime")) {
-				wxString mydatetime = root[j]["DateTime"].AsString();				
+			if (jdt.isMember("DateTime")) {
+				string datetime = root2[j]["DateTime"].asString();
+				wxString mydatetime(datetime.c_str(), wxConvUTF8);
 				outTidalEvent.DateTime = ProcessDate(mydatetime);
 			}
 			else {
 				outTidalEvent.DateTime = "N/A";
 			}
 
-			if (jMsg.HasMember("Height")) {
-				double height = root[j]["Height"].AsDouble();
+			if (jdt.isMember("Height")) {
+				double height = root2[j]["Height"].asDouble();
 				wxString myheight(wxString::Format("%4.2f", height));
 				outTidalEvent.Height = myheight;
 			}
@@ -428,7 +440,7 @@ void Dlg::getHWLW(string id)
 		}
 	}
 
-	root.Clear();
+	root2.clear();
 
 	for (std::list<myPort>::iterator it = mySavedPorts.begin(); it != mySavedPorts.end(); it++) {
 
