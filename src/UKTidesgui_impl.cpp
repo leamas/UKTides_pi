@@ -56,7 +56,7 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	wxFileName fn;
 	wxString tmp_path;
 
-	tmp_path = GetPluginDataDir("UKTides_pi");
+	tmp_path = GetPluginDataDir("uktides_pi");
 	fn.SetPath(tmp_path);
 	fn.AppendDir(_T("data"));
 
@@ -110,7 +110,7 @@ void Dlg::OnInformation(wxCommandEvent& event)
 {
 
 	wxString infolocation = *GetpSharedDataLocation()
-		+ "plugins/UKTides_pi/data/pictures/" + "UKTides.html";
+		+ "plugins/uktides_pi/data/pictures/" + "UKTides.html";
 	wxLaunchDefaultBrowser("file:///" + infolocation);
 
 }
@@ -662,7 +662,7 @@ wxString Dlg::StandardPath()
 	wxString stdPath(*GetpPrivateApplicationDataLocation());
 	wxString s = wxFileName::GetPathSeparator();
 
-	stdPath += s + _T("plugins") + s + _T("photolayer_pi");
+	stdPath += s + _T("plugins") + s + _T("uktides_pi");
 	if (!wxDirExists(stdPath))
 		wxMkdir(stdPath);
 	stdPath += s + _T("data");
