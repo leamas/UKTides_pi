@@ -33,7 +33,15 @@
 #include <wx/ffile.h>
 #include <wx/filefn.h>
 #include <wx/url.h>
-#include "json/json.h"
+
+#include "wx/jsonreader.h"
+#include "wx/jsonwriter.h"
+
+wxJSONValue     root;
+wxJSONReader    reader;
+wxJSONValue     jMsg;
+wxJSONWriter    writer;
+wxString        MsgString;
 
 class Position;
 
@@ -45,20 +53,27 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	this->Fit();
     dbg=false; //for debug output set to true
 
-	wxString blank_name = *GetpSharedDataLocation()
-		+ "plugins/UKTides_pi/data/blank.ico";
+	wxFileName fn;
+	wxString tmp_path;
+
+	tmp_path = GetPluginDataDir("UKTides_pi");
+	fn.SetPath(tmp_path);
+	fn.AppendDir(_T("data"));
+
+	fn.SetFullName("blank.ico");
+	wxString blank_name = fn.GetFullPath();
 
 	wxIcon icon(blank_name, wxBITMAP_TYPE_ICO);
 	SetIcon(icon);
 
-	wxString station_icon_name = *GetpSharedDataLocation()
-		+ "plugins/UKTides_pi/data/station_icon.png";
+	fn.SetFullName("station_icon.png");
+	wxString station_icon_name = fn.GetFullPath();
 
     wxString myOpenCPNiconsPath;
 
     /* ensure the directories exist */
-    wxFileName fn;
-    fn.Mkdir(Dlg::StandardPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+    wxFileName fn2;
+    fn2.Mkdir(Dlg::StandardPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
     wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
     myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/opencpn/UserIcons/";
@@ -72,7 +87,7 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 #endif
 
     if (!wxDirExists(myOpenCPNiconsPath)) {
-        fn.Mkdir(myOpenCPNiconsPath,wxS_DIR_DEFAULT,wxPATH_MKDIR_FULL);
+        fn2.Mkdir(myOpenCPNiconsPath,wxS_DIR_DEFAULT,wxPATH_MKDIR_FULL);
     }
 
     wxString destination = myOpenCPNiconsPath + "station_icon.png";
@@ -165,44 +180,42 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 	fileData.ReadAll(&myjson);
 
 	// construct the JSON root object
-	Json::Value  root;
-	// construct a JSON parser
-	Json::Reader reader;
+	
 	wxString error = _("No tidal stations found");
 
-	if (!reader.parse((std::string)myjson, root)) {
+	if (!reader.Parse(myjson, &root)) {
 		wxLogMessage(error);
 		return;
 	}
 
-	if (!root.isMember("features")) {
+	if (!root.HasMember("features")) {
 		// Originator
 		wxLogMessage(_("No features found in message"));
 		return;
 	}
 
-	int i = root["features"].size();
+	int i = root["features"].Size();
 
 	for (int j = 0; j < i; j++) {
 
-		Json::Value  features = root["features"][j];
+		jMsg  = root["features"][j];
 
-		if (!features.isMember("properties")) {
+		if (!jMsg.HasMember("properties")) {
 			// Originator
 			wxLogMessage(_("No properties found in message"));
 		}
 
-		string name = features["properties"]["Name"].asString();
+		string name = jMsg["properties"]["Name"].AsString();
 		wxString myname(name.c_str(), wxConvUTF8);
 		outPort.Name = myname;
 
-		string id = features["properties"]["Id"].asString();
+		string id = jMsg["properties"]["Id"].AsString();
 		wxString myId(id.c_str(), wxConvUTF8);
 		outPort.Id = myId;
 
-		string lon = features["geometry"]["coordinates"][0].asString();
+		string lon = jMsg["geometry"]["coordinates"][0].AsString();
 		s_lon = lon.c_str(), wxConvUTF8;
-		string lat = features["geometry"]["coordinates"][1].asString();
+		string lat = jMsg["geometry"]["coordinates"][1].AsString();
 		s_lat = lat.c_str(), wxConvUTF8;
 
 		double myLat, myLon;
@@ -228,7 +241,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 	SetCanvasContextMenuItemViz(plugin->m_position_menu_id, true);
 
 	RequestRefresh(m_parent);
-	root.clear();
+	root.Clear();
 
 }
 
@@ -370,37 +383,33 @@ void Dlg::getHWLW(string id)
 	fileData.Open(tmp_file, wxT("r"));
 	fileData.ReadAll(&myjson);
 
-	// construct the JSON root object
-	Json::Value  root2;
-	// construct a JSON parser
-	Json::Reader reader2;
 	wxString error = "Unable to parse json";
 
-	if (!reader2.parse((std::string)myjson, root2)) {
+	if (!reader.Parse(myjson, &root)) {
 		wxLogMessage(error);
 		return;
 	}
 
-	if (!root2.isArray()) {
+	if (!root.IsArray()) {
 		wxLogMessage(error);
 		return;
 	}
 	else {
 
-		int i = root2.size();
+		int i = root.Size();
 
 		for (int j = 0; j < i; j++) {
 
-			string type = root2[j]["EventType"].asString();
+			string type = root[j]["EventType"].AsString();
 			if (type == "HighWater") type = "HW";
 			else if (type == "LowWater") type = "LW";
 			wxString mytype(type.c_str(), wxConvUTF8);
 			outTidalEvent.EventType = mytype;
 
-			Json::Value  jdt = root2[j];
+			jMsg = root[j];
 
-			if (jdt.isMember("DateTime")) {
-				string datetime = root2[j]["DateTime"].asString();
+			if (jMsg.HasMember("DateTime")) {
+				string datetime = root[j]["DateTime"].AsString();
 				wxString mydatetime(datetime.c_str(), wxConvUTF8);
 				outTidalEvent.DateTime = ProcessDate(mydatetime);
 			}
@@ -408,8 +417,8 @@ void Dlg::getHWLW(string id)
 				outTidalEvent.DateTime = "N/A";
 			}
 
-			if (jdt.isMember("Height")) {
-				double height = root2[j]["Height"].asDouble();
+			if (jMsg.HasMember("Height")) {
+				double height = root[j]["Height"].AsDouble();
 				wxString myheight(wxString::Format("%4.2f", height));
 				outTidalEvent.Height = myheight;
 			}
@@ -422,7 +431,7 @@ void Dlg::getHWLW(string id)
 		}
 	}
 
-	root2.clear();
+	root.Clear();
 
 	for (std::list<myPort>::iterator it = mySavedPorts.begin(); it != mySavedPorts.end(); it++) {
 
@@ -652,36 +661,20 @@ void Dlg::OnClose(wxCloseEvent& event)
 
 wxString Dlg::StandardPath()
 {
-    wxString s = wxFileName::GetPathSeparator();
-    wxString stdPath  = *GetpPrivateApplicationDataLocation();
 
-    stdPath += s + _T("plugins");
-    if (!wxDirExists(stdPath))
-      wxMkdir(stdPath);
+	wxString stdPath(*GetpPrivateApplicationDataLocation());
+	wxString s = wxFileName::GetPathSeparator();
 
-    stdPath += s + _T("UKTides");
+	stdPath += s + _T("plugins") + s + _T("photolayer_pi");
+	if (!wxDirExists(stdPath))
+		wxMkdir(stdPath);
+	stdPath += s + _T("data");
+	if (!wxDirExists(stdPath))
+		wxMkdir(stdPath);
 
-#ifdef __WXOSX__
-    // Compatibility with pre-OCPN-4.2; move config dir to
-    // ~/Library/Preferences/opencpn if it exists
-    {
-        wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
-        wxString s = wxFileName::GetPathSeparator();
-        // should be ~/Library/Preferences/opencpn
-        wxString oldPath = (std_path.GetUserConfigDir() +s + _T("plugins") +s + _T("UKTides"));
-        if (wxDirExists(oldPath) && !wxDirExists(stdPath)) {
-            wxLogMessage("UKTides_pi: moving config dir %s to %s", oldPath, stdPath);
-            wxRenameFile(oldPath, stdPath);
-        }
-    }
-#endif
-
-    if (!wxDirExists(stdPath))
-      wxMkdir(stdPath);
-
-    stdPath += s;
-    return stdPath;
+	return stdPath;
 }
+
 
 
 myPort Dlg::SavePortTidalEvents(list<TidalEvent>myEvents, string portId)
