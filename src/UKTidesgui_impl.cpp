@@ -205,18 +205,16 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 			wxLogMessage(_("No properties found in message"));
 		}
 
-		string name = jMsg["properties"]["Name"].AsString();
-		wxString myname(name.c_str(), wxConvUTF8);
+		wxString myname = jMsg["properties"]["Name"].AsString();		
 		outPort.Name = myname;
 
-		string id = jMsg["properties"]["Id"].AsString();
-		wxString myId(id.c_str(), wxConvUTF8);
+		wxString myId = jMsg["properties"]["Id"].AsString();		
 		outPort.Id = myId;
 
-		string lon = jMsg["geometry"]["coordinates"][0].AsString();
-		s_lon = lon.c_str(), wxConvUTF8;
-		string lat = jMsg["geometry"]["coordinates"][1].AsString();
-		s_lat = lat.c_str(), wxConvUTF8;
+		wxString s_lon = jMsg["geometry"]["coordinates"][0].AsString();		
+		
+		wxString s_lat = jMsg["geometry"]["coordinates"][1].AsString();
+		
 
 		double myLat, myLon;
 		s_lat.ToDouble(&myLat);
@@ -400,17 +398,16 @@ void Dlg::getHWLW(string id)
 
 		for (int j = 0; j < i; j++) {
 
-			string type = root[j]["EventType"].AsString();
-			if (type == "HighWater") type = "HW";
-			else if (type == "LowWater") type = "LW";
-			wxString mytype(type.c_str(), wxConvUTF8);
+			wxString mytype = root[j]["EventType"].AsString();
+			if (mytype == "HighWater") mytype = "HW";
+			else if (mytype == "LowWater") mytype = "LW";
+			
 			outTidalEvent.EventType = mytype;
 
 			jMsg = root[j];
 
 			if (jMsg.HasMember("DateTime")) {
-				string datetime = root[j]["DateTime"].AsString();
-				wxString mydatetime(datetime.c_str(), wxConvUTF8);
+				wxString mydatetime = root[j]["DateTime"].AsString();				
 				outTidalEvent.DateTime = ProcessDate(mydatetime);
 			}
 			else {
