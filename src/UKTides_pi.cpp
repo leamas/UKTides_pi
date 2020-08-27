@@ -73,20 +73,15 @@ UKTides_pi::UKTides_pi(void *ppimgr)
       // Create the PlugIn icons
       initialize_images();
 
-	  wxFileName fn;
-	  wxString tmp_path;
-
-	  tmp_path = GetPluginDataDir("uktides_pi");
-	  fn.SetPath(tmp_path);
-	  fn.AppendDir(_T("data"));
-	  fn.SetFullName("uktides_panel_icon.png");
-
-	  wxString shareLocn = fn.GetFullPath();
-	  wxImage panelIcon(shareLocn);
+	  wxString shareLocn = *GetpSharedDataLocation() +
+		  "plugins" + wxFileName::GetPathSeparator() +
+		  "UKTides_pi" + wxFileName::GetPathSeparator()
+		  + "data" + wxFileName::GetPathSeparator();
+	  wxImage panelIcon(shareLocn + "uktides_panel_icon.png");
 	  if (panelIcon.IsOk())
 		  m_panelBitmap = wxBitmap(panelIcon);
 	  else
-		  wxLogMessage(_("UKTides panel icon has NOT been loaded"));
+		  wxLogMessage(_("    UKTides panel icon has NOT been loaded"));
 
 	  m_bShowUKTides = false;
 }
@@ -118,7 +113,7 @@ int UKTides_pi::Init(void)
       //    This PlugIn needs a toolbar icon, so request its insertion
 	if(m_bUKTidesShowIcon)
      
-#ifdef PLUGIN_USE_SVG
+#ifdef UKTIDES_USE_SVG
 	m_leftclick_tool_id = InsertPlugInToolSVG("UKTides", _svg_uktides, _svg_uktides, _svg_uktides_toggled,
 		wxITEM_CHECK, _("UKTides"), "", NULL, UKTIDES_TOOL_POSITION, 0, this);
 #else

@@ -11,7 +11,7 @@ extern void initialize_images(void);
 
 extern wxBitmap *_img_uktides;
 
-#ifdef PLUGIN_USE_SVG
+#ifdef UKTIDES_USE_SVG
 extern wxString _svg_uktides;
 extern wxString _svg_uktides_toggled;
 #endif

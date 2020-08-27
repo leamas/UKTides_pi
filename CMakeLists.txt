@@ -29,7 +29,7 @@ set(LONG_DESCRIPTION "UKTides plugin is used to download UK Tide times. The plug
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "9")
+set(VERSION_PATCH "10")
 set(VERSION_TWEAK "0")
 set(VERSION_DATE "16/08/2020")
 set(OCPN_MIN_VERSION "ov50")
@@ -85,8 +85,8 @@ message(STATUS "${CMLOC}Build type: ${CMAKE_BUILD_TYPE}")
 ##
 
 project(${PACKAGE})
-
-include("cmake/PluginSetup.cmake")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake;")
+include("PluginSetup")
 
 ##
 ## ----- The above is used to setup standard variables that are required by the CMAKE process - do not remove ----- ##
@@ -108,9 +108,7 @@ option(Plugin_CXX11 "Use c++11" OFF)
 ## ----- do not change next section - needed to configure build process ----- ##
 ##
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake;")
-
-include("PluginSetup")
+include("PluginConfigure")
 include("PluginJSON")
 
 ##
