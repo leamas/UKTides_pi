@@ -55,13 +55,6 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	tmp_path = GetPluginDataDir("uktides_pi");
 	fn.SetPath(tmp_path);
 	fn.AppendDir(_T("data"));
-
-	fn.SetFullName("blank.ico");
-	wxString blank_name = fn.GetFullPath();
-
-	wxIcon icon(blank_name, wxBITMAP_TYPE_ICO);
-	SetIcon(icon);
-
 	fn.SetFullName("station_icon.png");
 	wxString station_icon_name = fn.GetFullPath();
 
@@ -69,10 +62,12 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 
     /* ensure the directories exist */
     wxFileName fn2;
-    fn2.Mkdir(Dlg::StandardPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+
+   // fn2.Mkdir(Dlg::StandardPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
     wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
     myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/opencpn/UserIcons/";
+
 #if defined (__unix__)
     myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/.opencpn/UserIcons/";
 #endif
