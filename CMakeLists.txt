@@ -29,7 +29,7 @@ set(LONG_DESCRIPTION "UKTides plugin is used to download UK Tide times. The plug
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "5")
+set(VERSION_PATCH "6")
 set(VERSION_TWEAK "0")
 set(VERSION_DATE "16/08/2020")
 set(OCPN_MIN_VERSION "ov50")
@@ -47,7 +47,7 @@ set(PROD "prod") # Standard Repos
 set(BETA "beta") # Standard Repos
 set(ALPHA "alpha") # Standard Repos
 
-set(CLOUDSMITH_USER "mike-rossiter")
+set(CLOUDSMITH_USER "opencpn")
 # set this if your cloudsmith repository name does not match your git repository name 
 set(CLOUDSMITH_BASE_REPOSITORY "uktides")
 
@@ -109,7 +109,7 @@ option(Plugin_CXX11 "Use c++11" OFF)
 ## ----- do not change next section - needed to configure build process ----- ##
 ##
 
-include("PluginConfigure")
+include("cmake/PluginConfigure.cmake")
 include("cmake/PluginJSON.cmake")
 
 ##
