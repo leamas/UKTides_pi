@@ -164,24 +164,24 @@ bool UKTides_pi::DeInit(void)
     return true;
 }
 
-int UKTides_pi::GetAPIVersionMajor()
+int PhotoLayer_pi::GetAPIVersionMajor()
 {
-      return MY_API_VERSION_MAJOR;
+    return OCPN_API_VERSION_MAJOR;
 }
 
-int UKTides_pi::GetAPIVersionMinor()
+int PhotoLayer_pi::GetAPIVersionMinor()
 {
-      return MY_API_VERSION_MINOR;
+    return OCPN_API_VERSION_MINOR;
 }
 
-int UKTides_pi::GetPlugInVersionMajor()
+int PhotoLayer_pi::GetPlugInVersionMajor()
 {
-      return PLUGIN_VERSION_MAJOR;
+    return PLUGIN_VERSION_MAJOR;
 }
 
-int UKTides_pi::GetPlugInVersionMinor()
+int PhotoLayer_pi::GetPlugInVersionMinor()
 {
-      return PLUGIN_VERSION_MINOR;
+    return PLUGIN_VERSION_MINOR;
 }
 
 wxBitmap *UKTides_pi::GetPlugInBitmap()

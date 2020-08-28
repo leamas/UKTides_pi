@@ -29,9 +29,9 @@ set(LONG_DESCRIPTION "UKTides plugin is used to download UK Tide times. The plug
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "11")
+set(VERSION_PATCH "12")
 set(VERSION_TWEAK "0")
-set(VERSION_DATE "16/08/2020")
+set(VERSION_DATE "28/08/2020")
 set(OCPN_MIN_VERSION "ov50")
 set(OCPN_API_VERSION_MAJOR "1")
 set(OCPN_API_VERSION_MINOR "16")
