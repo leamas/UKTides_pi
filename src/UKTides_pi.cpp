@@ -78,7 +78,7 @@ UKTides_pi::UKTides_pi(void *ppimgr)
 	  wxFileName fn;
 	  wxString tmp_path;
 
-	  tmp_path = GetPluginDataDir("UKTides_pi");
+	  tmp_path = GetPluginDataDir("uktides_pi");
 	  fn.SetPath(tmp_path);
 	  fn.AppendDir(_T("data"));
 	  fn.SetFullName("uktides_panel_icon.png");

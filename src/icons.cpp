@@ -24,11 +24,13 @@ void initialize_images(void)
 
 #ifdef PLUGIN_USE_SVG
 	wxFileName fn;
-	fn.SetPath(*GetpSharedDataLocation());
-	fn.AppendDir("plugins");
-	fn.AppendDir("UKTides_pi");
-	fn.AppendDir("data");
-	fn.SetFullName("UKTides_pi.svg");
+	wxString tmp_path;
+
+	tmp_path = GetPluginDataDir("uktides_pi");	
+	fn.SetPath(tmp_path);
+	fn.AppendDir(_T("data"));
+	
+	fn.SetFullName("uktides_panel_icon.png");	
 	_svg_uktides = fn.GetFullPath();
 	fn.SetFullName("UKTides_pi_toggled.svg");
 	_svg_uktides_toggled = fn.GetFullPath();
