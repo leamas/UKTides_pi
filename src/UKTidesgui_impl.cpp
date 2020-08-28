@@ -45,19 +45,24 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	this->Fit();
     dbg=false; //for debug output set to true
  
-	wxString blank_name = *GetpSharedDataLocation()
-		+ "plugins/UKTides_pi/data/blank.ico";
+	wxFileName fn;
+	wxString tmp_path;
+
+	tmp_path = GetPluginDataDir("uktides_pi");
+	fn.SetPath(tmp_path);
+	fn.AppendDir(_T("data"));
+	fn.SetFullName("blank.ico");
+	wxString blank_name = fn.GetFullPath();
 
 	wxIcon icon(blank_name, wxBITMAP_TYPE_ICO);
 	SetIcon(icon);
 
-	wxString station_icon_name = *GetpSharedDataLocation()
-		+ "plugins/UKTides_pi/data/station_icon.png";
+	fn.SetFullName("station_icon.png");
+	wxString station_icon_name = fn.GetFullPath();
     
     wxString myOpenCPNiconsPath;
     
     /* ensure the directories exist */
-    wxFileName fn;
     fn.Mkdir(Dlg::StandardPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
     
     wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
