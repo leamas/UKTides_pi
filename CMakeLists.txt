@@ -29,7 +29,7 @@ set(LONG_DESCRIPTION "UKTides plugin is used to download UK Tide times. The plug
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "18")
+set(VERSION_PATCH "19")
 set(VERSION_TWEAK "0")
 set(VERSION_DATE "28/08/2020")
 set(OCPN_MIN_VERSION "ov50")
@@ -40,7 +40,7 @@ set(TP_COMMENT "  * Release for O5 using CI")
 set(PARENT "opencpn")
 
 # The next line allows for setting up your own local webserver with git on it for testing purposes, the default is github.com
-#set(GIT_REPOSITORY_SERVER "github.com")
+set(GIT_REPOSITORY_SERVER "github.com")
 
 # Specifies cloudsmith repository sufficies
 set(PROD "prod") # Standard Repos
