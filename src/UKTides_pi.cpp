@@ -75,11 +75,17 @@ UKTides_pi::UKTides_pi(void *ppimgr)
       // Create the PlugIn icons
       initialize_images();
 
-	  wxString shareLocn = *GetpSharedDataLocation() +
-		  "plugins" + wxFileName::GetPathSeparator() +
-		  "UKTides_pi" + wxFileName::GetPathSeparator()
-		  + "data" + wxFileName::GetPathSeparator();
-	  wxImage panelIcon(shareLocn + "uktides_panel_icon.png");
+	  wxFileName fn;
+	  wxString tmp_path;
+
+	  tmp_path = GetPluginDataDir("UKTides_pi");
+	  fn.SetPath(tmp_path);
+	  fn.AppendDir(_T("data"));
+	  fn.SetFullName("uktides_panel_icon.png");
+
+	  wxString shareLocn = fn.GetFullPath();
+
+	  wxImage panelIcon(shareLocn);
 	  if (panelIcon.IsOk())
 		  m_panelBitmap = wxBitmap(panelIcon);
 	  else
