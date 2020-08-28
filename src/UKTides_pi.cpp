@@ -164,22 +164,22 @@ bool UKTides_pi::DeInit(void)
     return true;
 }
 
-int PhotoLayer_pi::GetAPIVersionMajor()
+int UKTides_pi::GetAPIVersionMajor()
 {
     return OCPN_API_VERSION_MAJOR;
 }
 
-int PhotoLayer_pi::GetAPIVersionMinor()
+int UKTides_pi::GetAPIVersionMinor()
 {
     return OCPN_API_VERSION_MINOR;
 }
 
-int PhotoLayer_pi::GetPlugInVersionMajor()
+int UKTides_pi::GetPlugInVersionMajor()
 {
     return PLUGIN_VERSION_MAJOR;
 }
 
-int PhotoLayer_pi::GetPlugInVersionMinor()
+int UKTides_pi::GetPlugInVersionMinor()
 {
     return PLUGIN_VERSION_MINOR;
 }
