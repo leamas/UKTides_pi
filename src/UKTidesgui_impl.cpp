@@ -103,6 +103,7 @@ void Dlg::OnInformation(wxCommandEvent& event)
 	fn.SetFullName("UKTides.html");
 	wxString infolocation = fn.GetFullPath();
 
+
 	wxLaunchDefaultBrowser("file:///" + infolocation);
 
 }
@@ -666,7 +667,7 @@ wxString Dlg::StandardPath()
     if (!wxDirExists(stdPath))
       wxMkdir(stdPath);
 
-    stdPath += s + _T("UKTides");
+    stdPath += s + _T("uktides");
 
 #ifdef __WXOSX__
     // Compatibility with pre-OCPN-4.2; move config dir to
@@ -675,7 +676,7 @@ wxString Dlg::StandardPath()
         wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
         wxString s = wxFileName::GetPathSeparator();
         // should be ~/Library/Preferences/opencpn
-        wxString oldPath = (std_path.GetUserConfigDir() +s + _T("plugins") +s + _T("UKTides"));
+        wxString oldPath = (std_path.GetUserConfigDir() +s + _T("plugins") +s + _T("uktides"));
         if (wxDirExists(oldPath) && !wxDirExists(stdPath)) {
             wxLogMessage("UKTides_pi: moving config dir %s to %s", oldPath, stdPath);
             wxRenameFile(oldPath, stdPath);

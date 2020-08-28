@@ -19,7 +19,7 @@ if(COMMAND cmake_policy)
 endif(COMMAND cmake_policy)
 
 # define plugin name, owner and versions
-set(VERBOSE_NAME "UKTides")
+set(VERBOSE_NAME "uktides")
 set(COMMON_NAME "uktides")
 set(TITLE_NAME "uktides")
 set(PACKAGE_CONTACT "Mike Rossiter")
@@ -29,7 +29,7 @@ set(LONG_DESCRIPTION "UKTides plugin is used to download UK Tide times. The plug
 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
-set(VERSION_PATCH "21")
+set(VERSION_PATCH "22")
 set(VERSION_TWEAK "0")
 set(VERSION_DATE "28/08/2020")
 set(OCPN_MIN_VERSION "ov50")

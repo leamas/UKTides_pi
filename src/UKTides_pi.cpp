@@ -199,13 +199,13 @@ wxBitmap *UKTides_pi::GetPlugInBitmap()
 
 wxString UKTides_pi::GetCommonName()
 {
-      return _("UKTides");
+      return _("uktides");
 }
 
 
 wxString UKTides_pi::GetShortDescription()
 {
-      return _("UKTides");
+      return _("uktides");
 }
 
 wxString UKTides_pi::GetLongDescription()
