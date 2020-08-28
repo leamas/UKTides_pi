@@ -30,7 +30,7 @@ void initialize_images(void)
 	fn.SetPath(tmp_path);
 	fn.AppendDir(_T("data"));
 	
-	fn.SetFullName("uktides_panel_icon.png");	
+	fn.SetFullName("UKTides_pi.svg");	
 	_svg_uktides = fn.GetFullPath();
 	fn.SetFullName("UKTides_pi_toggled.svg");
 	_svg_uktides_toggled = fn.GetFullPath();
