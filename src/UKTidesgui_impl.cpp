@@ -62,9 +62,6 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
     
     wxString myOpenCPNiconsPath;
     
-    /* ensure the directories exist */
-    fn.Mkdir(Dlg::StandardPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
-    
     wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
     myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/opencpn/UserIcons/";
 
@@ -96,8 +93,16 @@ Dlg::~Dlg()
 void Dlg::OnInformation(wxCommandEvent& event)
 {
 
-	wxString infolocation = *GetpSharedDataLocation()
-		+ "plugins/UKTides_pi/data/pictures/" + "UKTides.html";
+	wxFileName fn;
+	wxString tmp_path;
+
+	tmp_path = GetPluginDataDir("uktides_pi");
+	fn.SetPath(tmp_path);
+	fn.AppendDir("data");
+	fn.AppendDir("pictures");
+	fn.SetFullName("UKTides.html");
+	wxString infolocation = fn.GetFullPath();
+
 	wxLaunchDefaultBrowser("file:///" + infolocation);
 
 }
