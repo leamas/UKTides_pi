@@ -9,7 +9,7 @@
 
 wxBitmap *_img_uktides;
 
-#ifdef UKTIDES_USE_SVG
+#ifdef PLUGIN_USE_SVG
 #include "ocpn_plugin.h"
 wxString _svg_uktides;
 wxString _svg_uktides_toggled;
@@ -22,7 +22,7 @@ void initialize_images(void)
 		_img_uktides = new wxBitmap(wxImage(sm));
 	}
 
-#ifdef UKTIDES_USE_SVG
+#ifdef PLUGIN_USE_SVG
 	wxFileName fn;
 	fn.SetPath(*GetpSharedDataLocation());
 	fn.AppendDir("plugins");
