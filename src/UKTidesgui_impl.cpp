@@ -687,7 +687,7 @@ wxString Dlg::StandardPath()
     if (!wxDirExists(stdPath))
       wxMkdir(stdPath);
 
-    stdPath += s;
+   
     return stdPath;
 }
 
