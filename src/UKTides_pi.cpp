@@ -173,12 +173,12 @@ bool UKTides_pi::DeInit(void)
 
 int UKTides_pi::GetAPIVersionMajor()
 {
-    return OCPN_API_VERSION_MAJOR;
+    return MY_API_VERSION_MAJOR;
 }
 
 int UKTides_pi::GetAPIVersionMinor()
 {
-    return OCPN_API_VERSION_MINOR;
+    return MY_API_VERSION_MINOR;
 }
 
 int UKTides_pi::GetPlugInVersionMajor()

@@ -41,6 +41,12 @@
 #include "icons.h"
 #include "UKTidesgui_impl.h"
 
+#define     PLUGIN_VERSION_MAJOR    1
+#define     PLUGIN_VERSION_MINOR    0
+
+#define     MY_API_VERSION_MAJOR    1
+#define     MY_API_VERSION_MINOR    6
+
 class Dlg;
 
 //----------------------------------------------------------------------------------------------------------
