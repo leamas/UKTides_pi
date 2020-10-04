@@ -51,7 +51,7 @@ option(UKTIDES_USE_SVG "Use SVG graphics" ON)
 
 # -------  Plugin setup --------
 #
-project(UKTides_pi VERSION 1.0.30)
+project(UKTides_pi VERSION 1.0.31)
 
 set(VERBOSE_NAME UKTides)    # Legacy installers artifact names
 set(TITLE_NAME UKTides)      # Legacy installer dialogs
@@ -98,7 +98,7 @@ set(PACKAGE_NAME ${CMAKE_PROJECT_NAME})
 string(REGEX REPLACE "\([0-9]\)\.\([0-9]\).*" "ov\\1\\2"
        OCPN_MIN_VERSION ${API_OCPN_MIN_VERSION})
 
-if (UKTIDES_USE_SVG)
+if (PLUGIN_USE_SVG)
   add_definitions(-DUKTIDES_USE_SVG)
 endif ()
 
