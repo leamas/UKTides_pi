@@ -37,7 +37,6 @@
 
 #include <wx/stdpaths.h>
 
-#include "version.h"
 
 
 class UKTides_pi;
