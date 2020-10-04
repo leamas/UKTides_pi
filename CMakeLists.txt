@@ -51,7 +51,7 @@ option(UKTIDES_USE_SVG "Use SVG graphics" ON)
 
 # -------  Plugin setup --------
 #
-project(UKTides_pi VERSION 1.0.34)
+project(UKTides_pi VERSION 1.0.35)
 
 set(VERBOSE_NAME UKTides)    # Legacy installers artifact names
 set(TITLE_NAME UKTides)      # Legacy installer dialogs
@@ -75,8 +75,7 @@ SET(SRC
 	    src/NavFunc.h
 	    src/NavFunc.cpp
 		src/tidetable.cpp
-		src/tidetable.h
-		src/ocpn_plugin.h		
+		src/tidetable.h		
 	)
 
 
