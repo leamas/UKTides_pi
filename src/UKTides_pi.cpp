@@ -37,6 +37,8 @@
 
 #include <wx/stdpaths.h>
 
+#include "version.h"
+
 
 class UKTides_pi;
 
@@ -73,11 +75,17 @@ UKTides_pi::UKTides_pi(void *ppimgr)
       // Create the PlugIn icons
       initialize_images();
 
-	  wxString shareLocn = *GetpSharedDataLocation() +
-		  "plugins" + wxFileName::GetPathSeparator() +
-		  "UKTides_pi" + wxFileName::GetPathSeparator()
-		  + "data" + wxFileName::GetPathSeparator();
-	  wxImage panelIcon(shareLocn + "uktides_panel_icon.png");
+	  wxFileName fn;
+	  wxString tmp_path;
+
+	  tmp_path = GetPluginDataDir("uktides_pi");
+	  fn.SetPath(tmp_path);
+	  fn.AppendDir(_T("data"));
+	  fn.SetFullName("uktides_panel_icon.png");
+
+	  wxString shareLocn = fn.GetFullPath();
+
+	  wxImage panelIcon(shareLocn);
 	  if (panelIcon.IsOk())
 		  m_panelBitmap = wxBitmap(panelIcon);
 	  else
@@ -113,7 +121,7 @@ int UKTides_pi::Init(void)
       //    This PlugIn needs a toolbar icon, so request its insertion
 	if(m_bUKTidesShowIcon)
      
-#ifdef UKTIDES_USE_SVG
+#ifdef PLUGIN_USE_SVG
 	m_leftclick_tool_id = InsertPlugInToolSVG("UKTides", _svg_uktides, _svg_uktides, _svg_uktides_toggled,
 		wxITEM_CHECK, _("UKTides"), "", NULL, UKTIDES_TOOL_POSITION, 0, this);
 #else
@@ -166,22 +174,22 @@ bool UKTides_pi::DeInit(void)
 
 int UKTides_pi::GetAPIVersionMajor()
 {
-      return MY_API_VERSION_MAJOR;
+    return OCPN_API_VERSION_MAJOR;
 }
 
 int UKTides_pi::GetAPIVersionMinor()
 {
-      return MY_API_VERSION_MINOR;
+    return OCPN_API_VERSION_MINOR;
 }
 
 int UKTides_pi::GetPlugInVersionMajor()
 {
-      return PLUGIN_VERSION_MAJOR;
+    return PLUGIN_VERSION_MAJOR;
 }
 
 int UKTides_pi::GetPlugInVersionMinor()
 {
-      return PLUGIN_VERSION_MINOR;
+    return PLUGIN_VERSION_MINOR;
 }
 
 wxBitmap *UKTides_pi::GetPlugInBitmap()
@@ -191,13 +199,13 @@ wxBitmap *UKTides_pi::GetPlugInBitmap()
 
 wxString UKTides_pi::GetCommonName()
 {
-      return _("UKTides");
+      return _("uktides");
 }
 
 
 wxString UKTides_pi::GetShortDescription()
 {
-      return _("UKTides");
+      return _("uktides");
 }
 
 wxString UKTides_pi::GetLongDescription()

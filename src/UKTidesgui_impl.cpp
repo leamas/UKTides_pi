@@ -45,20 +45,22 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	this->Fit();
     dbg=false; //for debug output set to true
  
-	wxString blank_name = *GetpSharedDataLocation()
-		+ "plugins/UKTides_pi/data/blank.ico";
+	wxFileName fn;
+	wxString tmp_path;
+
+	tmp_path = GetPluginDataDir("uktides_pi");
+	fn.SetPath(tmp_path);
+	fn.AppendDir(_T("data"));
+	fn.SetFullName("blank.ico");
+	wxString blank_name = fn.GetFullPath();
 
 	wxIcon icon(blank_name, wxBITMAP_TYPE_ICO);
 	SetIcon(icon);
 
-	wxString station_icon_name = *GetpSharedDataLocation()
-		+ "plugins/UKTides_pi/data/station_icon.png";
+	fn.SetFullName("station_icon.png");
+	wxString station_icon_name = fn.GetFullPath();
     
     wxString myOpenCPNiconsPath;
-    
-    /* ensure the directories exist */
-    wxFileName fn;
-    fn.Mkdir(Dlg::StandardPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
     
     wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
     myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/opencpn/UserIcons/";
@@ -91,8 +93,17 @@ Dlg::~Dlg()
 void Dlg::OnInformation(wxCommandEvent& event)
 {
 
-	wxString infolocation = *GetpSharedDataLocation()
-		+ "plugins/UKTides_pi/data/pictures/" + "UKTides.html";
+	wxFileName fn;
+	wxString tmp_path;
+
+	tmp_path = GetPluginDataDir("uktides_pi");
+	fn.SetPath(tmp_path);
+	fn.AppendDir("data");
+	fn.AppendDir("pictures");
+	fn.SetFullName("UKTides.html");
+	wxString infolocation = fn.GetFullPath();
+
+
 	wxLaunchDefaultBrowser("file:///" + infolocation);
 
 }
@@ -223,7 +234,8 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 	}
 
 	SetCanvasContextMenuItemViz(plugin->m_position_menu_id, true);
-
+	fileData.Close();
+	
 	RequestRefresh(m_parent);
 	root.clear();
 
@@ -652,11 +664,11 @@ wxString Dlg::StandardPath()
     wxString s = wxFileName::GetPathSeparator();
     wxString stdPath  = *GetpPrivateApplicationDataLocation();
 
-    stdPath += s + _T("plugins");
+    stdPath += s + _T("plugins") + s + _T("uktides_pi") + s + "data";
     if (!wxDirExists(stdPath))
       wxMkdir(stdPath);
 
-    stdPath += s + _T("UKTides");
+    
 
 #ifdef __WXOSX__
     // Compatibility with pre-OCPN-4.2; move config dir to
@@ -665,18 +677,14 @@ wxString Dlg::StandardPath()
         wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
         wxString s = wxFileName::GetPathSeparator();
         // should be ~/Library/Preferences/opencpn
-        wxString oldPath = (std_path.GetUserConfigDir() +s + _T("plugins") +s + _T("UKTides"));
+        wxString oldPath = (std_path.GetUserConfigDir() +s + _T("plugins") +s + _T("uktides"));
         if (wxDirExists(oldPath) && !wxDirExists(stdPath)) {
             wxLogMessage("UKTides_pi: moving config dir %s to %s", oldPath, stdPath);
             wxRenameFile(oldPath, stdPath);
         }
     }
 #endif
-
-    if (!wxDirExists(stdPath))
-      wxMkdir(stdPath);
-
-    stdPath += s;
+   
     return stdPath;
 }
 
@@ -748,7 +756,7 @@ void Dlg::SaveTidalEventsToXml(list<myPort>myPorts)
 		}
 	}
 
-	wxString filename = "tidalevents.xml";
+	wxString filename = "/tidalevents.xml";
 	wxString tidal_events_path = StandardPath();
     
     /* ensure the directory exists */
@@ -775,7 +783,7 @@ list<myPort>Dlg::LoadTidalEventsFromXml()
 
 	list<TidalEvent> listEvents;
 
-	wxString filename = tidal_events_path + "tidalevents.xml";
+	wxString filename = tidal_events_path + "/tidalevents.xml";
 	wxFileName fn(filename);
 
 	SetTitle(_("Tidal Events"));
