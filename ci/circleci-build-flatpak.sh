@@ -3,73 +3,47 @@
 #
 # Build the flatpak artifacts. Uses docker to run Fedora on
 # in full-fledged VM; the actual build is done in the Fedora
-# container.
+# container. 
 #
 # flatpak-builder can be run in a docker image. However, this
-# must then be run in privileged mode, which means it we need
-# a full VM to run it.
+# must then be run in privileged mode, which means we need 
+# a full-fledged VM to run it.
 #
 
-# bailout on errors and echo commands.
 set -xe
-##sudo apt-get -qq update
 
-#PLUGIN=bsb4
+# Give the apt update daemons a chance to leave the scene.
+sudo systemctl stop apt-daily.service apt-daily.timer
+sudo systemctl kill --kill-who=all apt-daily.service apt-daily-upgrade.service
+sudo systemctl mask apt-daily.service apt-daily-upgrade.service
+sudo systemctl daemon-reload
 
-DOCKER_SOCK="unix:///var/run/docker.sock"
-if [ -n "$TRAVIS" ]; then
-    TOPDIR=/opencpn-ci
-elif [ -n "$CIRCLECI" ]; then
-   TOPDIR=/root/project
-else
-   TOPDIR=/opencpn-ci
-fi
+sudo add-apt-repository -y ppa:alexlarsson/flatpak
+wget -q -O - https://dl.google.com/linux/linux_signing_key.pub \
+    | sudo apt-key add -
+sudo apt update
 
-echo "DOCKER_OPTS=\"-H tcp://127.0.0.1:2375 -H $DOCKER_SOCK -s devicemapper\"" \
-    | sudo tee /etc/default/docker > /dev/null
+sudo apt install build-essential flatpak-builder flatpak tar
+flatpak remote-add --user --if-not-exists flathub \
+    https://flathub.org/repo/flathub.flatpakrepo
+flatpak install --user -y flathub org.opencpn.OpenCPN > /dev/null
+flatpak install --user -y flathub org.freedesktop.Sdk//18.08  >/dev/null
+cp flatpak/org.opencpn.OpenCPN.Plugin.shipdriver.yaml flatpak.yaml.bak
+sed -i '/^runtime-version/s/:.*/: stable/' \
+    flatpak/org.opencpn.OpenCPN.Plugin.shipdriver.yaml
 
-if [ -n "$CIRCLECI" ]; then
-    sudo service docker restart;
-    sleep 5;
-    sudo docker pull fedora:28;
-    sleep 2
-fi
+mkdir build; cd build
+cmake  ..
+make flatpak
 
-DOCKER_CONTAINER_ID=$(docker ps | grep fedora | awk '{print $1}')
-if [ "" = "$DOCKER_CONTAINER_ID" ]; then
-    docker run --privileged -d -ti -e "container=docker"  \
-        -e TOPDIR=$TOPDIR \
-        -v /sys/fs/cgroup:/sys/fs/cgroup \
-        -v $(pwd):$TOPDIR:rw \
-        fedora:28   /usr/sbin/init
-    DOCKER_CONTAINER_ID=$(docker ps | grep fedora | awk '{print $1}')
-fi
+# Restore file so the cache checksumming is ok.
+cp ../flatpak.yaml.bak org.opencpn.OpenCPN.Plugin.shipdriver.yaml
 
-echo $CIRCLE_BRANCH
-docker logs $DOCKER_CONTAINER_ID
-if [ -n "$CIRCLECI" ]; then
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
-    "export CIRCLECI=$CIRCLECI;
-    export CIRCLE_BRANCH=\"$CIRCLE_BRANCH\";
-    export CIRCLE_TAG=\"$CIRCLE_TAG\";
-    export CIRCLE_PROJECT_USERNAME=\"$CIRCLE_PROJECT_USERNAME\";
-    export CIRCLE_PROJECT_REPONAME=\"$CIRCLE_PROJECT_REPONAME\";
-    export GIT_REPOSITORY_SERVER=\"$GIT_REPOSITORY_SERVER\";
-    export OCPN_TARGET=$OCPN_TARGET;
-    bash -xe $TOPDIR/ci/docker-build-flatpak.sh 28;
-         echo -ne \"------\nEND OPENCPN-CI BUILD\n\";"
-else
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
-    "export CIRCLECI=true;
-    export CIRCLE_BRANCH=updates;
-    export OCPN_TARGET=flatpak;
-    bash -xe $TOPDIR/ci/docker-build-flatpak.sh 28;
-         echo -ne \"------\nEND OPENCPN-CI BUILD\n\";"
-fi
+# Wait for apt-daily to complete, install cloudsmith-cli required by upload.sh.
+# apt-daily should not restart, it's masked.
+# https://unix.stackexchange.com/questions/315502
+echo -n "Waiting for apt_daily lock..."
+sudo flock /var/lib/apt/daily_lock echo done
 
-docker ps -a
-
-if [ -n "$CIRCLECI" ]; then
-    docker stop $DOCKER_CONTAINER_ID
-    docker rm -v $DOCKER_CONTAINER_ID
-fi
+pyenv local $(pyenv versions | sed 's/*//' | awk '{print $1}' | tail -1)
+pip3 install cloudsmith-cli

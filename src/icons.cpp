@@ -9,7 +9,7 @@
 
 wxBitmap *_img_uktides;
 
-#ifdef PLUGIN_USE_SVG
+#ifdef UKTIDES_USE_SVG
 #include "ocpn_plugin.h"
 wxString _svg_uktides;
 wxString _svg_uktides_toggled;
@@ -22,15 +22,13 @@ void initialize_images(void)
 		_img_uktides = new wxBitmap(wxImage(sm));
 	}
 
-#ifdef PLUGIN_USE_SVG
+#ifdef UKTIDES_USE_SVG
 	wxFileName fn;
-	wxString tmp_path;
-
-	tmp_path = GetPluginDataDir("uktides_pi");	
-	fn.SetPath(tmp_path);
-	fn.AppendDir(_T("data"));
-	
-	fn.SetFullName("UKTides_pi.svg");	
+	fn.SetPath(*GetpSharedDataLocation());
+	fn.AppendDir("plugins");
+	fn.AppendDir("UKTides_pi");
+	fn.AppendDir("data");
+	fn.SetFullName("UKTides_pi.svg");
 	_svg_uktides = fn.GetFullPath();
 	fn.SetFullName("UKTides_pi_toggled.svg");
 	_svg_uktides_toggled = fn.GetFullPath();

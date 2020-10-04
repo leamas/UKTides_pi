@@ -573,7 +573,7 @@ public:
     PlugIn_Waypoint();
     PlugIn_Waypoint(double lat, double lon,
                     const wxString& icon_ident, const wxString& wp_name,
-                    const wxString& GUID = _T("") );
+                    const wxString& GUID = "");
     ~PlugIn_Waypoint();
 
     double             m_lat;
