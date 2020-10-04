@@ -48,7 +48,7 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	wxFileName fn;
 	wxString tmp_path;
 
-	tmp_path = GetPluginDataDir("uktides_pi");
+	tmp_path = GetPluginDataDir("UKTides_pi");
 	fn.SetPath(tmp_path);
 	fn.AppendDir(_T("data"));
 	fn.SetFullName("blank.ico");
