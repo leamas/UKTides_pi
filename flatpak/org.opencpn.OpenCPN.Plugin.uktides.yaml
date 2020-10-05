@@ -1,4 +1,4 @@
-id: org.opencpn.OpenCPN.Plugin.shipdriver
+id: org.opencpn.OpenCPN.Plugin.uktides
 runtime: org.opencpn.OpenCPN
 # runtime-version: stable   # official build at flathub
 runtime-version: master   # for nightly builds
