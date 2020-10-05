@@ -63,21 +63,21 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
     wxString myOpenCPNiconsPath;
     
     wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
-    myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/opencpn/UserIcons/";
+    myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/opencpn/UserIcons";
 
 #if defined(__WXMSW__)
 	wxString win_stdPath = std_path.GetConfigDir();
-	myOpenCPNiconsPath = win_stdPath + "/UserIcons/";
+	myOpenCPNiconsPath = win_stdPath + "/UserIcons";
 #endif
     
     if (!wxDirExists(myOpenCPNiconsPath)) {
         fn.Mkdir(myOpenCPNiconsPath,wxS_DIR_DEFAULT,wxPATH_MKDIR_FULL);
     }
     
-    wxString destination = myOpenCPNiconsPath + "station_icon.png";
+    wxString destination = myOpenCPNiconsPath + "/station_icon.png";
     
 	if (!wxFileExists(destination)) {
-		wxCopyFile(station_icon_name, destination, true);		
+		wxCopyFile(station_icon_name, destination, false);		
 		wxMessageBox(_("On first use please re-start OpenCPN\n... to enable the tidal station icons"));		
 	}
 	
