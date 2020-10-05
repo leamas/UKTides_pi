@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 #
 # Build for raspbian armhf in a qemu docker container
 #
