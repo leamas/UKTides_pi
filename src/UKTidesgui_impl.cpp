@@ -96,7 +96,7 @@ void Dlg::OnInformation(wxCommandEvent& event)
 	wxFileName fn;
 	wxString tmp_path;
 
-	tmp_path = GetPluginDataDir("uktides_pi");
+	tmp_path = GetPluginDataDir("UKTides_pi");
 	fn.SetPath(tmp_path);
 	fn.AppendDir("data");
 	fn.AppendDir("pictures");
@@ -664,7 +664,7 @@ wxString Dlg::StandardPath()
     wxString s = wxFileName::GetPathSeparator();
     wxString stdPath  = *GetpPrivateApplicationDataLocation();
 
-    stdPath += s + _T("plugins") + s + _T("uktides_pi") + s + "data";
+    stdPath += s + _T("plugins") + s + _T("UKTides_pi") + s + "data";
     if (!wxDirExists(stdPath))
       wxMkdir(stdPath);
 

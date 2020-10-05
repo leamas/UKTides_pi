@@ -51,13 +51,13 @@ option(UKTIDES_USE_SVG "Use SVG graphics" ON)
 
 # -------  Plugin setup --------
 #
-project(UKTides_pi VERSION 1.0.38)
+project(UKTides_pi VERSION 1.0.39)
 
 set(VERBOSE_NAME UKTides)    # Legacy installers artifact names
 set(TITLE_NAME UKTides)      # Legacy installer dialogs
 set(PLUGIN_API_NAME UKTides) # As of GetCommonName() in plugin API
 set(CPACK_PACKAGE_CONTACT "Mike Rossiter")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "UK Ties from UKHO")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "UK Tides from UKHO")
 set(CPACK_PACKAGE_DESCRIPTION "Tides for 600+ UK ports")
 
 set(PKG_RELEASE "1")
@@ -98,7 +98,7 @@ string(REGEX REPLACE "\([0-9]\)\.\([0-9]\).*" "ov\\1\\2"
        OCPN_MIN_VERSION ${API_OCPN_MIN_VERSION})
 
 if (PLUGIN_USE_SVG)
-  add_definitions(-DUKTIDES_USE_SVG)
+  add_definitions(-DPLUGIN_USE_SVG)
 endif ()
 
 
