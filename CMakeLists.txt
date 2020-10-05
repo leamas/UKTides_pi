@@ -36,9 +36,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 message(STATUS "Building: ${BUILD_TYPE}")
 
+
 # -------- Options ----------
 #
-
 set(OCPN_UNSTABLE_REPO
     "mike-rossiter/uktides-beta"
     CACHE STRING "Default repository for untagged builds"
@@ -52,7 +52,7 @@ option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 
 # -------  Plugin setup --------
 #
-project(UKTides_pi VERSION 1.0.52)
+project(UKTides_pi VERSION 1.0.54)
 
 set(VERBOSE_NAME UKTides)    # Legacy installers artifact names
 set(TITLE_NAME UKTides)      # Legacy installer dialogs
@@ -78,7 +78,6 @@ SET(SRC
 		src/tidetable.cpp
 		src/tidetable.h		
 	)
-
 
 # -------- Setup completed, build the plugin --------
 #
