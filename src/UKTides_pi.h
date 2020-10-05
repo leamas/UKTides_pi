@@ -45,7 +45,7 @@
 #define     PLUGIN_VERSION_MINOR    0
 
 #define     MY_API_VERSION_MAJOR    1
-#define     MY_API_VERSION_MINOR    16
+#define     MY_API_VERSION_MINOR    6
 
 class Dlg;
 
@@ -55,7 +55,7 @@ class Dlg;
 
 #define UKTIDES_TOOL_POSITION    -1          // Request default positioning of toolbar tool
 
-class UKTides_pi : public opencpn_plugin_116
+class UKTides_pi : public opencpn_plugin_16
 {
 public:
       UKTides_pi(void *ppimgr);
