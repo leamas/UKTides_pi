@@ -13,11 +13,11 @@ finish-args:
     - --device=all
 
 modules:
-    - name: shipdriver
+    - name: uktides
       no-autogen: true
       buildsystem: cmake
       config-opts:
-          - -DCMAKE_INSTALL_PREFIX=/app/extensions/shipdriver/
+          - -DCMAKE_INSTALL_PREFIX=/app/extensions/uktides/
           - -DPREFIX_PLUGINS=lib/opencpn
           - -DBUILD_TYPE:STRING=tarball
           - -UPKG_TARGET
