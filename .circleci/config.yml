@@ -4,7 +4,8 @@ version: 2.1
 debian-steps: &debian-steps
   steps:
     - checkout
-    - run: chmod +x ci/circleci-build-debian.sh
+    - run: chmod a+x ./ci/*.sh
+    - run: ci/circleci-build-debian.sh
     - run: cd build; /bin/bash < upload.sh
 
 jobs:
@@ -15,7 +16,7 @@ jobs:
       - OCPN_TARGET: mingw
     steps:
       - checkout
-      - run: chmod +x ci/circleci-build-mingw.sh
+      - run: ci/circleci-build-mingw.sh
       - run: cd build; /bin/bash < upload.sh
 
   build-flatpak:
@@ -28,7 +29,7 @@ jobs:
       - restore_cache:
           keys:
             - fp-v1-{{ checksum "ci/circleci-build-flatpak.sh" }}
-      - run: chmod +x ci/circleci-build-flatpak.sh
+      - run: ci/circleci-build-flatpak.sh
       - save_cache:
           key: fp-v1-{{ checksum "ci/circleci-build-flatpak.sh" }}
           paths:
@@ -45,7 +46,7 @@ jobs:
       - restore_cache:
           keys:
             - macos-cache-v1-{{checksum "ci/circleci-build-macos.sh"}}
-      - run: chmod +x ci/circleci-build-macos.sh
+      - run: ci/circleci-build-macos.sh
       - save_cache:
           key: macos-cache-v1-{{checksum "ci/circleci-build-macos.sh"}}
           paths:
@@ -105,8 +106,9 @@ jobs:
       - DOCKER_IMAGE=balenalib/raspberry-pi-debian:stretch
     steps:
       - checkout
+      - run: chmod a+x ./ci/*.sh
       - run: pyenv local 3.5.2
-      - run: chmod +x ci/circleci-build-raspbian-armhf.sh
+      - run: ci/circleci-build-raspbian-armhf.sh
       - run: cd build; /bin/bash < upload.sh
 
   build-armhf-buster:
@@ -117,7 +119,7 @@ jobs:
     steps:
       - checkout
       - run: pyenv local 3.5.2
-      - run: chmod +x ci/circleci-build-raspbian-armhf.sh
+      - run: ci/circleci-build-raspbian-armhf.sh
       - run: cd build; /bin/bash < upload.sh
 
 std-filters: &std-filters
