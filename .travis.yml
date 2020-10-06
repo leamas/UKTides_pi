@@ -9,6 +9,7 @@ matrix:
     services:
     - docker
     script:
+    - chmod a+x ./ci/*.sh
     - "./ci/travis-build-raspbian-armhf.sh"
     - "cd build; bash < upload.sh"
     os: Linux
