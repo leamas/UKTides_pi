@@ -52,20 +52,20 @@ option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 
 # -------  Plugin setup --------
 #
-project(UKTides_pi VERSION 1.0.58)
+project(UKTides_pi VERSION 1.0.51)
 
 set(VERBOSE_NAME UKTides)    # Legacy installers artifact names
 set(TITLE_NAME UKTides)      # Legacy installer dialogs
 set(PLUGIN_API_NAME UKTides) # As of GetCommonName() in plugin API
 set(CPACK_PACKAGE_CONTACT "Mike Rossiter")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "UK Tides from UKHO")
-set(CPACK_PACKAGE_DESCRIPTION "Tides for 600+ UK ports")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Show UK tidal heights")
+set(CPACK_PACKAGE_DESCRIPTION "Show UK Tides at over 600 ports")
 
 set(PKG_RELEASE "1")
 set(PKG_AUTHOR "Mike Rossiter")
 
-SET(SRC
-        src/UKTides_pi.h
+set(SRC
+		src/UKTides_pi.h
         src/UKTides_pi.cpp
         src/icons.h
         src/icons.cpp
@@ -77,7 +77,8 @@ SET(SRC
 	    src/NavFunc.cpp
 		src/tidetable.cpp
 		src/tidetable.h		
-	)
+)
+
 
 # -------- Setup completed, build the plugin --------
 #

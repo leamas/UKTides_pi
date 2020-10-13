@@ -4,7 +4,6 @@ version: 2.1
 debian-steps: &debian-steps
   steps:
     - checkout
-    - run: chmod a+x ./ci/*.sh
     - run: ci/circleci-build-debian.sh
     - run: cd build; /bin/bash < upload.sh
 
@@ -16,7 +15,6 @@ jobs:
       - OCPN_TARGET: mingw
     steps:
       - checkout
-      - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-mingw.sh
       - run: cd build; /bin/bash < upload.sh
 
@@ -30,7 +28,6 @@ jobs:
       - restore_cache:
           keys:
             - fp-v1-{{ checksum "ci/circleci-build-flatpak.sh" }}
-      - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-flatpak.sh
       - save_cache:
           key: fp-v1-{{ checksum "ci/circleci-build-flatpak.sh" }}
@@ -48,7 +45,6 @@ jobs:
       - restore_cache:
           keys:
             - macos-cache-v1-{{checksum "ci/circleci-build-macos.sh"}}
-      - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-macos.sh
       - save_cache:
           key: macos-cache-v1-{{checksum "ci/circleci-build-macos.sh"}}
@@ -58,13 +54,6 @@ jobs:
             - /usr/local/lib
             - /usr/local/include
       - run: cd build; /bin/bash < upload.sh
-
-  build-trusty:
-    docker:
-      - image: circleci/buildpack-deps:trusty-scm
-    environment:
-      - OCPN_TARGET: trusty
-    <<: *debian-steps
 
   build-xenial:
     docker:
@@ -109,7 +98,6 @@ jobs:
       - DOCKER_IMAGE=balenalib/raspberry-pi-debian:stretch
     steps:
       - checkout
-      - run: chmod a+x ./ci/*.sh
       - run: pyenv local 3.5.2
       - run: ci/circleci-build-raspbian-armhf.sh
       - run: cd build; /bin/bash < upload.sh
@@ -120,9 +108,8 @@ jobs:
       - OCPN_TARGET=buster-armhf
       - DOCKER_IMAGE=balenalib/raspberry-pi-debian:buster
     steps:
-      - checkout      
+      - checkout
       - run: pyenv local 3.5.2
-      - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-raspbian-armhf.sh
       - run: cd build; /bin/bash < upload.sh
 
@@ -144,9 +131,6 @@ workflows:
           <<: *std-filters
 
       - build-macos:
-          <<: *std-filters
-
-      - build-trusty:
           <<: *std-filters
 
       - build-xenial:

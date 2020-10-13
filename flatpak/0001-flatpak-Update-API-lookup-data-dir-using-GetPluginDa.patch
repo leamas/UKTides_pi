@@ -36,7 +36,7 @@ index 8ea30d8..d942371 100644
 --- a/src/icons.cpp
 +++ b/src/icons.cpp
 @@ -10,11 +10,18 @@
- wxBitmap *_img_UKTidesIcon;
+ wxBitmap *_img_uktides;
  
  #ifdef PLUGIN_USE_SVG
 +
@@ -47,7 +47,6 @@ index 8ea30d8..d942371 100644
 +#endif   // FLATPAK
 +
  wxString _svg_uktides;
- wxString _svg_uktides_rollover;
  wxString _svg_uktides_toggled;
 -#endif
 +
@@ -67,7 +66,7 @@ index 8ea30d8..d942371 100644
      fn.AppendDir(_T("UKTides_pi"));
 +#endif
      fn.AppendDir(_T("data"));
-     fn.SetFullName(_T("uktides_pi.svg"));
+     fn.SetFullName(_T("UKTides_pi.svg"));
      _svg_uktides = fn.GetFullPath();
 diff --git a/src/ocpn_plugin-git.h b/src/ocpn_plugin-git.h
 new file mode 100644

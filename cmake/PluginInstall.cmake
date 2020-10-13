@@ -12,11 +12,6 @@ if (APPLE)
   install(
     TARGETS ${PACKAGE_NAME}
     RUNTIME
-    LIBRARY DESTINATION OpenCPN.app/Contents/SharedSupport/plugins
-  )
-  install(
-    TARGETS ${PACKAGE_NAME}
-    RUNTIME
     LIBRARY DESTINATION OpenCPN.app/Contents/PlugIns
   )
   if (EXISTS ${PROJECT_SOURCE_DIR}/data)
@@ -55,5 +50,14 @@ if (${BUILD_TYPE} STREQUAL "tarball" OR ${BUILD_TYPE} STREQUAL "flatpak")
   install(FILES ${CMAKE_BINARY_DIR}/${pkg_displayname}.xml
           DESTINATION "${CMAKE_BINARY_DIR}/app/files"
           RENAME metadata.xml
+  )
+endif()
+
+# On macos, fix paths which points to the build environment, make sure they
+# refers to runtime locations
+if (${BUILD_TYPE} STREQUAL "tarball" AND APPLE)
+  install(CODE
+    "execute_process(
+      COMMAND bash -c ${PROJECT_SOURCE_DIR}/cmake/fix-macos-libs.sh)"
   )
 endif()

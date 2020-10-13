@@ -7,7 +7,7 @@ set(wxWidgets_USE_DEBUG OFF)
 set(wxWidgets_USE_UNICODE ON)
 set(wxWidgets_USE_UNIVERSAL OFF)
 set(wxWidgets_USE_STATIC OFF)
-if (NOT QT_ANDROID AND NOT DEFINED wxWidgets_USE_FILE)
+if (NOT QT_ANDROID)
   # QT_ANDROID is a cross-build, so the native FIND_PACKAGE(OpenGL) is
   # not useful.
   find_package(OpenGL)
@@ -24,11 +24,9 @@ if (NOT QT_ANDROID AND NOT DEFINED wxWidgets_USE_FILE)
   set(_LIBS base core net xml html adv ${GL_LIB})
   find_package(wxWidgets COMPONENTS ${_LIBS} REQUIRED)
   include(${wxWidgets_USE_FILE})
-endif ()
-
-if (NOT APPLE)
   target_link_libraries(${PACKAGE_NAME} ${wxWidgets_LIBRARIES})
 endif ()
+
 
 if (MINGW)
   target_link_libraries(${PACKAGE_NAME} ${OPENGL_LIBRARIES})
