@@ -4,6 +4,7 @@ version: 2.1
 debian-steps: &debian-steps
   steps:
     - checkout
+    - run: chmod a+x ./ci/*.sh
     - run: ci/circleci-build-debian.sh
     - run: cd build; /bin/bash < upload.sh
 
@@ -15,6 +16,7 @@ jobs:
       - OCPN_TARGET: mingw
     steps:
       - checkout
+      - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-mingw.sh
       - run: cd build; /bin/bash < upload.sh
 
@@ -28,6 +30,7 @@ jobs:
       - restore_cache:
           keys:
             - fp-v1-{{ checksum "ci/circleci-build-flatpak.sh" }}
+      - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-flatpak.sh
       - save_cache:
           key: fp-v1-{{ checksum "ci/circleci-build-flatpak.sh" }}
@@ -45,6 +48,7 @@ jobs:
       - restore_cache:
           keys:
             - macos-cache-v1-{{checksum "ci/circleci-build-macos.sh"}}
+      - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-macos.sh
       - save_cache:
           key: macos-cache-v1-{{checksum "ci/circleci-build-macos.sh"}}
@@ -99,6 +103,7 @@ jobs:
     steps:
       - checkout
       - run: pyenv local 3.5.2
+      - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-raspbian-armhf.sh
       - run: cd build; /bin/bash < upload.sh
 
@@ -110,6 +115,7 @@ jobs:
     steps:
       - checkout
       - run: pyenv local 3.5.2
+      - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-raspbian-armhf.sh
       - run: cd build; /bin/bash < upload.sh
 
