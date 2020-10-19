@@ -45,7 +45,7 @@
 #define     PLUGIN_VERSION_MINOR    0
 
 #define     MY_API_VERSION_MAJOR    1
-#define     MY_API_VERSION_MINOR    6
+#define     MY_API_VERSION_MINOR    16
 
 class Dlg;
 
@@ -55,7 +55,7 @@ class Dlg;
 
 #define UKTIDES_TOOL_POSITION    -1          // Request default positioning of toolbar tool
 
-class UKTides_pi : public opencpn_plugin_16
+class UKTides_pi : public opencpn_plugin_116
 {
 public:
       UKTides_pi(void *ppimgr);
@@ -96,6 +96,8 @@ public:
       void SetCalculatorDialogWidth     (int x){ m_route_dialog_width = x;};
       void SetCalculatorDialogHeight    (int x){ m_route_dialog_height = x;};      
 	  void OnUKTidesDialogClose();
+	  bool RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp);
+	  bool RenderGLOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp);
 	  
 
 	  double GetCursorLon(void) { return m_cursor_lon; }

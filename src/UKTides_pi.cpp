@@ -69,7 +69,7 @@ extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p)
 //---------------------------------------------------------------------------------------------------------
 
 UKTides_pi::UKTides_pi(void *ppimgr)
-      :opencpn_plugin_16 (ppimgr)
+      :opencpn_plugin_116 (ppimgr)
 {
       // Create the PlugIn icons
       initialize_images();
@@ -136,6 +136,7 @@ int UKTides_pi::Init(void)
 	SetCanvasContextMenuItemViz(m_position_menu_id, false);
 
      m_pDialog = NULL;	 
+	
 
       return (WANTS_OVERLAY_CALLBACK |
               WANTS_OPENGL_OVERLAY_CALLBACK |		      
@@ -165,9 +166,7 @@ bool UKTides_pi::DeInit(void)
       }	
     
     SaveConfig();
-
-    RequestRefresh(m_parent_window); // refresh mainn window
-
+    
     return true;
 }
 
@@ -230,9 +229,26 @@ void UKTides_pi::OnToolbarToolCallback(int id)
     
 	if(NULL == m_pDialog)
       {
-            m_pDialog = new Dlg(*this, m_parent_window);
+           
+		    m_pDialog = new Dlg(*this, m_parent_window);
             m_pDialog->plugin = this;
             m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
+
+			wxFileName fn;
+			wxString tmp_path;
+
+			tmp_path = GetPluginDataDir("UKTides_pi");
+			fn.SetPath(tmp_path);
+			fn.AppendDir(_T("data"));
+
+			fn.SetFullName("station_icon.png");
+			wxString iconLocn = fn.GetFullPath();
+			wxImage stationIcon(iconLocn);
+
+			if (stationIcon.IsOk())
+				m_pDialog->m_stationBitmap = wxBitmap(stationIcon);
+			else
+				wxLogMessage(_("otcurrent:: station bitmap has NOT been loaded"));			
 			
       }
 
@@ -303,6 +319,28 @@ void UKTides_pi::OnUKTidesDialogClose()
     RequestRefresh(m_parent_window); // refresh main window
 
 }
+
+
+bool UKTides_pi::RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp)
+{
+	if (!m_pDialog)
+		return false;
+
+	m_pDialog->SetViewPort(vp);
+	m_pDialog->RenderukOverlay(dc, vp);
+	return true;
+}
+
+bool UKTides_pi::RenderGLOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp)
+{
+	if (!m_pDialog) 
+		return false;
+
+	m_pDialog->SetViewPort(vp);
+	m_pDialog->RenderGLukOverlay(pcontext, vp);
+	return true;
+}
+
 
 void UKTides_pi::OnContextMenuItemCallback(int id)
 {

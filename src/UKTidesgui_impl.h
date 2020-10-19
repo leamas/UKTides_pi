@@ -39,8 +39,26 @@
 #include "tinyxml.h"
 #include "wx/stdpaths.h"
 
+#include <map>
 #include <list>
 #include <vector>
+
+#ifdef ocpnUSE_GL
+#ifdef __WXMSW__
+#include <GL/glu.h>
+#include "GL/gl.h"  // local copy for Windows
+#else
+
+#ifndef __OCPN__ANDROID__
+#include <GL/gl.h>
+#include <GL/glu.h>
+#else
+#include "GL/gl_private.h"
+#include "qopengl.h"  // this gives us the qt runtime gles2.h
+#endif
+
+#endif
+#endif
 
 using namespace std;
 
@@ -63,6 +81,7 @@ struct myPort
 
 class UKTides_pi;
 class Position;
+class TideTable;
 
 class Dlg : public DlgDef
 {
@@ -89,8 +108,29 @@ public:
 		wxString StandardPath();	
 		list<myPort>myports;	
 
+		void SetViewPort(PlugIn_ViewPort *vp);
+		bool RenderGLukOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp);
+		bool RenderukOverlay(wxDC &dc, PlugIn_ViewPort *vp);
+		void DrawAllStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList, bool bforce_redraw_icons, bool bdraw_mono_for_mask);
+		void DrawAllSavedStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList,
+			bool bforce_redraw_icons, bool bdraw_mono_for_mask);
+		void DrawOLBitmap(const wxBitmap &bitmap, wxCoord x, wxCoord y, bool usemask);
+		void DrawGLLabels(Dlg *pof, wxDC *dc, PlugIn_ViewPort *vp,
+			wxImage &imageLabel, double myLat, double myLon, int offset);
+		wxImage &Dlg::DrawGLTextString(wxString myText);
+		wxBitmap m_stationBitmap;
+
+		TideTable* tidetable;
+		bool b_usingSavedPorts;
+
 private:
 	
+	
+	PlugIn_ViewPort  *m_vp;
+
+	wxDC *m_pdc;
+	wxGraphicsContext *m_gdc;
+
 	wxString m_titlePortName;
 	
 	list<TidalEvent>myevents;
@@ -123,6 +163,14 @@ private:
 
 	wxString     m_gpx_path;	
 	wxDateTime m_dtNow;
+
+	wxFont *pTCFont;
+	wxColour m_text_color;
+	std::map < double, wxImage > m_labelCache;
+	std::map < wxString, wxImage > m_labelCacheText;
+
+	
+	
 };
 
 
