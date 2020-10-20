@@ -45,13 +45,13 @@
 
 #ifdef ocpnUSE_GL
 #ifdef __WXMSW__
-#include <GL/glu.h>
+#include "GL/glu.h"
 #include "GL/gl.h"  // local copy for Windows
 #else
 
 #ifndef __OCPN__ANDROID__
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "GL/gl.h"
+#include "GL/glu.h"
 #else
 #include "GL/gl_private.h"
 #include "qopengl.h"  // this gives us the qt runtime gles2.h
@@ -105,8 +105,12 @@ public:
 		void AutoSizeHeader(wxListCtrl *const list_ctrl);
 
 		UKTides_pi &m_UKTides_pi;
-		wxString StandardPath();	
-		list<myPort>myports;	
+		wxString StandardPath();
+
+		list<myPort>myports;
+		list<myPort>mySavedPorts;
+
+		myPort mySavedPort;
 
 		void SetViewPort(PlugIn_ViewPort *vp);
 		bool RenderGLukOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp);
@@ -117,7 +121,7 @@ public:
 		void DrawOLBitmap(const wxBitmap &bitmap, wxCoord x, wxCoord y, bool usemask);
 		void DrawGLLabels(Dlg *pof, wxDC *dc, PlugIn_ViewPort *vp,
 			wxImage &imageLabel, double myLat, double myLon, int offset);
-		wxImage &Dlg::DrawGLTextString(wxString myText);
+		wxImage &DrawGLTextString(wxString myText);
 		wxBitmap m_stationBitmap;
 
 		TideTable* tidetable;
@@ -136,8 +140,8 @@ private:
 	list<TidalEvent>myevents;
 	list<TidalEvent>mySavedEvents;
 
-	myPort mySavedPort;
-	list<myPort>mySavedPorts;
+	
+	
 
 	myPort SavePortTidalEvents(list<TidalEvent>myEvents, string portId);
 	void SaveTidalEventsToXml(list<myPort>myPorts);
