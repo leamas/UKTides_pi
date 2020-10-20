@@ -51,6 +51,9 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	wxFileName fn;
 	wxString tmp_path;
 
+	b_clearIcons = true;
+	b_clearAllIcons = true;
+
 	tmp_path = GetPluginDataDir("UKTides_pi");
 	fn.SetPath(tmp_path);
 	fn.AppendDir(_T("data"));
@@ -124,15 +127,16 @@ bool Dlg::RenderGLukOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp)
 {
 	m_pdc = NULL;  // inform lower layers that this is OpenGL render
 
-	
-	DrawAllStationIcons(vp, false, false, false);
-
-	if (mySavedPorts.size() != 0) {
-		DrawAllSavedStationIcons(vp, false, false, false);
+	if (!b_clearIcons) {
+		DrawAllStationIcons(vp, false, false, false);
+		if (!b_clearAllIcons) {
+			if (mySavedPorts.size() != 0) {
+				DrawAllSavedStationIcons(vp, false, false, false);
+			}
+		}
 	}
 	
 	return true;
-
 }
 
 bool Dlg::RenderukOverlay(wxDC &dc, PlugIn_ViewPort *vp)
@@ -150,14 +154,17 @@ bool Dlg::RenderukOverlay(wxDC &dc, PlugIn_ViewPort *vp)
 
 	m_pdc = &dc;
 	
-	DrawAllStationIcons(vp, false, false, false);
+	if (!b_clearIcons) {
 
-	if (mySavedPorts.size() != 0) {
-		DrawAllSavedStationIcons(vp, false, false, false);
+		DrawAllStationIcons(vp, false, false, false);
+		if (!b_clearAllIcons) {
+			if (mySavedPorts.size() != 0) {
+				DrawAllSavedStationIcons(vp, false, false, false);
+			}
+		}
 	}
 	
 	return true;
-
 }
 
 
@@ -169,7 +176,7 @@ void Dlg::DrawAllStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList,
 	double plon = 0.0;
 	myPort outPort;
 	
-	if (myports.empty()) {
+	if (myports.size()== 0) {
 		return;
 	}
 
@@ -193,17 +200,15 @@ void Dlg::DrawAllStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList,
 		int textShift = -15;
 
 		if (!m_pdc) {
-			
-			DrawGLLabels(this, m_pdc, BBox,
-					DrawGLTextString(outPort.Name), plat, plon, textShift);
 
+			DrawGLLabels(this, m_pdc, BBox,
+				DrawGLTextString(outPort.Name), plat, plon, textShift);
 		}
 		else {
-								
-			m_pdc->DrawText(outPort.Name, pixxc, pixyc);
-			
-		}
 
+			m_pdc->DrawText(outPort.Name, pixxc, pixyc + textShift);
+		}
+		
 	}
 }
 
@@ -214,7 +219,7 @@ void Dlg::DrawAllSavedStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList,
 	double plon = 0.0;
 	myPort outPort;
 
-	if (mySavedPorts.empty()) {
+	if (mySavedPorts.size() == 0) {
 		return;
 	}
 
@@ -241,17 +246,11 @@ void Dlg::DrawAllSavedStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList,
 
 			DrawGLLabels(this, m_pdc, BBox,
 				DrawGLTextString(outPort.Name), plat, plon, textShift);
-
 		}
-		else {					
-			m_pdc->DrawText(outPort.Name, pixxc, pixyc);
-
+		else {
+			m_pdc->DrawText(outPort.Name, pixxc, pixyc + textShift);
 		}
-
-	}
-
-	//b_usingSavedPorts = false;
-
+	}	
 }
 
 	
@@ -491,6 +490,8 @@ void Dlg::Addpoint(TiXmlElement* Route, wxString ptlat, wxString ptlon, wxString
 
 void Dlg::OnDownload(wxCommandEvent& event) {
 
+	b_clearIcons = false;
+	b_clearAllIcons = false;
 	myports.clear();
 	myPort outPort;
 
@@ -596,6 +597,9 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 	myLat = 0;
 	myLon = 0;
 
+	b_clearIcons = false;
+	b_clearAllIcons = false;
+
 	LoadTidalEventsFromXml();
 
 	if (mySavedPorts.size() == 0) {
@@ -604,6 +608,7 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 	}
 
 	b_usingSavedPorts = true;
+
 
 	GetTidalEventDialog* GetPortDialog = new GetTidalEventDialog(this, -1, _("Select the Location"), wxPoint(200, 200), wxSize(300, 200), 		wxRESIZE_BORDER);
 
@@ -639,6 +644,8 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 	wxListItem     row_info;
 	wxString       cell_contents_string = wxEmptyString;
 	bool foundPort = false;
+
+	GetParent()->Refresh();
 
 	if (GetPortDialog->ShowModal() != wxID_OK) {
 		// Do nothing
@@ -684,9 +691,15 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 		}
 	}
 
-	
-	
+	GetParent()->Refresh();
 
+}
+
+void Dlg::DoRemovePortIcons(wxCommandEvent& event) {
+
+	b_clearIcons = true;
+	b_clearAllIcons = true;
+	RequestRefresh(m_parent);
 }
 
 void Dlg::getHWLW(string id)
@@ -1186,6 +1199,7 @@ list<myPort>Dlg::LoadTidalEventsFromXml()
 		}
 	}
 
+	
 	return mySavedPorts;
 
 }

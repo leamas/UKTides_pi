@@ -91,6 +91,7 @@ public:
 
         void OnDownload( wxCommandEvent& event );	
 		void OnGetSavedTides(wxCommandEvent& event);
+		void DoRemovePortIcons(wxCommandEvent& event);
 
 		void OnInformation(wxCommandEvent& event);
         void Addpoint(TiXmlElement* Route, wxString ptlat, wxString ptlon, wxString ptname, wxString ptsym, wxString pttype);	
@@ -126,6 +127,8 @@ public:
 
 		TideTable* tidetable;
 		bool b_usingSavedPorts;
+		bool b_clearIcons;
+		bool b_clearAllIcons;
 
 private:
 	
