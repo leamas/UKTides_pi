@@ -258,10 +258,15 @@ void UKTides_pi::OnToolbarToolCallback(int id)
 
       //    Toggle dialog? 
       if(m_bShowUKTides) {
+		  m_pDialog->b_clearSavedIcons = false;
+		  m_pDialog->b_clearAllIcons = false;
           m_pDialog->Show();         
-      } else
-          m_pDialog->Hide();
-     
+	  }
+	  else {
+		  m_pDialog->b_clearSavedIcons = true;
+		  m_pDialog->b_clearAllIcons = true;
+		  m_pDialog->Hide();
+	  }
       // Toggle is handled by the toolbar but we must keep plugin manager b_toggle updated
       // to actual status to ensure correct status upon toolbar rebuild
       SetToolbarItemState( m_leftclick_tool_id, m_bShowUKTides );
@@ -311,7 +316,9 @@ bool UKTides_pi::SaveConfig(void)
 
 void UKTides_pi::OnUKTidesDialogClose()
 {
-    m_bShowUKTides = false;
+	m_pDialog->b_clearSavedIcons = true;
+	m_pDialog->b_clearAllIcons = true;
+	m_bShowUKTides = false;
     SetToolbarItemState( m_leftclick_tool_id, m_bShowUKTides );
     m_pDialog->Hide();
     SaveConfig();

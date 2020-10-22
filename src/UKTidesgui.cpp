@@ -20,10 +20,10 @@ DlgDef::DlgDef( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_menuItem1 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Download") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu1->Append( m_menuItem1 );
 
-	m_menuItem3 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Ports Saved") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem3 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Stations Saved") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu1->Append( m_menuItem3 );
 
-	m_menuItem4 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Remove Port Icons") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem4 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Remove Station Icons") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu1->Append( m_menuItem4 );
 
 	m_menubar1->Append( m_menu1, _("Locations") );

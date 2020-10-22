@@ -38,6 +38,7 @@
 #include "tidetable.h"
 #include "tinyxml.h"
 #include "wx/stdpaths.h"
+#include "wx/msgdlg.h"
 
 #include <map>
 #include <list>
@@ -127,7 +128,7 @@ public:
 
 		TideTable* tidetable;
 		bool b_usingSavedPorts;
-		bool b_clearIcons;
+		bool b_clearSavedIcons;
 		bool b_clearAllIcons;
 
 private:

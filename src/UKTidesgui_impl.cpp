@@ -51,8 +51,8 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	wxFileName fn;
 	wxString tmp_path;
 
-	b_clearIcons = true;
-	b_clearAllIcons = true;
+	b_clearSavedIcons = false;
+	b_clearAllIcons = false;
 
 	tmp_path = GetPluginDataDir("UKTides_pi");
 	fn.SetPath(tmp_path);
@@ -127,15 +127,17 @@ bool Dlg::RenderGLukOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp)
 {
 	m_pdc = NULL;  // inform lower layers that this is OpenGL render
 
-	if (!b_clearIcons) {
-		DrawAllStationIcons(vp, false, false, false);
-		if (!b_clearAllIcons) {
-			if (mySavedPorts.size() != 0) {
-				DrawAllSavedStationIcons(vp, false, false, false);
-			}
+	if (!b_clearAllIcons) {
+		if (myports.size() != 0) {
+			DrawAllStationIcons(vp, false, false, false);
 		}
 	}
-	
+	if (!b_clearSavedIcons) {
+		if (mySavedPorts.size() != 0) {
+			DrawAllSavedStationIcons(vp, false, false, false);
+		}
+	}
+		
 	return true;
 }
 
@@ -154,13 +156,15 @@ bool Dlg::RenderukOverlay(wxDC &dc, PlugIn_ViewPort *vp)
 
 	m_pdc = &dc;
 	
-	if (!b_clearIcons) {
+	if (!b_clearAllIcons) {
+		if (myports.size() != 0) {
+			DrawAllStationIcons(vp, false, false, false);
+		}
+	}
 
-		DrawAllStationIcons(vp, false, false, false);
-		if (!b_clearAllIcons) {
-			if (mySavedPorts.size() != 0) {
-				DrawAllSavedStationIcons(vp, false, false, false);
-			}
+	if (!b_clearSavedIcons) {
+		if (mySavedPorts.size() != 0) {
+			DrawAllSavedStationIcons(vp, false, false, false);
 		}
 	}
 	
@@ -490,8 +494,9 @@ void Dlg::Addpoint(TiXmlElement* Route, wxString ptlat, wxString ptlon, wxString
 
 void Dlg::OnDownload(wxCommandEvent& event) {
 
-	b_clearIcons = false;
+	b_clearSavedIcons = false;
 	b_clearAllIcons = false;
+
 	myports.clear();
 	myPort outPort;
 
@@ -597,15 +602,16 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 	myLat = 0;
 	myLon = 0;
 
-	b_clearIcons = false;
-	b_clearAllIcons = false;
-
+	
 	LoadTidalEventsFromXml();
 
 	if (mySavedPorts.size() == 0) {
 		wxMessageBox(_("No locations are available, please download and select a tidal station"));
 		return;
 	}
+
+	b_clearAllIcons = false;
+	RequestRefresh(m_parent);  //put the saved port icons back
 
 	b_usingSavedPorts = true;
 
@@ -644,6 +650,10 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 	wxListItem     row_info;
 	wxString       cell_contents_string = wxEmptyString;
 	bool foundPort = false;
+
+	
+	b_clearSavedIcons = false;
+	//b_clearAllIcons = true;	
 
 	GetParent()->Refresh();
 
@@ -696,10 +706,28 @@ void Dlg::OnGetSavedTides(wxCommandEvent& event) {
 }
 
 void Dlg::DoRemovePortIcons(wxCommandEvent& event) {
-
-	b_clearIcons = true;
-	b_clearAllIcons = true;
-	RequestRefresh(m_parent);
+	
+	wxMessageDialog KeepSavedIcons(NULL,
+		"Keep saved station locations", "Remove Icons",
+		wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION);	
+	
+	switch (KeepSavedIcons.ShowModal()) {
+		case wxID_YES: {			
+			myports.clear();
+			b_clearSavedIcons = false;
+			b_clearAllIcons = true;
+			RequestRefresh(m_parent);
+			break; 
+		}
+		case wxID_NO: {
+			mySavedPorts.clear();
+			b_clearSavedIcons = true;
+			b_clearAllIcons = true;
+			RequestRefresh(m_parent);
+			break;
+		}
+		default:       wxLogMessage("Error: UKTides-Unexpected wxMessageDialog return code!");
+	}
 }
 
 void Dlg::getHWLW(string id)
