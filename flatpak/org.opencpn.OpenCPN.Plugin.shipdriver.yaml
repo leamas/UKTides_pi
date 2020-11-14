@@ -1,4 +1,4 @@
-id: org.opencpn.OpenCPN.Plugin.uktides
+id: org.opencpn.OpenCPN.Plugin.shipdriver
 runtime: org.opencpn.OpenCPN
 # runtime-version: stable   # official build at flathub
 runtime-version: master   # for nightly builds
@@ -13,11 +13,11 @@ finish-args:
     - --device=all
 
 modules:
-    - name: uktides
+    - name: shipdriver
       no-autogen: true
       buildsystem: cmake
       config-opts:
-          - -DCMAKE_INSTALL_PREFIX=/app/extensions/uktides/
+          - -DCMAKE_INSTALL_PREFIX=/app/extensions/shipdriver/
           - -DPREFIX_PLUGINS=lib/opencpn
           - -DBUILD_TYPE:STRING=tarball
           - -UPKG_TARGET

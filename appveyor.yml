@@ -1,4 +1,4 @@
-clone_folder: c:\project\opencpn\UKTides_pi
+clone_folder: c:\project\opencpn\shipdriver_pi
 shallow_clone: false
 clone_depth: 10
 
@@ -39,7 +39,7 @@ install:
   #- cmd: nmake -f makefile.vc BUILD=debug SHARED=1 CFLAGS=/D_USING_V120_SDK71_ CXXFLAGS=/D_USING_V120_SDK71_
 
 before_build:
-  - cd c:\project\opencpn\UKTides_pi
+  - cd c:\project\opencpn\shipdriver_pi
   - mkdir build
   - cd build
 #  - ps: Start-FileDownload http://opencpn.navnux.org/build_deps/OpenCPN_buildwin-4.99a.7z
@@ -54,6 +54,11 @@ build_script:
   - py -m pip install -q setuptools
   - py -m pip install -q cloudsmith-cli
   - bash ./upload.sh
+  - PATH=C:\Python38;%PATH%
+  - python --version
+  - python -m pip install -q cryptography
+  - cd ..\ci
+  - python git-push
 
 artifacts:
   - path: 'build\*.exe'
