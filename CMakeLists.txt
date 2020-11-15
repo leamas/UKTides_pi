@@ -52,7 +52,7 @@ option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 
 # -------  Plugin setup --------
 #
-project(UKTides_pi VERSION 1.0.72)
+project(UKTides_pi VERSION 1.0.73)
 
 set(VERBOSE_NAME UKTides)    # Legacy installers artifact names
 set(TITLE_NAME UKTides)      # Legacy installer dialogs
@@ -111,7 +111,7 @@ endif ()
 #
 include(Targets)
 create_targets(
-  ${PROJECT_SOURCE_DIR}/flatpak/org.opencpn.OpenCPN.Plugin.UKTides.yaml
+  ${PROJECT_SOURCE_DIR}/flatpak/org.opencpn.OpenCPN.Plugin.uktides.yaml
 )
 if ("${BUILD_TYPE}" STREQUAL "")
   return ()
@@ -144,7 +144,7 @@ configure_file(
 
 configure_file(
   # The XML metadata file
-  ${CMAKE_SOURCE_DIR}/UKTides-plugin.xml.in
+  ${CMAKE_SOURCE_DIR}/uktides-plugin.xml.in
   ${CMAKE_BINARY_DIR}/${pkg_displayname}.xml
   @ONLY
 )
