@@ -53,7 +53,7 @@ option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 
 # -------  Plugin setup --------
 #
-project(UKTides_pi VERSION 1.0.74)
+project(UKTides_pi VERSION 1.0.75)
 
 set(DISPLAY_NAME UKTides)    # Dialogs, installer artifacts, ...
 set(PLUGIN_API_NAME UKTides) # As of GetCommonName() in plugin API
@@ -111,7 +111,7 @@ endif ()
 #
 include(Targets)
 create_targets(
-  ${PROJECT_SOURCE_DIR}/flatpak/org.opencpn.OpenCPN.Plugin.uktides.yaml
+  ${PROJECT_SOURCE_DIR}/flatpak/org.opencpn.OpenCPN.Plugin.UKTides.yaml
 )
 if ("${BUILD_TYPE}" STREQUAL "")
   return ()
@@ -149,7 +149,7 @@ configure_file(
 set(checksum "@checksum@")
 configure_file(
   # The XML metadata file
-  ${CMAKE_SOURCE_DIR}/uktides-plugin.xml.in
+  ${CMAKE_SOURCE_DIR}/UKTides-plugin.xml.in
   ${CMAKE_BINARY_DIR}/${pkg_displayname}.xml
   @ONLY
 )
