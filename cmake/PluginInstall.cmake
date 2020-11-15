@@ -11,8 +11,7 @@ include(Metadata)
 if (APPLE)
   install(
     TARGETS ${PACKAGE_NAME}
-    RUNTIME
-    LIBRARY DESTINATION OpenCPN.app/Contents/PlugIns
+    RUNTIME LIBRARY DESTINATION OpenCPN.app/Contents/PlugIns
   )
   if (EXISTS ${PROJECT_SOURCE_DIR}/data)
     install(
@@ -33,9 +32,9 @@ elseif (WIN32)
 
   if (EXISTS ${PROJECT_SOURCE_DIR}/data)
     install(DIRECTORY data DESTINATION "${INSTALL_DIRECTORY}")
-  endif (EXISTS ${PROJECT_SOURCE_DIR}/data)
+  endif ()
 
-elseif (UNIX AND NOT APPLE)
+elseif (UNIX)
   install(
     TARGETS ${PACKAGE_NAME}
     RUNTIME LIBRARY DESTINATION lib/opencpn
@@ -47,10 +46,12 @@ endif ()
 
 # Hardcoded, absolute destination for tarball generation
 if (${BUILD_TYPE} STREQUAL "tarball" OR ${BUILD_TYPE} STREQUAL "flatpak")
-  install(FILES ${CMAKE_BINARY_DIR}/${pkg_displayname}.xml
-          DESTINATION "${CMAKE_BINARY_DIR}/app/files"
-          RENAME metadata.xml
-  )
+  install(CODE "
+    configure_file(
+      ${CMAKE_BINARY_DIR}/${pkg_displayname}.xml.in
+      ${CMAKE_BINARY_DIR}/app/files/metadata.xml
+      @ONLY)
+  ")
 endif()
 
 # On macos, fix paths which points to the build environment, make sure they
@@ -61,3 +62,12 @@ if (${BUILD_TYPE} STREQUAL "tarball" AND APPLE)
       COMMAND bash -c ${PROJECT_SOURCE_DIR}/cmake/fix-macos-libs.sh)"
   )
 endif()
+
+if (${BUILD_TYPE} STREQUAL "tarball" AND MINGW)
+  find_program(STRIP_UTIL NAMES strip REQUIRED)
+  install(CODE
+    "execute_process(
+      COMMAND ${STRIP_UTIL} app/files/plugins/lib${PACKAGE_NAME}.dll
+      WORKING_DIRECTORY ${CMAKE_BINARY_DIR})"
+  )
+endif ()

@@ -1,4 +1,4 @@
-UKTides Continous Integration README
+Shipdriver Continous Integration README
 ---------------------------------------
 
 This document is designed to be generic and terse. More complete 
@@ -19,7 +19,7 @@ deployment server.
 In a last step, the metadata XML file is pushed to a remote git clone
 of the opencpn plugins project.
 
-All steps could be configured after cloning the UKTides\_pi sources.
+All steps could be configured after cloning the shipdriver\_pi sources.
 
 Builders
 --------

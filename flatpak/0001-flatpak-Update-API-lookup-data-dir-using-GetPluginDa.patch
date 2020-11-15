@@ -36,9 +36,9 @@ index 8ea30d8..d942371 100644
 --- a/src/icons.cpp
 +++ b/src/icons.cpp
 @@ -10,11 +10,18 @@
- wxBitmap *_img_uktides;
+ wxBitmap *_img_UKTidesIcon;
  
- #ifdef PLUGIN_USE_SVG
+ #ifdef SHIPDRIVER_USE_SVG
 +
 +#ifdef FLATPAK
 +#include "ocpn_plugin-git.h"
@@ -47,16 +47,17 @@ index 8ea30d8..d942371 100644
 +#endif   // FLATPAK
 +
  wxString _svg_uktides;
+ wxString _svg_uktides_rollover;
  wxString _svg_uktides_toggled;
 -#endif
 +
-+#endif  // PLUGIN_USE_SVG
++#endif  // SHIPDRIVER_USE_SVG
  
  void initialize_images(void)
  {
 @@ -25,9 +32,13 @@ void initialize_images(void)
  
- #ifdef PLUGIN_USE_SVG
+ #ifdef SHIPDRIVER_USE_SVG
      wxFileName fn;
 +#ifdef FLATPAK
 +    fn.SetPath(GetPluginDataDir("UKTides_pi"));

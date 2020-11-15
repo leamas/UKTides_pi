@@ -44,10 +44,69 @@ else ()
 endif ()
 
 if (WIN32 AND NOT MINGW)
-  set(MVDIR rename)
+  set(_mvdir rename)
 else ()
-  set(MVDIR mv)
+  set(_mvdir mv)
 endif ()
+
+# Command to compute sha256 checksum
+if (${CMAKE_MAJOR_VERSION} LESS 3 OR ${CMAKE_MINOR_VERSION} LESS 10)
+  set(_cs_command "${pkg_python} ${PROJECT_SOURCE_DIR}/ci/checksum.py")
+else ()
+  set(_cs_command "cmake -E sha256sum" )
+endif ()
+
+# Cmake batch file to compute and patch metadata checksum
+#
+set(_cs_script "
+  execute_process(
+    COMMAND ${_cs_command}  ${CMAKE_BINARY_DIR}/${pkg_tarname}.tar.gz
+    OUTPUT_FILE ${CMAKE_BINARY_DIR}/${pkg_tarname}.sha256
+  )
+  file(READ ${CMAKE_BINARY_DIR}/${pkg_tarname}.sha256 _SHA256)
+  string(REGEX MATCH \"^[^ ]*\" checksum \${_SHA256} )
+  configure_file(
+    ${CMAKE_BINARY_DIR}/${pkg_displayname}.xml.in
+    ${CMAKE_BINARY_DIR}/${pkg_displayname}.xml
+    @ONLY
+)")
+file(WRITE "${CMAKE_BINARY_DIR}/checksum.cmake" ${_cs_script})
+
+
+# General post-process targets. Functions with a name parameter are used to
+# break dependency chains.
+#
+function(topdir_target target_name)
+  add_custom_target(${target_name})
+  add_custom_command(
+    TARGET ${target_name}     # Change top-level directory name
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/app
+    COMMAND ${_mvdir} files ${pkg_displayname}
+  )
+endfunction ()
+
+function(tar_target target_name)
+  add_custom_target(${target_name})
+  add_custom_command(
+    TARGET ${target_name}     # Build the tarball
+    WORKING_DIRECTORY  ${CMAKE_BINARY_DIR}/app
+    COMMAND
+      cmake -E
+      tar -czf ../${pkg_tarname}.tar.gz --format=gnutar ${pkg_displayname}
+    VERBATIM
+    COMMENT "Building ${pkg_tarname}.tar.gz"
+  )
+endfunction ()
+
+function(cs_target target_name)
+  add_custom_target(${target_name})
+  add_custom_command(
+    TARGET ${target_name}      # Compute checksum
+    COMMAND cmake -P ${CMAKE_BINARY_DIR}/checksum.cmake
+    VERBATIM
+    COMMENT "Computing checksum in ${pkg_displayname}.xml"
+  )
+endfunction ()
 
 function (tarball_target)
 
@@ -69,36 +128,17 @@ function (tarball_target)
     TARGET tarball-install
     COMMAND ${_install_cmd}
   )
-  add_custom_target(tarball-pkg)
-  add_custom_target(
-    TARGET tarball-pkg            # Move metadata in place.
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    COMMAND cmake -E copy ${pkg_displayname}.xml app/files/metadata.xml
-  )
-  add_custom_target(tarball-finish)
-  add_custom_command(
-    TARGET tarball-finish     # Change top-level directory name
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/app
-    COMMAND ${MVDIR} files ${pkg_displayname}
-  )
-  add_custom_target(tarball-tar)
-  add_custom_command(
-    TARGET tarball-tar
-    WORKING_DIRECTORY  ${CMAKE_BINARY_DIR}/app
-    COMMAND
-      cmake -E
-      tar -czf ../${pkg_tarname}.tar.gz --format=gnutar ${pkg_displayname}
-    VERBATIM
-    COMMENT "Building ${pkg_tarname}.tar.gz"
-  )
+  topdir_target("tarball-topdir")
+  tar_target("tarball-tar")
+  cs_target("tarball-cs")
   add_dependencies(tarball-build tarball-conf)
   add_dependencies(tarball-install tarball-build)
-  add_dependencies(tarball-finish tarball-install)
-  add_dependencies(tarball-pkg tarball-finish)
-  add_dependencies(tarball-tar tarball-pkg)
+  add_dependencies(tarball-topdir tarball-install)
+  add_dependencies(tarball-tar tarball-topdir)
+  add_dependencies(tarball-cs tarball-tar)
 
   add_custom_target(tarball)
-  add_dependencies(tarball tarball-tar)
+  add_dependencies(tarball tarball-cs)
 endfunction ()
 
 function (flatpak_target manifest)
@@ -116,31 +156,23 @@ function (flatpak_target manifest)
             ${manifest}
   )
   add_custom_target(
-    flatpak-pkg            # Move metadata in place.
+    flatpak-metadata       # Move metadata into install tree
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    COMMAND cmake -E copy ${pkg_displayname}.xml app/files/metadata.xml
-  )
-  add_custom_target(
-    flatpak-pkg-finish            # Change name of top directory
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/app
-    COMMAND ${MVDIR} files ${pkg_displayname}
-  )
-  add_custom_target(flatpak-tar)
-  add_custom_command(
-    TARGET flatpak-tar
-    WORKING_DIRECTORY  ${CMAKE_BINARY_DIR}/app
-    COMMAND cmake -E
-       tar -czf ../${pkg_tarname}.tar.gz --format=gnutar ${pkg_displayname}
+    COMMAND bash -c "sed -e '/@checksum@/d' \
+        < ${pkg_displayname}.xml.in > app/files/metadata.xml"
     VERBATIM
-    COMMENT "building ${pkg_tarname}.tar.gz"
   )
+  topdir_target("flatpak-topdir")
+  tar_target("flatpak-tar")
+  cs_target("flatpak-cs")
   add_dependencies(flatpak-build flatpak-conf)
-  add_dependencies(flatpak-pkg flatpak-build)
-  add_dependencies(flatpak-pkg-finish flatpak-pkg)
-  add_dependencies(flatpak-tar flatpak-pkg-finish)
+  add_dependencies(flatpak-metadata flatpak-build)
+  add_dependencies(flatpak-topdir flatpak-metadata)
+  add_dependencies(flatpak-tar flatpak-topdir)
+  add_dependencies(flatpak-cs flatpak-tar)
 
   add_custom_target(flatpak)
-  add_dependencies(flatpak flatpak-tar)
+  add_dependencies(flatpak flatpak-cs)
 endfunction ()
 
 function (pkg_target)
