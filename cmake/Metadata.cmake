@@ -53,7 +53,7 @@ else ()
 endif ()
 
 # pkg_semver: Complete version including build info
-set(pkg_semver "${PROJECT_VERSION}+${_build_id}.${_gitversion}")
+set(pkg_semver "${PACKAGE_VERSION}+${_build_id}.${_gitversion}")
 
 # pkg_displayname: Used for xml metadata and GUI name
 set(pkg_displayname "${PLUGIN_API_NAME}-${PKG_TARGET}-${PKG_TARGET_VERSION}")
@@ -85,8 +85,12 @@ endif ()
 # pkg_target_arch: os + optional -arch suffix. See: Opencpn bug #2003
 if ("${BUILD_TYPE}" STREQUAL "flatpak")
   set(pkg_target_arch "flatpak-${ARCH}")
-elseif ("${PKG_TARGET}" MATCHES "ubuntu|raspbian|debian|mingw")
-  set(pkg_target_arch "${PKG_TARGET}-${ARCH}")
+elseif ("${PKG_TARGET}" STREQUAL "ubuntu")
+  set(pkg_target_arch "ubuntu-${ARCH}")
+elseif ("${PKG_TARGET}" STREQUAL "raspbian")
+  set(pkg_target_arch "raspbian-${ARCH}")
+elseif ("${PKG_TARGET}" STREQUAL "debian")
+  set(pkg_target_arch "debian-${ARCH}")
 else ()
   set(pkg_target_arch "${PKG_TARGET}")
 endif ()
