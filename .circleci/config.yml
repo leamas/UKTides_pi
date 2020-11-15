@@ -4,9 +4,10 @@ version: 2.1
 debian-steps: &debian-steps
   steps:
     - checkout
-    - run: chmod a+x ./ci/*.sh
     - run: ci/circleci-build-debian.sh
     - run: cd build; /bin/bash < upload.sh
+    - run: pip3 install cryptography
+    - run: python3 ci/git-push
 
 jobs:
   build-mingw:
@@ -16,9 +17,10 @@ jobs:
       - OCPN_TARGET: mingw
     steps:
       - checkout
-      - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-mingw.sh
       - run: cd build; /bin/bash < upload.sh
+      - run: pip3 install cryptography
+      - run: python3 ci/git-push
 
   build-flatpak:
     machine:
@@ -27,16 +29,18 @@ jobs:
       - OCPN_TARGET: flatpak
     steps:
       - checkout
+      - run: pyenv local 3.5.2
       - restore_cache:
           keys:
             - fp-v1-{{ checksum "ci/circleci-build-flatpak.sh" }}
-      - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-flatpak.sh
       - save_cache:
           key: fp-v1-{{ checksum "ci/circleci-build-flatpak.sh" }}
           paths:
             - /home/circleci/.local/share/flatpak/repo
       - run: cd build; /bin/bash < upload.sh
+      - run: pip3 install cryptography
+      - run: python3 ci/git-push
 
   build-macos:
     macos:
@@ -48,8 +52,6 @@ jobs:
       - restore_cache:
           keys:
             - macos-cache-v1-{{checksum "ci/circleci-build-macos.sh"}}
-      - run: chmod a+x ./ci/*.sh
-      - run: chmod a+x ./cmake/*.sh
       - run: ci/circleci-build-macos.sh
       - save_cache:
           key: macos-cache-v1-{{checksum "ci/circleci-build-macos.sh"}}
@@ -59,6 +61,8 @@ jobs:
             - /usr/local/lib
             - /usr/local/include
       - run: cd build; /bin/bash < upload.sh
+      - run: pip3 install cryptography
+      - run: python3 ci/git-push
 
   build-xenial:
     docker:
@@ -103,10 +107,10 @@ jobs:
       - DOCKER_IMAGE=balenalib/raspberry-pi-debian:stretch
     steps:
       - checkout
-      - run: pyenv local 3.5.2
-      - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-raspbian-armhf.sh
       - run: cd build; /bin/bash < upload.sh
+      - run: pip3 install cryptography
+      - run: python3 ci/git-push
 
   build-armhf-buster:
     machine: true
@@ -115,10 +119,10 @@ jobs:
       - DOCKER_IMAGE=balenalib/raspberry-pi-debian:buster
     steps:
       - checkout
-      - run: pyenv local 3.5.2
-      - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-raspbian-armhf.sh
       - run: cd build; /bin/bash < upload.sh
+      - run: pip3 install cryptography
+      - run: python3 ci/git-push
 
 std-filters: &std-filters
   filters:
