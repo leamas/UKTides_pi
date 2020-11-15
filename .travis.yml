@@ -10,7 +10,7 @@ matrix:
     - docker
     script:
     - run: chmod a+x ./ci/*.sh
-    - run: chmod a+x ./cmake/*.sh
+    - run: chmod a+x ./cmake/*.cmake
     - "./ci/travis-build-raspbian-armhf.sh"
     - "cd build; bash < upload.sh"
     os: Linux
