@@ -53,7 +53,7 @@ option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 # -------  Plugin setup --------
 #
 
-project(UKTides_pi VERSION 1.0.78)
+project(UKTides_pi VERSION 1.0.79)
 
 set(DISPLAY_NAME UKTides)    # Dialogs, installer artifacts, ...
 set(PLUGIN_API_NAME UKTides) # As of GetCommonName() in plugin API
@@ -148,6 +148,6 @@ set(checksum "@checksum@")
 configure_file(
   # The XML metadata file
   ${CMAKE_SOURCE_DIR}/UKTides-plugin.xml.in
-  ${CMAKE_BINARY_DIR}/${pkg_displayname}.xml
+  ${CMAKE_BINARY_DIR}/${pkg_displayname}.xml.in
   @ONLY
 )
