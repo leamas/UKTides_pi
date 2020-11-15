@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 #
 # Build the flatpak artifacts. Uses docker to run Fedora on
 # in full-fledged VM; the actual build is done in the Fedora
