@@ -29,7 +29,6 @@ message(STATUS "Cmake version: ${CMAKE_VERSION}.")
 # -------- Build setup (mostly in PluginCompiler) --------
 #
 
-
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -53,7 +52,8 @@ option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 
 # -------  Plugin setup --------
 #
-project(UKTides_pi VERSION 1.0.75)
+
+project(UKTides_pi VERSION 1.0.76)
 
 set(DISPLAY_NAME UKTides)    # Dialogs, installer artifacts, ...
 set(PLUGIN_API_NAME UKTides) # As of GetCommonName() in plugin API
@@ -85,6 +85,8 @@ set(SRC
 
 # -------- Setup completed, build the plugin --------
 #
+
+
 add_library(${CMAKE_PROJECT_NAME} SHARED ${SRC})
 include_directories(${CMAKE_BINARY_DIR}/include)
 
@@ -118,10 +120,6 @@ if ("${BUILD_TYPE}" STREQUAL "")
 endif ()
 
 if (NOT ${BUILD_TYPE} STREQUAL "flatpak")
-
-
-
-
   # Build package as required (flatpak already dealt with).
   #
   include(PluginCompiler)
