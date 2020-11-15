@@ -18,17 +18,18 @@ endif ()
 set(OpenGL_GL_PREFERENCE "LEGACY")
 
 # Locations where cmake looks for cmake modules.
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/build
-                      ${CMAKE_SOURCE_DIR}/
-                      ${CMAKE_SOURCE_DIR}/cmake
-)
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/build ${CMAKE_SOURCE_DIR}/cmake) 
+
 if (WIN32)
-  set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/buildwin)
+  list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/buildwin)
 endif ()
+message(STATUS "Cmake version: ${CMAKE_VERSION}.")
 
 
 # -------- Build setup (mostly in PluginCompiler) --------
 #
+
+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -52,10 +53,9 @@ option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 
 # -------  Plugin setup --------
 #
-project(UKTides_pi VERSION 1.0.73)
+project(UKTides_pi VERSION 1.0.74)
 
-set(VERBOSE_NAME UKTides)    # Legacy installers artifact names
-set(TITLE_NAME UKTides)      # Legacy installer dialogs
+set(DISPLAY_NAME UKTides)    # Dialogs, installer artifacts, ...
 set(PLUGIN_API_NAME UKTides) # As of GetCommonName() in plugin API
 set(CPACK_PACKAGE_CONTACT "Mike Rossiter")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Show UK tidal heights")
@@ -82,6 +82,7 @@ set(SRC
 )
 
 
+
 # -------- Setup completed, build the plugin --------
 #
 add_library(${CMAKE_PROJECT_NAME} SHARED ${SRC})
@@ -93,7 +94,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME} ocpn::api)
 set(VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 set(VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set(VERSION_PATCH ${PROJECT_VERSION_PATCH})
-set(PACKAGE_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 set(PACKAGE_NAME ${CMAKE_PROJECT_NAME})
 
 # Create the minimim ocpn version id string like ov50
@@ -118,6 +118,10 @@ if ("${BUILD_TYPE}" STREQUAL "")
 endif ()
 
 if (NOT ${BUILD_TYPE} STREQUAL "flatpak")
+
+
+
+
   # Build package as required (flatpak already dealt with).
   #
   include(PluginCompiler)
@@ -142,6 +146,7 @@ configure_file(
   @ONLY
 )
 
+set(checksum "@checksum@")
 configure_file(
   # The XML metadata file
   ${CMAKE_SOURCE_DIR}/uktides-plugin.xml.in
