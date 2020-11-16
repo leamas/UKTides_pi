@@ -40,6 +40,10 @@
 #include "wx/stdpaths.h"
 #include "wx/msgdlg.h"
 
+#include <wx/image.h>
+#include <wx/gdicmn.h>
+#include <wx/bitmap.h>
+
 #include <map>
 #include <list>
 #include <vector>

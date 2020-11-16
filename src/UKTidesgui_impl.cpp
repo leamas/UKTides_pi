@@ -470,7 +470,7 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 	wxString urlString = "https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations?key=cefba1163a81498c9a1e5d03ea1fed69";
 	wxURI url(urlString);
 
-	wxString tmp_file = wxFileName::CreateTempFileName("");
+	wxString tmp_file = wxFileName::CreateTempFileName("UKTides");
 
 	_OCPN_DLStatus ret = OCPN_downloadFile(url.BuildURI(), tmp_file,
 		"UKTides", "", wxNullBitmap, this,
@@ -498,6 +498,8 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 	wxFFile fileData;
 	fileData.Open(tmp_file, wxT("r"));
 	fileData.ReadAll(&myjson);
+    
+    wxMessageBox("Tidal stations downloaded");
 
 	// construct the JSON root object
 	Json::Value  root;

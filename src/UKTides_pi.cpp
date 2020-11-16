@@ -82,14 +82,6 @@ UKTides_pi::UKTides_pi(void *ppimgr)
 	  fn.SetFullName("uktides_panel_icon.png");
 
 	  path = fn.GetFullPath();
-
-	  wxInitAllImageHandlers();
-
-	  wxLogDebug(wxString("Using icon path: ") + path);
-	  if (!wxImage::CanRead(path)) {
-		wxLogDebug("Initiating image handlers.");
-		wxInitAllImageHandlers();
-	  }
 	      
 	  wxImage panelIcon(path);
   
@@ -98,15 +90,7 @@ UKTides_pi::UKTides_pi(void *ppimgr)
 	  else
 		  wxLogMessage(_("    UKTides panel icon has NOT been loaded"));
 
-	  fn.SetFullName("station_icon.png");
-
-	  path = fn.GetFullPath();
-	  wxImage stationIcon(path);
-
-	  if (stationIcon.IsOk())
-		  m_stationBitmap = wxBitmap(stationIcon);
-	  else
-		  wxLogMessage(_("UKTides: station bitmap has NOT been loaded"));
+	  
 
 	  m_bShowUKTides = false;
 }
@@ -119,7 +103,6 @@ UKTides_pi::~UKTides_pi(void)
 
 int UKTides_pi::Init(void)
 {
-	  wxInitAllImageHandlers();
 
 	  AddLocaleCatalog("opencpn-UKTides_pi");
 
@@ -136,6 +119,24 @@ int UKTides_pi::Init(void)
 
       //    And load the configuration items
       LoadConfig();
+    
+    wxInitAllImageHandlers();
+    
+    wxFileName fn;
+    
+    auto path = GetPluginDataDir("UKTides_pi");
+    fn.SetPath(path);
+    fn.AppendDir("data");
+    
+    fn.SetFullName("station_icon.png");
+
+    path = fn.GetFullPath();
+    wxImage stationIcon(path);
+
+    if (stationIcon.IsOk())
+        m_stationBitmap = wxBitmap(stationIcon);
+    else
+        wxLogMessage(_("UKTides: station bitmap has NOT been loaded"));
 
       //    This PlugIn needs a toolbar icon, so request its insertion
 	if(m_bUKTidesShowIcon)
