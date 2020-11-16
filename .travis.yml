@@ -1,4 +1,7 @@
 language: cpp
+
+before_install:
+  - chmod +x "./ci/travis-build-raspbian-armhf.sh"
   
 matrix:
   include:
