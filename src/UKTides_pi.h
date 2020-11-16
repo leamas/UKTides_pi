@@ -37,6 +37,7 @@
 
 #include <wx/fileconf.h>
 #include <wx/image.h>
+#include <wx/gdicmn.h>
 
 #include "ocpn_plugin.h" //Required for OCPN plugin functions
 #include "icons.h"
