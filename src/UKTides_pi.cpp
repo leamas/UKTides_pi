@@ -119,7 +119,9 @@ UKTides_pi::~UKTides_pi(void)
 
 int UKTides_pi::Init(void)
 {
-      AddLocaleCatalog("opencpn-UKTides_pi");
+	  wxInitAllImageHandlers();
+
+	  AddLocaleCatalog("opencpn-UKTides_pi");
 
       // Set some default private member parameters
       m_route_dialog_x = 0;
