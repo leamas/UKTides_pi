@@ -57,11 +57,6 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	tmp_path = GetPluginDataDir("UKTides_pi");
 	fn.SetPath(tmp_path);
 	fn.AppendDir(_T("data"));
-	fn.SetFullName("blank.ico");
-	wxString blank_name = fn.GetFullPath();
-
-	wxIcon icon(blank_name, wxBITMAP_TYPE_ICO);
-	SetIcon(icon);
 
 	fn.SetFullName("station_icon.png");
 	wxString station_icon_name = fn.GetFullPath();
