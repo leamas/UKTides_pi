@@ -5,7 +5,6 @@ debian-steps: &debian-steps
   steps:
     - checkout
     - run: chmod a+x ./ci/*.sh
-    - run: chmod a+x ./cmake/*.cmake
     - run: ci/circleci-build-debian.sh
     - run: cd build; /bin/bash < upload.sh
     - run: pip3 install cryptography
@@ -20,7 +19,6 @@ jobs:
     steps:
       - checkout
       - run: chmod a+x ./ci/*.sh
-      - run: chmod a+x ./cmake/*.cmake
       - run: ci/circleci-build-mingw.sh
       - run: cd build; /bin/bash < upload.sh
       - run: pip3 install cryptography
@@ -38,7 +36,6 @@ jobs:
           keys:
             - fp-v1-{{ checksum "ci/circleci-build-flatpak.sh" }}
       - run: chmod a+x ./ci/*.sh
-      - run: chmod a+x ./cmake/*.cmake
       - run: ci/circleci-build-flatpak.sh
       - save_cache:
           key: fp-v1-{{ checksum "ci/circleci-build-flatpak.sh" }}
@@ -59,7 +56,6 @@ jobs:
           keys:
             - macos-cache-v1-{{checksum "ci/circleci-build-macos.sh"}}
       - run: chmod a+x ./ci/*.sh
-      - run: chmod a+x ./cmake/*.sh
       - run: ci/circleci-build-macos.sh
       - save_cache:
           key: macos-cache-v1-{{checksum "ci/circleci-build-macos.sh"}}
@@ -116,7 +112,6 @@ jobs:
     steps:
       - checkout
       - run: chmod a+x ./ci/*.sh
-      - run: chmod a+x ./cmake/*.cmake
       - run: ci/circleci-build-raspbian-armhf.sh
       - run: cd build; /bin/bash < upload.sh
       - run: pip3 install cryptography
@@ -130,7 +125,6 @@ jobs:
     steps:
       - checkout
       - run: chmod a+x ./ci/*.sh
-      - run: chmod a+x ./cmake/*.make
       - run: ci/circleci-build-raspbian-armhf.sh
       - run: cd build; /bin/bash < upload.sh
       - run: pip3 install cryptography
