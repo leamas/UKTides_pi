@@ -98,6 +98,16 @@ UKTides_pi::UKTides_pi(void *ppimgr)
 	  else
 		  wxLogMessage(_("    UKTides panel icon has NOT been loaded"));
 
+	  fn.SetFullName("station_icon.png");
+
+	  path = fn.GetFullPath();
+	  wxImage stationIcon(path);
+
+	  if (stationIcon.IsOk())
+		  m_stationBitmap = wxBitmap(stationIcon);
+	  else
+		  wxLogMessage(_("UKTides: station bitmap has NOT been loaded"));
+
 	  m_bShowUKTides = false;
 }
 
@@ -242,29 +252,7 @@ void UKTides_pi::OnToolbarToolCallback(int id)
             m_pDialog->plugin = this;
             m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
 
-			wxFileName fn;
 			
-			auto path = GetPluginDataDir("UKTides_pi");
-			fn.SetPath(path);
-			fn.AppendDir("data");
-			fn.SetFullName("station_icon.png");
-
-			path = fn.GetFullPath();
-
-			wxInitAllImageHandlers();
-
-			wxLogDebug(wxString("Using icon path: ") + path);
-			if (!wxImage::CanRead(path)) {
-				wxLogDebug("Initiating image handlers.");
-				wxInitAllImageHandlers();
-			}
-
-			wxImage stationIcon(path);
-
-			if (stationIcon.IsOk())
-				m_pDialog->m_stationBitmap = wxBitmap(stationIcon);
-			else
-				wxLogMessage(_("UKTides: station bitmap has NOT been loaded"));			
 			
       }
 

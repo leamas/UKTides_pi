@@ -124,7 +124,7 @@ public:
 		void DrawGLLabels(Dlg *pof, wxDC *dc, PlugIn_ViewPort *vp,
 			wxImage &imageLabel, double myLat, double myLon, int offset);
 		wxImage &DrawGLTextString(wxString myText);
-		wxBitmap m_stationBitmap;
+		
 
 		TideTable* tidetable;
 		bool b_usingSavedPorts;
