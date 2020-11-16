@@ -75,16 +75,24 @@ UKTides_pi::UKTides_pi(void *ppimgr)
       initialize_images();
 
 	  wxFileName fn;
-	  wxString tmp_path;
-
-	  tmp_path = GetPluginDataDir("UKTides_pi");
-	  fn.SetPath(tmp_path);
-	  fn.AppendDir(_T("data"));
+	  
+	  auto path = GetPluginDataDir("UKTides_pi");
+	  fn.SetPath(path);
+	  fn.AppendDir("data");
 	  fn.SetFullName("uktides_panel_icon.png");
 
-	  wxString shareLocn = fn.GetFullPath();
+	  path = fn.GetFullPath();
 
-	  wxImage panelIcon(shareLocn);
+	  wxInitAllImageHandlers();
+
+	  wxLogDebug(wxString("Using icon path: ") + path);
+	  if (!wxImage::CanRead(path)) {
+		wxLogDebug("Initiating image handlers.");
+		wxInitAllImageHandlers();
+	  }
+	      
+	  wxImage panelIcon(path);
+  
 	  if (panelIcon.IsOk())
 		  m_panelBitmap = wxBitmap(panelIcon);
 	  else
