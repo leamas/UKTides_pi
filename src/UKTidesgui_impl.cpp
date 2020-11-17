@@ -90,7 +90,9 @@ void Dlg::SetViewPort(PlugIn_ViewPort *vp)
 
 bool Dlg::RenderGLukOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp)
 {
+#if wxUSE_GRAPHICS_CONTEXT	
 	m_pdc = NULL;  // inform lower layers that this is OpenGL render
+#endif
 
 	if (!b_clearAllIcons) {
 		if (myports.size() != 0) {
