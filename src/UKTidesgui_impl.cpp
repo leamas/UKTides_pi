@@ -499,8 +499,6 @@ void Dlg::OnDownload(wxCommandEvent& event) {
 	fileData.Open(tmp_file, wxT("r"));
 	fileData.ReadAll(&myjson);
     
-    wxMessageBox("Tidal stations downloaded");
-
 	// construct the JSON root object
 	Json::Value  root;
 	// construct a JSON parser

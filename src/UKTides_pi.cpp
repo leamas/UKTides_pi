@@ -251,14 +251,10 @@ void UKTides_pi::OnToolbarToolCallback(int id)
 {
     
 	if(NULL == m_pDialog)
-      {
-           
+      {       
 		    m_pDialog = new Dlg(*this, m_parent_window);
             m_pDialog->plugin = this;
-            m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
-
-			
-			
+            m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));			
       }
 
 	  m_pDialog->Fit();
@@ -339,8 +335,12 @@ void UKTides_pi::OnUKTidesDialogClose()
 
 bool UKTides_pi::RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp)
 {
-	if (!m_pDialog)
-		return false;
+	if (NULL == m_pDialog)
+	{
+		m_pDialog = new Dlg(*this, m_parent_window);
+		m_pDialog->plugin = this;
+		m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
+	}
 
 	m_pDialog->SetViewPort(vp);
 	m_pDialog->RenderukOverlay(dc, vp);
@@ -349,8 +349,12 @@ bool UKTides_pi::RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp)
 
 bool UKTides_pi::RenderGLOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp)
 {
-	if (!m_pDialog) 
-		return false;
+	if (NULL == m_pDialog)
+	{
+		m_pDialog = new Dlg(*this, m_parent_window);
+		m_pDialog->plugin = this;
+		m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
+	}
 
 	m_pDialog->SetViewPort(vp);
 	m_pDialog->RenderGLukOverlay(pcontext, vp);
