@@ -122,24 +122,6 @@ int UKTides_pi::Init(void)
       //    And load the configuration items
       LoadConfig();
     
-    wxInitAllImageHandlers();
-    
-    wxFileName fn;
-    
-    auto path = GetPluginDataDir("UKTides_pi");
-    fn.SetPath(path);
-    fn.AppendDir("data");
-    
-    fn.SetFullName("station_icon.png");
-
-    path = fn.GetFullPath();
-    wxImage stationIcon(path);
-
-    if (stationIcon.IsOk())
-        m_stationBitmap = wxBitmap(stationIcon);
-    else
-        wxLogMessage(_("UKTides: station bitmap has NOT been loaded"));
-
       //    This PlugIn needs a toolbar icon, so request its insertion
 	if(m_bUKTidesShowIcon)
      
@@ -254,7 +236,24 @@ void UKTides_pi::OnToolbarToolCallback(int id)
       {       
 		    m_pDialog = new Dlg(*this, m_parent_window);
             m_pDialog->plugin = this;
-            m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));			
+            m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));		
+
+			wxFileName fn;
+			wxString tmp_path;
+
+			tmp_path = GetPluginDataDir("UKTides_pi");
+			fn.SetPath(tmp_path);
+			fn.AppendDir(_T("data"));
+
+			fn.SetFullName("station_icon.png");
+			wxString iconLocn = fn.GetFullPath();
+			wxImage stationIcon(iconLocn);
+
+			if (stationIcon.IsOk())
+				m_pDialog->m_stationBitmap = wxBitmap(stationIcon);
+			else
+				wxLogMessage(_("UKTides: station bitmap has NOT been loaded"));
+
       }
 
 	  m_pDialog->Fit();
@@ -335,12 +334,8 @@ void UKTides_pi::OnUKTidesDialogClose()
 
 bool UKTides_pi::RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp)
 {
-	if (NULL == m_pDialog)
-	{
-		m_pDialog = new Dlg(*this, m_parent_window);
-		m_pDialog->plugin = this;
-		m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
-	}
+	if (!m_pDialog)
+		return false;
 
 	m_pDialog->SetViewPort(vp);
 	m_pDialog->RenderukOverlay(dc, vp);
@@ -349,12 +344,8 @@ bool UKTides_pi::RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp)
 
 bool UKTides_pi::RenderGLOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp)
 {
-	if (NULL == m_pDialog)
-	{
-		m_pDialog = new Dlg(*this, m_parent_window);
-		m_pDialog->plugin = this;
-		m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
-	}
+	if (!m_pDialog) 
+		return false;
 
 	m_pDialog->SetViewPort(vp);
 	m_pDialog->RenderGLukOverlay(pcontext, vp);

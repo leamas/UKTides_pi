@@ -164,7 +164,7 @@ void Dlg::DrawAllStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList,
 		pixxc = cpoint.x;
 		pixyc = cpoint.y;
 
-		DrawOLBitmap(plugin->m_stationBitmap, pixxc, pixyc, false);
+		DrawOLBitmap(m_stationBitmap, pixxc, pixyc, false);
 
 		int textShift = -15;
 
@@ -207,7 +207,7 @@ void Dlg::DrawAllSavedStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList,
 		pixxc = cpoint.x;
 		pixyc = cpoint.y;
 
-		DrawOLBitmap(plugin->m_stationBitmap, pixxc, pixyc, false);
+		DrawOLBitmap(m_stationBitmap, pixxc, pixyc, false);
 
 		int textShift = -15;
 

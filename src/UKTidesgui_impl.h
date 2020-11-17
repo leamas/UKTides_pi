@@ -134,10 +134,10 @@ public:
 		bool b_usingSavedPorts;
 		bool b_clearSavedIcons;
 		bool b_clearAllIcons;
+		wxBitmap m_stationBitmap;
 
 private:
-	
-	
+		
 	PlugIn_ViewPort  *m_vp;
 
 	wxDC *m_pdc;
