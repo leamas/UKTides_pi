@@ -78,7 +78,7 @@ UKTides_pi::UKTides_pi(void *ppimgr)
 
 	  wxFileName fn;
 	  
-	  auto path = GetPluginDataDir("UKTides_pi");
+	  wxString path = GetPluginDataDir("UKTides_pi");
 	  fn.SetPath(path);
 	  fn.AppendDir("data");
 	  fn.SetFullName("uktides_panel_icon.png");
@@ -105,7 +105,8 @@ UKTides_pi::~UKTides_pi(void)
 
 int UKTides_pi::Init(void)
 {
-
+	  wxInitAllImageHandlers();
+	 
 	  AddLocaleCatalog("opencpn-UKTides_pi");
 
       // Set some default private member parameters
@@ -241,6 +242,8 @@ void UKTides_pi::OnToolbarToolCallback(int id)
 			wxFileName fn;
 			wxString tmp_path;
 
+			wxInitAllImageHandlers();
+
 			tmp_path = GetPluginDataDir("UKTides_pi");
 			fn.SetPath(tmp_path);
 			fn.AppendDir(_T("data"));
@@ -334,7 +337,8 @@ void UKTides_pi::OnUKTidesDialogClose()
 
 bool UKTides_pi::RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp)
 {
-	if (!m_pDialog)
+	if (!m_pDialog ||
+		!m_pDialog->IsShown())
 		return false;
 
 	m_pDialog->SetViewPort(vp);
@@ -344,7 +348,8 @@ bool UKTides_pi::RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp)
 
 bool UKTides_pi::RenderGLOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp)
 {
-	if (!m_pDialog) 
+	if (!m_pDialog ||
+		!m_pDialog->IsShown())
 		return false;
 
 	m_pDialog->SetViewPort(vp);
