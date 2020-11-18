@@ -1227,6 +1227,10 @@ void Dlg::RemoveOldDownloads() {
 
 	dtn = wxDateTime::Now();
 
+	if (mySavedPorts.size() == 0) {
+		return;
+	}
+
 	for (std::list<myPort>::iterator it = mySavedPorts.begin(); it != mySavedPorts.end(); it++) {
 		sddt = (*it).DownloadDate;
 		ddt.ParseDateTime(sddt);
