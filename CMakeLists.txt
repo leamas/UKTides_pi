@@ -40,11 +40,11 @@ message(STATUS "Building: ${BUILD_TYPE}")
 # -------- Options ----------
 #
 set(OCPN_UNSTABLE_REPO
-    "mike-rossiter/uktides-beta"
+    "opencpn/uktides-beta"
     CACHE STRING "Default repository for untagged builds"
 )
 set(OCPN_STABLE_REPO
-    "mike-rossiter/uktides-prod"
+    "opencpn/uktides-prod"
     CACHE STRING "Default repository for tagged builds"
 )
 option(PLUGIN_USE_SVG "Use SVG graphics" ON)
@@ -53,7 +53,7 @@ option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 # -------  Plugin setup --------
 #
 
-project(UKTides_pi VERSION 1.0.110)
+project(UKTides_pi VERSION 1.0.111)
 
 set(DISPLAY_NAME UKTides)    # Dialogs, installer artifacts, ...
 set(PLUGIN_API_NAME UKTides) # As of GetCommonName() in plugin API
