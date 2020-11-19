@@ -248,20 +248,11 @@ void UKTides_pi::OnToolbarToolCallback(int id)
 			wxFileName fn;
 			wxString tmp_path;
 
-			wxInitAllImageHandlers();
-
-			tmp_path = GetPluginDataDir("UKTides_pi");
-			fn.SetPath(tmp_path);
-			fn.AppendDir(_T("data"));
-
-			fn.SetFullName("station_icon.png");
-			wxString iconLocn = fn.GetFullPath();
-			wxImage stationIcon(iconLocn);
-
-			if (stationIcon.IsOk())
-				m_pDialog->m_stationBitmap = wxBitmap(stationIcon);
-			else
-				wxLogMessage(_("UKTides: station bitmap has NOT been loaded"));
+			
+			m_pDialog->m_stationBitmap = wxBitmap(*_img_uktides);
+			if (!m_pDialog->m_stationBitmap.IsOk()) {
+				wxLogMessage("UKTides: failed to load station bitmap");
+			}
 
       }
 
