@@ -248,6 +248,8 @@ void UKTides_pi::OnToolbarToolCallback(int id)
 			wxFileName fn;
 			wxString tmp_path;
 
+			wxInitAllImageHandlers();
+
 			tmp_path = GetPluginDataDir("UKTides_pi");
 			fn.SetPath(tmp_path);
 			fn.AppendDir(_T("data"));
