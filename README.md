@@ -1,4 +1,4 @@
-# shipdriver\_pi README
+# UKTides\_pi README
 
 A plugin for OpenCPN. Almost a simulator or is it a game?
 
