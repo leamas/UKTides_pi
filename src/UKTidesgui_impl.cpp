@@ -96,45 +96,11 @@ bool Dlg::RenderGLukOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp)
 
 	if (!b_clearAllIcons) {
 		if (myports.size() != 0) {
-
-			wxFileName fn;
-			wxString tmp_path;
-
-			tmp_path = GetPluginDataDir("UKTides_pi");
-			fn.SetPath(tmp_path);
-			fn.AppendDir(_T("data"));
-
-			fn.SetFullName("station_icon.png");
-			wxString iconLocn = fn.GetFullPath();
-			wxImage stationIcon(iconLocn);
-
-			if (stationIcon.IsOk())
-				m_stationBitmap = wxBitmap(stationIcon);
-			else
-				wxLogMessage(_("UKTides: station bitmap has NOT been loaded"));
-
 			DrawAllStationIcons(vp, false, false, false);
 		}
 	}
 	if (!b_clearSavedIcons) {
 		if (mySavedPorts.size() != 0) {
-
-			wxFileName fn;
-			wxString tmp_path;
-
-			tmp_path = GetPluginDataDir("UKTides_pi");
-			fn.SetPath(tmp_path);
-			fn.AppendDir(_T("data"));
-
-			fn.SetFullName("station_icon.png");
-			wxString iconLocn = fn.GetFullPath();
-			wxImage stationIcon(iconLocn);
-
-			if (stationIcon.IsOk())
-				m_stationBitmap = wxBitmap(stationIcon);
-			else
-				wxLogMessage(_("UKTides: station bitmap has NOT been loaded"));
-
 			DrawAllSavedStationIcons(vp, false, false, false);
 		}
 	}

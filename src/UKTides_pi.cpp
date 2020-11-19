@@ -245,6 +245,22 @@ void UKTides_pi::OnToolbarToolCallback(int id)
             m_pDialog->plugin = this;
             m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));		
 
+			wxFileName fn;
+			wxString tmp_path;
+
+			tmp_path = GetPluginDataDir("UKTides_pi");
+			fn.SetPath(tmp_path);
+			fn.AppendDir(_T("data"));
+
+			fn.SetFullName("station_icon.png");
+			wxString iconLocn = fn.GetFullPath();
+			wxImage stationIcon(iconLocn);
+
+			if (stationIcon.IsOk())
+				m_pDialog->m_stationBitmap = wxBitmap(stationIcon);
+			else
+				wxLogMessage(_("UKTides: station bitmap has NOT been loaded"));
+
       }
 
 	  m_pDialog->Fit();
