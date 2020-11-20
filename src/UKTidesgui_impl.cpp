@@ -90,6 +90,7 @@ void Dlg::SetViewPort(PlugIn_ViewPort *vp)
 
 bool Dlg::RenderGLukOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp)
 {
+
 #if wxUSE_GRAPHICS_CONTEXT	
 	m_pdc = NULL;  // inform lower layers that this is OpenGL render
 #endif
@@ -166,7 +167,7 @@ void Dlg::DrawAllStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList,
 		pixxc = cpoint.x;
 		pixyc = cpoint.y;
 
-		DrawOLBitmap(m_stationBitmap, pixxc, pixyc, false);
+		//DrawOLBitmap(m_stationBitmap, pixxc, pixyc, false);
 
 		int textShift = -15;
 
@@ -209,7 +210,7 @@ void Dlg::DrawAllSavedStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList,
 		pixxc = cpoint.x;
 		pixyc = cpoint.y;
 
-		DrawOLBitmap(m_stationBitmap, pixxc, pixyc, false);
+		//DrawOLBitmap(m_stationBitmap, pixxc, pixyc, false);
 
 		int textShift = -15;
 
@@ -1226,10 +1227,6 @@ void Dlg::RemoveOldDownloads() {
 	DaySpan = wxTimeSpan::Days(7);
 
 	dtn = wxDateTime::Now();
-
-	if (mySavedPorts.size() == 0) {
-		return;
-	}
 
 	for (std::list<myPort>::iterator it = mySavedPorts.begin(); it != mySavedPorts.end(); it++) {
 		sddt = (*it).DownloadDate;
