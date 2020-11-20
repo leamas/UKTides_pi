@@ -72,25 +72,32 @@ UKTides_pi::UKTides_pi(void *ppimgr)
       :opencpn_plugin_116 (ppimgr)
 {
       
-	  wxInitAllImageHandlers();
+	  
 	  // Create the PlugIn icons
       initialize_images();
 
 	  wxFileName fn;
-	  wxString tmp_path;
+	  wxString path;
 
-	  tmp_path = GetPluginDataDir("UKTides_pi");
-	  fn.SetPath(tmp_path);
+	  path = GetPluginDataDir("UKTides_pi");
+	  fn.SetPath(path);
 	  fn.AppendDir(_T("data"));
 	  fn.SetFullName("uktides_panel_icon.png");
 
-	  wxString shareLocn = fn.GetFullPath();
+	  path = fn.GetFullPath();
 
-	  wxImage panelIcon(shareLocn);
+	  wxInitAllImageHandlers();
+
+	  wxLogDebug(wxString("Using icon path: ") + path);
+	  if (!wxImage::CanRead(path)) {
+		  wxLogDebug("Initiating image handlers.");
+		  wxInitAllImageHandlers();
+	  }
+	  wxImage panelIcon(path);
 	  if (panelIcon.IsOk())
 		  m_panelBitmap = wxBitmap(panelIcon);
 	  else
-		  wxLogMessage(_("    UKTides panel icon has NOT been loaded"));
+		  wxLogWarning("ShipDriver panel icon has NOT been loaded");
 
 	  m_bShowUKTides = false;
 }
@@ -103,7 +110,6 @@ UKTides_pi::~UKTides_pi(void)
 
 int UKTides_pi::Init(void)
 {
-	wxInitAllImageHandlers();     
 	
 	  AddLocaleCatalog("opencpn-UKTides_pi");
 
@@ -157,8 +163,12 @@ bool UKTides_pi::DeInit(void)
       {
             //Capture dialog position
             wxPoint p = m_pDialog->GetPosition();
+			wxRect r = m_pDialog->GetRect();
             SetCalculatorDialogX(p.x);
             SetCalculatorDialogY(p.y);
+			SetCalculatorDialogWidth(r.GetWidth());
+			SetCalculatorDialogHeight(r.GetHeight());
+
             m_pDialog->Close();
             delete m_pDialog;
             m_pDialog = NULL;
@@ -237,7 +247,7 @@ void UKTides_pi::OnToolbarToolCallback(int id)
             m_pDialog = new Dlg(*this, m_parent_window);
             m_pDialog->plugin = this;
             m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
-			
+			m_pDialog->SetSize(m_route_dialog_width, m_route_dialog_height);
       }
 
 	  m_pDialog->Fit();
@@ -246,6 +256,8 @@ void UKTides_pi::OnToolbarToolCallback(int id)
 
       //    Toggle dialog? 
       if(m_bShowUKTides) {
+		  m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
+		  m_pDialog->SetSize(m_route_dialog_width, m_route_dialog_height);
           m_pDialog->Show();         
       } else
           m_pDialog->Hide();
@@ -253,6 +265,14 @@ void UKTides_pi::OnToolbarToolCallback(int id)
       // Toggle is handled by the toolbar but we must keep plugin manager b_toggle updated
       // to actual status to ensure correct status upon toolbar rebuild
       SetToolbarItemState( m_leftclick_tool_id, m_bShowUKTides );
+
+	  //Capture dialog position
+	  wxPoint p = m_pDialog->GetPosition();
+	  wxRect r = m_pDialog->GetRect();
+	  SetCalculatorDialogX(p.x);
+	  SetCalculatorDialogY(p.y);
+	  SetCalculatorDialogWidth(r.GetWidth());
+	  SetCalculatorDialogHeight(r.GetHeight());
 
       RequestRefresh(m_parent_window); // refresh main window
 }
@@ -268,7 +288,13 @@ bool UKTides_pi::LoadConfig(void)
            
             m_route_dialog_x =  pConf->Read ( _T ( "DialogPosX" ), 20L );
             m_route_dialog_y =  pConf->Read ( _T ( "DialogPosY" ), 20L );
-         
+			m_route_dialog_width = pConf->Read(_T("DialogWidth"), 330L);
+#ifdef __WXOSX__
+			m_route_dialog_height = pConf->Read(_T("DialogHeight"), 250L);
+#else
+			m_route_dialog_height = pConf->Read(_T("DialogHeight"), 300L);
+#endif
+
             if((m_route_dialog_x < 0) || (m_route_dialog_x > m_display_width))
                   m_route_dialog_x = 5;
             if((m_route_dialog_y < 0) || (m_route_dialog_y > m_display_height))
@@ -290,6 +316,9 @@ bool UKTides_pi::SaveConfig(void)
           
             pConf->Write ( _T ( "DialogPosX" ),   m_route_dialog_x );
             pConf->Write ( _T ( "DialogPosY" ),   m_route_dialog_y );
+			pConf->Write(_T("DialogSizeX"), m_route_dialog_width);
+			pConf->Write(_T("DialogSizeY"), m_route_dialog_height);
+
             
             return true;
       }

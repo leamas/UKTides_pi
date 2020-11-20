@@ -83,8 +83,8 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 		wxMessageBox(_("On first use please re-start OpenCPN\n... to enable the tidal station icons"));		
 	}
 	*/
-	LoadTidalEventsFromXml();
-	RemoveOldDownloads();
+	//LoadTidalEventsFromXml();
+	//RemoveOldDownloads();
 	
 }
 
@@ -135,7 +135,9 @@ void Dlg::Addpoint(TiXmlElement* Route, wxString ptlat, wxString ptlon, wxString
 //done adding point
 }
 
-void Dlg::OnDownload(wxCommandEvent& event) {		
+void Dlg::OnDownload(wxCommandEvent& event) {	
+
+	return;
 
 	myports.clear();
 	myPort outPort;
