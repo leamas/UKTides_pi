@@ -53,7 +53,7 @@ option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 # -------  Plugin setup --------
 #
 
-project(UKTides_pi VERSION 1.0.119)
+project(UKTides_pi VERSION 1.0.118)
 
 set(DISPLAY_NAME UKTides)    # Dialogs, installer artifacts, ...
 set(PLUGIN_API_NAME UKTides) # As of GetCommonName() in plugin API
