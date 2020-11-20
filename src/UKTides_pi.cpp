@@ -37,9 +37,7 @@
 
 #include <wx/stdpaths.h>
 
-
-
-class UKTides_pi;
+class Dlg;
 
 // the class factories, used to create and destroy instances of the PlugIn
 
@@ -244,7 +242,7 @@ void UKTides_pi::OnToolbarToolCallback(int id)
     
 	if(NULL == m_pDialog)
       {
-            m_pDialog = new Dlg(*this, m_parent_window);
+		    m_pDialog = new Dlg(m_parent_window, this);
             m_pDialog->plugin = this;
             m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
 			m_pDialog->SetSize(m_route_dialog_width, m_route_dialog_height);

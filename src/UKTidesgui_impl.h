@@ -42,7 +42,15 @@
 #include <list>
 #include <vector>
 
+#ifdef __WXOSX__
+#define UKTIDES_DLG_STYLE wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSTAY_ON_TOP
+#else
+#define UKTIDES_DLG_STYLE wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER
+#endif
+
 using namespace std;
+
+
 
 struct TidalEvent
 {
@@ -67,7 +75,7 @@ class Position;
 class Dlg : public DlgDef
 {
 public:
-	Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent);
+	Dlg(wxWindow *parent, UKTides_pi *ppi);
 	~Dlg();
 
         void OnDownload( wxCommandEvent& event );	
@@ -85,7 +93,6 @@ public:
 		wxString m_default_configuration_path;
 		void AutoSizeHeader(wxListCtrl *const list_ctrl);
 
-		UKTides_pi &m_UKTides_pi;
 		wxString StandardPath();	
 		list<myPort>myports;	
 

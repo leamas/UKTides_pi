@@ -37,59 +37,20 @@
 
 class Position;
 
-Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
-	: DlgDef(parent),
-	m_UKTides_pi(_UKTides_pi)
-{	
+Dlg::Dlg(wxWindow *parent, UKTides_pi *ppi)
+	: DlgDef(parent) 
+{
 	
 	this->Fit();
     dbg=false; //for debug output set to true
  
-	/*
-	
-	wxFileName fn;
-	wxString tmp_path;
-
-	tmp_path = GetPluginDataDir("UKTides_pi");
-	fn.SetPath(tmp_path);
-	fn.AppendDir(_T("data"));
-	fn.SetFullName("blank.ico");
-	wxString blank_name = fn.GetFullPath();
-
-	wxIcon icon(blank_name, wxBITMAP_TYPE_ICO);
-	SetIcon(icon);
-
-	fn.SetFullName("station_icon.png");
-	wxString station_icon_name = fn.GetFullPath();
-    
-    wxString myOpenCPNiconsPath;
-    
-    wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
-    myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/opencpn/UserIcons";
-
-#if defined(__WXMSW__)
-	wxString win_stdPath = std_path.GetConfigDir();
-	myOpenCPNiconsPath = win_stdPath + "/UserIcons";
-#endif
-    
-    if (!wxDirExists(myOpenCPNiconsPath)) {
-        fn.Mkdir(myOpenCPNiconsPath,wxS_DIR_DEFAULT,wxPATH_MKDIR_FULL);
-    }
-    
-    wxString destination = myOpenCPNiconsPath + "/station_icon.png";
-    
-	if (!wxFileExists(destination)) {
-		wxCopyFile(station_icon_name, destination, false);		
-		wxMessageBox(_("On first use please re-start OpenCPN\n... to enable the tidal station icons"));		
-	}
-	*/
 	//LoadTidalEventsFromXml();
 	//RemoveOldDownloads();
 	
 }
-
 Dlg::~Dlg()
 {
+
 }
 
 void Dlg::OnInformation(wxCommandEvent& event)
