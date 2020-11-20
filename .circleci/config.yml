@@ -45,9 +45,10 @@ jobs:
       - run: pip3 install cryptography
       - run: python3 ci/git-push
 
+
   build-macos:
     macos:
-      xcode: "11.0.0"
+      xcode: "10.0.0"
     environment:
       - OCPN_TARGET: macos
     steps:
