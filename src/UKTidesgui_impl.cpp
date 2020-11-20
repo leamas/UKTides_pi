@@ -173,8 +173,8 @@ void Dlg::DrawAllStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList,
 
 		if (!m_pdc) {
 
-			DrawGLLabels(this, m_pdc, BBox,
-				DrawGLTextString(outPort.Name), plat, plon, textShift);
+			//DrawGLLabels(this, m_pdc, BBox,
+				//DrawGLTextString(outPort.Name), plat, plon, textShift);
 		}
 		else {
 
@@ -216,8 +216,8 @@ void Dlg::DrawAllSavedStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList,
 
 		if (!m_pdc) {
 
-			DrawGLLabels(this, m_pdc, BBox,
-				DrawGLTextString(outPort.Name), plat, plon, textShift);
+			//DrawGLLabels(this, m_pdc, BBox,
+				//DrawGLTextString(outPort.Name), plat, plon, textShift);
 		}
 		else {
 			m_pdc->DrawText(outPort.Name, pixxc, pixyc + textShift);
