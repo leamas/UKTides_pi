@@ -37,8 +37,8 @@
 
 class Position;
 
-Dlg::Dlg(wxWindow *parent, UKTides_pi *ppi)
-	: DlgDef(parent) 
+Dlg::Dlg(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style)
+	: DlgDef(parent, id, title, pos, size, style)
 {
 	
 	this->Fit();
@@ -47,10 +47,6 @@ Dlg::Dlg(wxWindow *parent, UKTides_pi *ppi)
 	//LoadTidalEventsFromXml();
 	//RemoveOldDownloads();
 	
-}
-Dlg::~Dlg()
-{
-
 }
 
 void Dlg::OnInformation(wxCommandEvent& event)

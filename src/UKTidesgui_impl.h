@@ -75,8 +75,7 @@ class Position;
 class Dlg : public DlgDef
 {
 public:
-	Dlg(wxWindow *parent, UKTides_pi *ppi);
-	~Dlg();
+	Dlg(wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("UKTides"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = UKTIDES_DLG_STYLE);
 
         void OnDownload( wxCommandEvent& event );	
 		void OnGetSavedTides(wxCommandEvent& event);

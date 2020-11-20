@@ -112,9 +112,11 @@ int UKTides_pi::Init(void)
 	  AddLocaleCatalog("opencpn-UKTides_pi");
 
       // Set some default private member parameters
-      m_route_dialog_x = 0;
-      m_route_dialog_y = 0;
-      ::wxDisplaySize(&m_display_width, &m_display_height);
+      m_route_dialog_x = 40;
+      m_route_dialog_y = 80;
+	  m_route_dialog_width = 400;
+	  m_route_dialog_height = 300;
+	  ::wxDisplaySize(&m_display_width, &m_display_height);
 
       //    Get a pointer to the opencpn display canvas, to use as a parent for the POI Manager dialog
       m_parent_window = GetOCPNCanvasWindow();
@@ -242,7 +244,7 @@ void UKTides_pi::OnToolbarToolCallback(int id)
     
 	if(NULL == m_pDialog)
       {
-		    m_pDialog = new Dlg(m_parent_window, this);
+		    m_pDialog = new Dlg(m_parent_window);
             m_pDialog->plugin = this;
             m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
 			m_pDialog->SetSize(m_route_dialog_width, m_route_dialog_height);
@@ -294,9 +296,9 @@ bool UKTides_pi::LoadConfig(void)
 #endif
 
             if((m_route_dialog_x < 0) || (m_route_dialog_x > m_display_width))
-                  m_route_dialog_x = 5;
+                  m_route_dialog_x = 40;
             if((m_route_dialog_y < 0) || (m_route_dialog_y > m_display_height))
-                  m_route_dialog_y = 5;
+                  m_route_dialog_y = 140;
             return true;
       }
       else
