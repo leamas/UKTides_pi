@@ -36,9 +36,6 @@
 #endif //precompiled headers
 
 #include <wx/fileconf.h>
-#include <wx/image.h>
-#include <wx/gdicmn.h>
-#include <wx/bitmap.h>
 
 #include "ocpn_plugin.h" //Required for OCPN plugin functions
 #include "icons.h"
@@ -99,15 +96,12 @@ public:
       void SetCalculatorDialogWidth     (int x){ m_route_dialog_width = x;};
       void SetCalculatorDialogHeight    (int x){ m_route_dialog_height = x;};      
 	  void OnUKTidesDialogClose();
-	  bool RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp);
-	  bool RenderGLOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp);
 	  
 
 	  double GetCursorLon(void) { return m_cursor_lon; }
 	  double GetCursorLat(void) { return m_cursor_lat; }
 	  
 	  int m_position_menu_id;
-	  
 
 private:
       

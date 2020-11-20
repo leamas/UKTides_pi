@@ -44,7 +44,6 @@ class DlgDef : public wxFrame
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnDownload( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGetSavedTides( wxCommandEvent& event ) { event.Skip(); }
-		virtual void DoRemovePortIcons( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInformation( wxCommandEvent& event ) { event.Skip(); }
 
 
@@ -53,7 +52,6 @@ class DlgDef : public wxFrame
 		wxMenu* m_menu1;
 		wxMenuItem* m_menuItem1;
 		wxMenuItem* m_menuItem3;
-		wxMenuItem* m_menuItem4;
 		wxMenu* m_menu2;
 		wxMenuItem* m_menuItem2;
 		wxStaticText* m_stTimeZone;

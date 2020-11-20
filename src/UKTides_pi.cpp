@@ -71,34 +71,26 @@ extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p)
 UKTides_pi::UKTides_pi(void *ppimgr)
       :opencpn_plugin_116 (ppimgr)
 {
-      wxInitAllImageHandlers();
       
-      // Create the PlugIn icons
+	  wxInitAllImageHandlers();
+	  // Create the PlugIn icons
       initialize_images();
 
 	  wxFileName fn;
-	  
-	  wxString path = GetPluginDataDir("UKTides_pi");
-	  fn.SetPath(path);
-	  fn.AppendDir("data");
+	  wxString tmp_path;
+
+	  tmp_path = GetPluginDataDir("UKTides_pi");
+	  fn.SetPath(tmp_path);
+	  fn.AppendDir(_T("data"));
 	  fn.SetFullName("uktides_panel_icon.png");
 
-	  path = fn.GetFullPath();
+	  wxString shareLocn = fn.GetFullPath();
 
-	  wxLogDebug(wxString("Using icon path: ") + path);
-	  if (!wxImage::CanRead(path)) {
-		  wxLogDebug("Initiating image handlers.");
-		  wxInitAllImageHandlers();
-	  }
-	      
-	  wxImage panelIcon(path);
-  
+	  wxImage panelIcon(shareLocn);
 	  if (panelIcon.IsOk())
 		  m_panelBitmap = wxBitmap(panelIcon);
 	  else
 		  wxLogMessage(_("    UKTides panel icon has NOT been loaded"));
-
-	  
 
 	  m_bShowUKTides = false;
 }
@@ -111,8 +103,8 @@ UKTides_pi::~UKTides_pi(void)
 
 int UKTides_pi::Init(void)
 {
-	  wxInitAllImageHandlers();
-	 
+	wxInitAllImageHandlers();     
+	
 	  AddLocaleCatalog("opencpn-UKTides_pi");
 
       // Set some default private member parameters
@@ -128,7 +120,7 @@ int UKTides_pi::Init(void)
 
       //    And load the configuration items
       LoadConfig();
-    
+
       //    This PlugIn needs a toolbar icon, so request its insertion
 	if(m_bUKTidesShowIcon)
      
@@ -148,7 +140,6 @@ int UKTides_pi::Init(void)
 	SetCanvasContextMenuItemViz(m_position_menu_id, false);
 
      m_pDialog = NULL;	 
-	
 
       return (WANTS_OVERLAY_CALLBACK |
               WANTS_OPENGL_OVERLAY_CALLBACK |		      
@@ -178,7 +169,9 @@ bool UKTides_pi::DeInit(void)
       }	
     
     SaveConfig();
-    
+
+    RequestRefresh(m_parent_window); // refresh mainn window
+
     return true;
 }
 
@@ -240,20 +233,11 @@ void UKTides_pi::OnToolbarToolCallback(int id)
 {
     
 	if(NULL == m_pDialog)
-      {       
-		    m_pDialog = new Dlg(*this, m_parent_window);
+      {
+            m_pDialog = new Dlg(*this, m_parent_window);
             m_pDialog->plugin = this;
-            m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));		
-
-			wxFileName fn;
-			wxString tmp_path;
-
+            m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
 			
-			m_pDialog->m_stationBitmap = wxBitmap(*_img_uktides);
-			if (!m_pDialog->m_stationBitmap.IsOk()) {
-				wxLogMessage("UKTides: failed to load station bitmap");
-			}
-
       }
 
 	  m_pDialog->Fit();
@@ -262,15 +246,10 @@ void UKTides_pi::OnToolbarToolCallback(int id)
 
       //    Toggle dialog? 
       if(m_bShowUKTides) {
-		  m_pDialog->b_clearSavedIcons = false;
-		  m_pDialog->b_clearAllIcons = false;
           m_pDialog->Show();         
-	  }
-	  else {
-		  m_pDialog->b_clearSavedIcons = true;
-		  m_pDialog->b_clearAllIcons = true;
-		  m_pDialog->Hide();
-	  }
+      } else
+          m_pDialog->Hide();
+     
       // Toggle is handled by the toolbar but we must keep plugin manager b_toggle updated
       // to actual status to ensure correct status upon toolbar rebuild
       SetToolbarItemState( m_leftclick_tool_id, m_bShowUKTides );
@@ -320,9 +299,7 @@ bool UKTides_pi::SaveConfig(void)
 
 void UKTides_pi::OnUKTidesDialogClose()
 {
-	m_pDialog->b_clearSavedIcons = true;
-	m_pDialog->b_clearAllIcons = true;
-	m_bShowUKTides = false;
+    m_bShowUKTides = false;
     SetToolbarItemState( m_leftclick_tool_id, m_bShowUKTides );
     m_pDialog->Hide();
     SaveConfig();
@@ -330,30 +307,6 @@ void UKTides_pi::OnUKTidesDialogClose()
     RequestRefresh(m_parent_window); // refresh main window
 
 }
-
-
-bool UKTides_pi::RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp)
-{
-	if (!m_pDialog ||
-		!m_pDialog->IsShown())
-		return false;
-
-	m_pDialog->SetViewPort(vp);
-	m_pDialog->RenderukOverlay(dc, vp);
-	return true;
-}
-
-bool UKTides_pi::RenderGLOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp)
-{
-	if (!m_pDialog ||
-		!m_pDialog->IsShown())
-		return false;
-
-	m_pDialog->SetViewPort(vp);
-	m_pDialog->RenderGLukOverlay(pcontext, vp);
-	return true;
-}
-
 
 void UKTides_pi::OnContextMenuItemCallback(int id)
 {
