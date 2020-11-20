@@ -130,6 +130,7 @@ public:
 		bool b_usingSavedPorts;
 		bool b_clearSavedIcons;
 		bool b_clearAllIcons;
+		void OnShow(void);
 
 private:
 	
@@ -160,7 +161,7 @@ private:
 	wxString getPortId(double m_lat, double m_lon);
 	wxString getSavedPortId(double m_lat, double m_lon);
 	wxString ProcessDate(wxString myLongDate);
-	void OnShow();
+	
 	void OnShowSavedPortTides(wxString thisPortId);
 
 	void OnClose( wxCloseEvent& event );

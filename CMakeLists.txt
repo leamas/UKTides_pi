@@ -51,7 +51,7 @@ option(UKTIDES_USE_SVG "Use SVG graphics" ON)
 
 # -------  Plugin setup --------
 #
-project(UKTides_pi VERSION 1.0.132)
+project(UKTides_pi VERSION 1.0.133)
 
 set(DISPLAY_NAME UKTides)    # Dialogs, installer artifacts, ...
 set(PLUGIN_API_NAME UKTides) # As of GetCommonName() in plugin API
@@ -76,6 +76,10 @@ set(SRC
     src/UKTidesgui.cpp
     src/UKTidesgui_impl.cpp
     src/UKTidesgui_impl.h
+	src/NavFunc.cpp
+	src/NavFunc.h
+	src/tidetable.cpp
+	src/tidetable.h
     
 )
 

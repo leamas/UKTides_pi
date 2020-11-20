@@ -53,6 +53,41 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 
 	b_clearSavedIcons = false;
 	b_clearAllIcons = false;
+
+	tmp_path = GetPluginDataDir("UKTides_pi");
+	fn.SetPath(tmp_path);
+	fn.AppendDir(_T("data"));
+	fn.SetFullName("blank.ico");
+	wxString blank_name = fn.GetFullPath();
+
+	wxIcon icon(blank_name, wxBITMAP_TYPE_ICO);
+	SetIcon(icon);
+
+	fn.SetFullName("station_icon.png");
+	wxString station_icon_name = fn.GetFullPath();
+
+    wxString myOpenCPNiconsPath;
+
+  	wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
+    	myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/.opencpn/UserIcons";
+
+#if defined(__WXMSW__)
+	wxString win_stdPath = std_path.GetConfigDir();
+	myOpenCPNiconsPath = win_stdPath + "/UserIcons";
+
+#endif
+ 	//wxMessageBox(myOpenCPNiconsPath);
+
+	if (!wxDirExists(myOpenCPNiconsPath)) {
+		fn.Mkdir(myOpenCPNiconsPath,wxS_DIR_DEFAULT,wxPATH_MKDIR_FULL);
+	}
+
+    wxString destination = myOpenCPNiconsPath + "/station_icon.png";
+
+	if (!wxFileExists(destination)) {
+		wxCopyFile(station_icon_name, destination, false);
+		wxMessageBox(_("On first use please re-start OpenCPN\n... to enable the tidal station icons"));
+	}	
 	
 	LoadTidalEventsFromXml();
 	RemoveOldDownloads();
@@ -794,9 +829,9 @@ void Dlg::getHWLW(string id)
 	OnShow();
 }
 
-void Dlg::OnShow()
+void Dlg::OnShow(void)
 {
-		TideTable* tidetable = new TideTable(this, 7000, _("Tides"), wxPoint(200, 200), wxSize(-1, -1), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+		tidetable = new TideTable(this, 7000, _("Tides"), wxPoint(200, 200), wxSize(-1, -1), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
 		wxString label = m_titlePortName + _("      (Times are UTC)  ") + _(" (Height in metres)");
 		tidetable->itemStaticBoxSizer14Static->SetLabel(label);
 
