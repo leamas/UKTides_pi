@@ -5,7 +5,7 @@
  * Author:   Mike Rossiter
  *
  ***************************************************************************
- *   Copyright (C) 2017 by Mike Rossiter                                *
+ *   Copyright (C) 2019 by Mike Rossiter                                *
  *   $EMAIL$                                                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,12 +34,12 @@
 #include "UKTides_pi.h"
 #include "UKTidesgui_impl.h"
 #include "UKTidesgui.h"
-#include "ocpn_plugin.h" 
+
+#include <wx/stdpaths.h>
+
+
 
 class UKTides_pi;
-class Dlg;
-
-using namespace std;
 
 // the class factories, used to create and destroy instances of the PlugIn
 
@@ -55,10 +55,11 @@ extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p)
 
 //---------------------------------------------------------------------------------------------------------
 //
-//    UKTides PlugIn Implementation
+//   UKTides PlugIn Implementation
 //
 //---------------------------------------------------------------------------------------------------------
 
+#define UKTIDES_TOOL_POSITION    -1 
 #include "icons.h"
 
 //---------------------------------------------------------------------------------------------------------
@@ -67,67 +68,44 @@ extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p)
 //
 //---------------------------------------------------------------------------------------------------------
 
-
-
-
 UKTides_pi::UKTides_pi(void *ppimgr)
       :opencpn_plugin_116 (ppimgr)
 {
-    // Create the PlugIn icons
-    initialize_images();
+      // Create the PlugIn icons
+      initialize_images();
 
-    wxFileName fn;
+	  wxFileName fn;
+	  wxString tmp_path;
 
-    auto path = GetPluginDataDir("UKTides_pi");
-    fn.SetPath(path);
-    fn.AppendDir("data");
-    fn.SetFullName("UKTides_panel_icon.png");
+	  tmp_path = GetPluginDataDir("UKTides_pi");
+	  fn.SetPath(tmp_path);
+	  fn.AppendDir(_T("data"));
+	  fn.SetFullName("uktides_panel_icon.png");
 
-    path = fn.GetFullPath();
-    
-    wxInitAllImageHandlers();
+	  wxString shareLocn = fn.GetFullPath();
 
-    wxLogDebug(wxString("Using icon path: ") + path);
-    if (!wxImage::CanRead(path)) {
-        wxLogDebug("Initiating image handlers.");
-        wxInitAllImageHandlers();
-    }
-    wxImage panelIcon(path);
-    if (panelIcon.IsOk())
-        m_panelBitmap = wxBitmap(panelIcon);
-    else
-        wxLogWarning("UKTides panel icon has NOT been loaded");
-    m_bShowUKTides = false;
+	  wxImage panelIcon(shareLocn);
+	  if (panelIcon.IsOk())
+		  m_panelBitmap = wxBitmap(panelIcon);
+	  else
+		  wxLogMessage(_("    UKTides panel icon has NOT been loaded"));
+
+	  m_bShowUKTides = false;
 }
 
 UKTides_pi::~UKTides_pi(void)
 {
-
-     delete _img_UKTidesIcon;
-
-	 if (m_pDialog){
-
-		 wxFileConfig *pConf = GetOCPNConfigObject();;
-
-		 if (pConf) {
-
-			 pConf->SetPath(_T("/Settings/UKTides"));
-
-			
-		 }
-	 }
+     delete _img_uktides;
      
 }
 
 int UKTides_pi::Init(void)
 {
-      AddLocaleCatalog( _T("opencpn-UKTides_pi") );
+      AddLocaleCatalog("opencpn-UKTides_pi");
 
       // Set some default private member parameters
-      m_hr_dialog_x = 40;
-      m_hr_dialog_y = 80;
-	  m_hr_dialog_sx = 400;
-	  m_hr_dialog_sy = 300;
+      m_route_dialog_x = 0;
+      m_route_dialog_y = 0;
       ::wxDisplaySize(&m_display_width, &m_display_height);
 
       //    Get a pointer to the opencpn display canvas, to use as a parent for the POI Manager dialog
@@ -140,30 +118,32 @@ int UKTides_pi::Init(void)
       LoadConfig();
 
       //    This PlugIn needs a toolbar icon, so request its insertion
-	if(m_bUKTidesShowIcon) {
-#ifdef UKTIDES_USE_SVG
-        m_leftclick_tool_id = InsertPlugInToolSVG(_T( "UKTides" ), _svg_UKTides, _svg_UKTides, _svg_UKTides_toggled,
-            wxITEM_CHECK, _("UKTides"), _T( "" ), NULL, UKTides_TOOL_POSITION, 0, this);
+	if(m_bUKTidesShowIcon)
+     
+#ifdef PLUGIN_USE_SVG
+	m_leftclick_tool_id = InsertPlugInToolSVG("UKTides", _svg_uktides, _svg_uktides, _svg_uktides_toggled,
+		wxITEM_CHECK, _("UKTides"), "", NULL, UKTIDES_TOOL_POSITION, 0, this);
 #else
-		m_leftclick_tool_id = InsertPlugInTool(_T(""), _img_UKTidesIcon, _img_UKTidesIcon, wxITEM_CHECK,
-            _("UKTides"), _T(""), NULL,
-             UKTides_TOOL_POSITION, 0, this);
+	 m_leftclick_tool_id  = InsertPlugInTool("", _img_uktides, _img_uktides, wxITEM_CHECK,
+            _("UKTides"), "", NULL,
+             UKTIDES_TOOL_POSITION, 0, this);
 #endif
-    }
+
 	wxMenu dummy_menu;
 	m_position_menu_id = AddCanvasContextMenuItem
-		(new wxMenuItem(&dummy_menu, -1, _("Select Vessel Start Position")), this);
-	SetCanvasContextMenuItemViz(m_position_menu_id, true);
 
-      m_pDialog = NULL;	  
+	(new wxMenuItem(&dummy_menu, -1, _("Select UK Tidal Station")), this);
+	SetCanvasContextMenuItemViz(m_position_menu_id, false);
 
-      return (
-			  WANTS_OVERLAY_CALLBACK |
-			  WANTS_OPENGL_OVERLAY_CALLBACK |
+     m_pDialog = NULL;	 
+	
+
+      return (WANTS_OVERLAY_CALLBACK |
+              WANTS_OPENGL_OVERLAY_CALLBACK |		      
+		      WANTS_CURSOR_LATLON      |
               WANTS_TOOLBAR_CALLBACK    |
-              INSTALLS_TOOLBAR_TOOL     |   
-			  WANTS_CURSOR_LATLON |
-              WANTS_CONFIG           
+              INSTALLS_TOOLBAR_TOOL     |
+              WANTS_CONFIG            
            );
 }
 
@@ -174,50 +154,45 @@ bool UKTides_pi::DeInit(void)
       {
             //Capture dialog position
             wxPoint p = m_pDialog->GetPosition();
-			wxRect r = m_pDialog->GetRect();
-            SetUKTidesDialogX(p.x);
-            SetUKTidesDialogY(p.y);
-			SetUKTidesDialogSizeX(r.GetWidth());
-			SetUKTidesDialogSizeY(r.GetHeight());
-
+            SetCalculatorDialogX(p.x);
+            SetCalculatorDialogY(p.y);
             m_pDialog->Close();
             delete m_pDialog;
             m_pDialog = NULL;
 
 			m_bShowUKTides = false;
 			SetToolbarItemState( m_leftclick_tool_id, m_bShowUKTides );
+
       }	
     
     SaveConfig();
-
-    RequestRefresh(m_parent_window); // refresh main window
-
+    
     return true;
 }
 
 int UKTides_pi::GetAPIVersionMajor()
 {
-      return MY_API_VERSION_MAJOR;
+    return MY_API_VERSION_MAJOR;
 }
 
 int UKTides_pi::GetAPIVersionMinor()
 {
-      return MY_API_VERSION_MINOR;
+    return MY_API_VERSION_MINOR;
 }
 
 int UKTides_pi::GetPlugInVersionMajor()
 {
-      return PLUGIN_VERSION_MAJOR;
+    return PLUGIN_VERSION_MAJOR;
 }
 
 int UKTides_pi::GetPlugInVersionMinor()
 {
-      return PLUGIN_VERSION_MINOR;
+    return PLUGIN_VERSION_MINOR;
 }
 
 wxBitmap *UKTides_pi::GetPlugInBitmap()
 {
-	return &m_panelBitmap;
+      return &m_panelBitmap;
 }
 
 wxString UKTides_pi::GetCommonName()
@@ -228,12 +203,12 @@ wxString UKTides_pi::GetCommonName()
 
 wxString UKTides_pi::GetShortDescription()
 {
-      return _("UKTides player");
+      return _("UKTides");
 }
 
 wxString UKTides_pi::GetLongDescription()
 {
-      return _("UK Tides for over 600 ports");
+      return _("Downloads UKHO Tidal Data for UK ports");
 }
 
 int UKTides_pi::GetToolbarToolCount(void)
@@ -249,48 +224,52 @@ void UKTides_pi::SetColorScheme(PI_ColorScheme cs)
       DimeWindow(m_pDialog);
 }
 
-
 void UKTides_pi::OnToolbarToolCallback(int id)
 {
-
-      if(NULL == m_pDialog)
+    
+	if(NULL == m_pDialog)
       {
-            m_pDialog = new Dlg(m_parent_window);
-            m_pDialog->plugin = this;						
-            m_pDialog->Move(wxPoint(m_hr_dialog_x, m_hr_dialog_y));	
-			m_pDialog->SetSize(m_hr_dialog_sx, m_hr_dialog_sy);	
+           
+		    m_pDialog = new Dlg(*this, m_parent_window);
+            m_pDialog->plugin = this;
+            m_pDialog->Move(wxPoint(m_route_dialog_x, m_route_dialog_y));
+
+			wxFileName fn;
+			wxString tmp_path;
+
+			tmp_path = GetPluginDataDir("UKTides_pi");
+			fn.SetPath(tmp_path);
+			fn.AppendDir(_T("data"));
+
+			fn.SetFullName("station_icon.png");
+			wxString iconLocn = fn.GetFullPath();
+			wxImage stationIcon(iconLocn);
+
+			if (stationIcon.IsOk())
+				m_pDialog->m_stationBitmap = wxBitmap(stationIcon);
+			else
+				wxLogMessage(_("otcurrent:: station bitmap has NOT been loaded"));			
 			
       }
 
-	 // m_pDialog->Fit();
+	  m_pDialog->Fit();
 	  //Toggle 
-	  m_bShowUKTides = !m_bShowUKTides;	
-
-	  
+	  m_bShowUKTides = !m_bShowUKTides;	  
 
       //    Toggle dialog? 
       if(m_bShowUKTides) {
-		  m_pDialog->Move(wxPoint(m_hr_dialog_x, m_hr_dialog_y));
-		  m_pDialog->SetSize(m_hr_dialog_sx, m_hr_dialog_sy);
-          m_pDialog->Show(); 
-		  
+		  m_pDialog->b_clearSavedIcons = false;
+		  m_pDialog->b_clearAllIcons = false;
+          m_pDialog->Show();         
 	  }
 	  else {
+		  m_pDialog->b_clearSavedIcons = true;
+		  m_pDialog->b_clearAllIcons = true;
 		  m_pDialog->Hide();
 	  }
-     
       // Toggle is handled by the toolbar but we must keep plugin manager b_toggle updated
       // to actual status to ensure correct status upon toolbar rebuild
-      SetToolbarItemState( m_leftclick_tool_id, m_bShowUKTides);
-
-	  //Capture dialog position
-	  wxPoint p = m_pDialog->GetPosition();
-	  wxRect r = m_pDialog->GetRect();
-	  SetUKTidesDialogX(p.x);
-	  SetUKTidesDialogY(p.y);
-	  SetUKTidesDialogSizeX(r.GetWidth());
-	  SetUKTidesDialogSizeY(r.GetHeight());
-
+      SetToolbarItemState( m_leftclick_tool_id, m_bShowUKTides );
 
       RequestRefresh(m_parent_window); // refresh main window
 }
@@ -302,21 +281,15 @@ bool UKTides_pi::LoadConfig(void)
       if(pConf)
       {
             pConf->SetPath ( _T( "/Settings/UKTides_pi" ) );
-			pConf->Read ( _T( "ShowUKTidesIcon" ), &m_bUKTidesShowIcon, 1 );
-
-            m_hr_dialog_x =  pConf->Read ( _T ( "DialogPosX" ), 40L );
-            m_hr_dialog_y =  pConf->Read ( _T ( "DialogPosY" ), 140L);
-			m_hr_dialog_sx = pConf->Read ( _T ( "DialogSizeX"), 330L);
-#ifdef __WXOSX__
-			m_hr_dialog_sy = pConf->Read ( _T ( "DialogSizeY"), 250L);
-#else
-            m_hr_dialog_sy = pConf->Read ( _T ( "DialogSizeY"), 300L);
-#endif
-            if((m_hr_dialog_x < 0) || (m_hr_dialog_x > m_display_width))
-                  m_hr_dialog_x = 40;
-            if((m_hr_dialog_y < 0) || (m_hr_dialog_y > m_display_height))
-                  m_hr_dialog_y = 140;
-
+			 pConf->Read ( _T( "ShowUKTidesIcon" ), &m_bUKTidesShowIcon, 1 );
+           
+            m_route_dialog_x =  pConf->Read ( _T ( "DialogPosX" ), 20L );
+            m_route_dialog_y =  pConf->Read ( _T ( "DialogPosY" ), 20L );
+         
+            if((m_route_dialog_x < 0) || (m_route_dialog_x > m_display_width))
+                  m_route_dialog_x = 5;
+            if((m_route_dialog_y < 0) || (m_route_dialog_y > m_display_height))
+                  m_route_dialog_y = 5;
             return true;
       }
       else
@@ -331,11 +304,9 @@ bool UKTides_pi::SaveConfig(void)
       {
             pConf->SetPath ( _T ( "/Settings/UKTides_pi" ) );
 			pConf->Write ( _T ( "ShowUKTidesIcon" ), m_bUKTidesShowIcon );
-
-            pConf->Write ( _T ( "DialogPosX" ),   m_hr_dialog_x );
-            pConf->Write ( _T ( "DialogPosY" ),   m_hr_dialog_y );
-			pConf->Write ( _T ( "DialogSizeX"),   m_hr_dialog_sx);
-			pConf->Write ( _T ( "DialogSizeY"),   m_hr_dialog_sy);
+          
+            pConf->Write ( _T ( "DialogPosX" ),   m_route_dialog_x );
+            pConf->Write ( _T ( "DialogPosY" ),   m_route_dialog_y );
             
             return true;
       }
@@ -345,27 +316,49 @@ bool UKTides_pi::SaveConfig(void)
 
 void UKTides_pi::OnUKTidesDialogClose()
 {
-    m_bShowUKTides = false;
-    SetToolbarItemState( m_leftclick_tool_id, m_bShowUKTides);
+	m_pDialog->b_clearSavedIcons = true;
+	m_pDialog->b_clearAllIcons = true;
+	m_bShowUKTides = false;
+    SetToolbarItemState( m_leftclick_tool_id, m_bShowUKTides );
     m_pDialog->Hide();
     SaveConfig();
 
     RequestRefresh(m_parent_window); // refresh main window
+
 }
+
+
+bool UKTides_pi::RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp)
+{
+	if (!m_pDialog)
+		return false;
+
+	m_pDialog->SetViewPort(vp);
+	m_pDialog->RenderukOverlay(dc, vp);
+	return true;
+}
+
+bool UKTides_pi::RenderGLOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp)
+{
+	if (!m_pDialog) 
+		return false;
+
+	m_pDialog->SetViewPort(vp);
+	m_pDialog->RenderGLukOverlay(pcontext, vp);
+	return true;
+}
+
 
 void UKTides_pi::OnContextMenuItemCallback(int id)
 {
-
 	if (!m_pDialog)
 		return;
-
-	if (id == m_position_menu_id){
-
+	
+	if (id == m_position_menu_id) {
 		m_cursor_lat = GetCursorLat();
 		m_cursor_lon = GetCursorLon();
-
-		//m_pDialog->OnContextMenu(m_cursor_lat, m_cursor_lon);
-	}
+		m_pDialog->getPort(m_cursor_lat, m_cursor_lon);
+	}	
 }
 
 void UKTides_pi::SetCursorLatLon(double lat, double lon)

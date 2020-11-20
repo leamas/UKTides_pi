@@ -5,7 +5,7 @@
  * Author:   Mike Rossiter
  *
  ***************************************************************************
- *   Copyright (C) 2017 by Mike Rossiter                                   *
+ *   Copyright (C) 2019 by Mike Rossiter                                   *
  *   $EMAIL$                                                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -25,8 +25,8 @@
  ***************************************************************************
  */
 
-#ifndef _SDR_PI_H_
-#define _SDR_PI_H_
+#ifndef _CALCULATOR_PI_H_
+#define _CALCULATOR_PI_H_
 
 #include "wx/wxprec.h"
 
@@ -38,11 +38,8 @@
 #include <wx/fileconf.h>
 
 #include "ocpn_plugin.h" //Required for OCPN plugin functions
+#include "icons.h"
 #include "UKTidesgui_impl.h"
-#include "json/reader.h"
-#include "json/writer.h"
-#include <wx/datetime.h>
-#include <wx/tokenzr.h>
 
 #define     PLUGIN_VERSION_MAJOR    1
 #define     PLUGIN_VERSION_MINOR    0
@@ -56,7 +53,7 @@ class Dlg;
 //    The PlugIn Class Definition
 //----------------------------------------------------------------------------------------------------------
 
-#define UKTides_TOOL_POSITION    -1          // Request default positioning of toolbar tool
+#define UKTIDES_TOOL_POSITION    -1          // Request default positioning of toolbar tool
 
 class UKTides_pi : public opencpn_plugin_116
 {
@@ -76,6 +73,8 @@ public:
       wxString GetCommonName();
       wxString GetShortDescription();
       wxString GetLongDescription();
+	  
+
 
 //    The required override PlugIn Methods
       int GetToolbarToolCount(void);
@@ -87,58 +86,49 @@ public:
 
 
 //    The override PlugIn Methods
-	  void OnContextMenuItemCallback(int id);
-	  void SetCursorLatLon(double lat, double lon);
+	void OnContextMenuItemCallback(int id);
+	void SetCursorLatLon(double lat, double lon);
+
 
 //    Other public methods
-      void SetUKTidesDialogX         (int x){ m_hr_dialog_x = x;};
-      void SetUKTidesDialogY         (int x){ m_hr_dialog_y = x;};
-      void SetUKTidesDialogWidth     (int x){ m_hr_dialog_width = x;};
-      void SetUKTidesDialogHeight    (int x){ m_hr_dialog_height = x;};  
-	  void SetUKTidesDialogSizeX     (int x){ m_hr_dialog_sx = x; }
-	  void SetUKTidesDialogSizeY     (int x){ m_hr_dialog_sy = x; }
+      void SetCalculatorDialogX         (int x){ m_route_dialog_x = x;};
+      void SetCalculatorDialogY         (int x){ m_route_dialog_y = x;};
+      void SetCalculatorDialogWidth     (int x){ m_route_dialog_width = x;};
+      void SetCalculatorDialogHeight    (int x){ m_route_dialog_height = x;};      
 	  void OnUKTidesDialogClose();
+	  bool RenderOverlay(wxDC &dc, PlugIn_ViewPort *vp);
+	  bool RenderGLOverlay(wxGLContext *pcontext, PlugIn_ViewPort *vp);
 	  
 
-	  int  m_hr_dialog_x, m_hr_dialog_y;
-
-      double GetCursorLat(void) { return m_cursor_lat; }
 	  double GetCursorLon(void) { return m_cursor_lon; }
+	  double GetCursorLat(void) { return m_cursor_lat; }
 	  
+	  int m_position_menu_id;
 
-	  bool m_bGribValid;
-	  double m_grib_lat, m_grib_lon;
-	  double m_tr_spd;
-	  double m_tr_dir;
-
-	  wxBitmap m_panelBitmap;
-	  
 private:
+      
+	
 
-	double m_cursor_lat;
 	double m_cursor_lon;
+	double m_cursor_lat;
 
-	int				m_position_menu_id;
-	  double           m_GUIScaleFactor;
 	  void OnClose( wxCloseEvent& event );
-	  
 	  UKTides_pi *plugin;
 	  
-      Dlg         *m_pDialog;
-
 	  wxFileConfig      *m_pconfig;
       wxWindow          *m_parent_window;
       bool              LoadConfig(void);
       bool              SaveConfig(void);
-	  
-      int				m_hr_dialog_width,m_hr_dialog_height;
-	  int               m_hr_dialog_sx, m_hr_dialog_sy;
+      Dlg               *m_pDialog;
+      int               m_route_dialog_x, m_route_dialog_y,m_route_dialog_width,m_route_dialog_height;
       int               m_display_width, m_display_height;      
-      int				m_leftclick_tool_id;
-	  bool				m_bUKTidesShowIcon;
-	  bool				m_bShowUKTides;
+      int               m_leftclick_tool_id;
+      bool              m_ShowHelp,m_bCaptureCursor,m_bCaptureShip;
+      double m_ship_lon,m_ship_lat;
+
+	  bool             m_bUKTidesShowIcon;
+	  bool             m_bShowUKTides;
+	  wxBitmap         m_panelBitmap;
 };
-
-
 
 #endif
