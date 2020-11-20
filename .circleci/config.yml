@@ -56,7 +56,7 @@ jobs:
       - restore_cache:
           keys:
             - macos-cache-v1-{{checksum "ci/circleci-build-macos.sh"}}
-      - run: chmod a+x ./cmake/fix-macos-lib.sh      
+      - run: chmod a+x ./cmake/fix-macos-libs.sh      
       - run: chmod a+x ./ci/*.sh
       - run: ci/circleci-build-macos.sh
       - save_cache:
