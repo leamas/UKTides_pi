@@ -45,6 +45,8 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	this->Fit();
     dbg=false; //for debug output set to true
  
+	/*
+	
 	wxFileName fn;
 	wxString tmp_path;
 
@@ -80,7 +82,7 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 		wxCopyFile(station_icon_name, destination, false);		
 		wxMessageBox(_("On first use please re-start OpenCPN\n... to enable the tidal station icons"));		
 	}
-	
+	*/
 	LoadTidalEventsFromXml();
 	RemoveOldDownloads();
 	
@@ -852,6 +854,11 @@ wxString Dlg::GetDateStringNow() {
 }
 
 void Dlg::RemoveOldDownloads() {
+	
+	if (mySavedPorts.size() == 0) {
+		return;
+	}
+		
 	wxDateTime dtn, ddt;
 	wxString sdt, sddt;
 	wxTimeSpan DaySpan;
