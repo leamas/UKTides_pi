@@ -18,7 +18,7 @@ endif ()
 set(OpenGL_GL_PREFERENCE "LEGACY")
 
 # Locations where cmake looks for cmake modules.
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/build ${CMAKE_SOURCE_DIR}/cmake) 
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/build ${CMAKE_SOURCE_DIR}/cmake)
 
 if (WIN32)
   list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/buildwin)
@@ -28,7 +28,6 @@ message(STATUS "Cmake version: ${CMAKE_VERSION}.")
 
 # -------- Build setup (mostly in PluginCompiler) --------
 #
-
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -40,53 +39,49 @@ message(STATUS "Building: ${BUILD_TYPE}")
 # -------- Options ----------
 #
 set(OCPN_UNSTABLE_REPO
-    "opencpn/uktides-beta"
+    "mike-rossiter/uktides-beta"
     CACHE STRING "Default repository for untagged builds"
 )
 set(OCPN_STABLE_REPO
-    "opencpn/uktides-prod"
+    "mike-rossiter/uktides-prod"
     CACHE STRING "Default repository for tagged builds"
 )
-option(PLUGIN_USE_SVG "Use SVG graphics" ON)
+option(UKTIDES_USE_SVG "Use SVG graphics" ON)
 
 
 # -------  Plugin setup --------
 #
-
-project(UKTides_pi VERSION 1.0.125)
+project(UKTides_pi VERSION 1.0.126)
 
 set(DISPLAY_NAME UKTides)    # Dialogs, installer artifacts, ...
 set(PLUGIN_API_NAME UKTides) # As of GetCommonName() in plugin API
 set(CPACK_PACKAGE_CONTACT "Mike Rossiter")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Show UK tidal heights")
-set(CPACK_PACKAGE_DESCRIPTION "Show UK Tides at over 600 ports")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Simulate ship movements")
+set(CPACK_PACKAGE_DESCRIPTION [=[
+Simulates navigation of a vessel. Using the sail option and a current
+grib file for wind data, simulates how a sailing vessel might react in
+those conditions. Using 'Preferences' the simulator is able to record AIS
+data from itself. This can be replayed to simulate collision situations.
+]=])
 
 set(PKG_RELEASE "1")
 set(PKG_AUTHOR "Mike Rossiter")
 
 set(SRC
-		src/UKTides_pi.h
-        src/UKTides_pi.cpp
-        src/icons.h
-        src/icons.cpp
-	    src/UKTidesgui.h
-	    src/UKTidesgui.cpp
-	    src/UKTidesgui_impl.cpp
-	    src/UKTidesgui_impl.h
-	    src/NavFunc.h
-	    src/NavFunc.cpp
-		src/tidetable.cpp
-		src/tidetable.h	
-		src/GL/gl.h
-		src/GL/glu.h	
+    src/UKTides_pi.h
+    src/UKTides_pi.cpp
+    src/icons.h
+    src/icons.cpp
+    src/UKTidesgui.h
+    src/UKTidesgui.cpp
+    src/UKTidesgui_impl.cpp
+    src/UKTidesgui_impl.h
+    
 )
-
 
 
 # -------- Setup completed, build the plugin --------
 #
-
-
 add_library(${CMAKE_PROJECT_NAME} SHARED ${SRC})
 include_directories(${CMAKE_BINARY_DIR}/include)
 
@@ -102,8 +97,8 @@ set(PACKAGE_NAME ${CMAKE_PROJECT_NAME})
 string(REGEX REPLACE "\([0-9]\)\.\([0-9]\).*" "ov\\1\\2"
        OCPN_MIN_VERSION ${API_OCPN_MIN_VERSION})
 
-if (PLUGIN_USE_SVG)
-  add_definitions(-DPLUGIN_USE_SVG)
+if (UKTIDES_USE_SVG)
+  add_definitions(-DUKTIDES_USE_SVG)
 endif ()
 
 
