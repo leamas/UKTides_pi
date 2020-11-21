@@ -1009,23 +1009,6 @@ wxString Dlg::StandardPath()
     if (!wxDirExists(stdPath))
       wxMkdir(stdPath);
 
-
-
-#ifdef __WXOSX__
-    // Compatibility with pre-OCPN-4.2; move config dir to
-    // ~/Library/Preferences/opencpn if it exists
-    {
-        wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
-        wxString s = wxFileName::GetPathSeparator();
-        // should be ~/Library/Preferences/opencpn
-        wxString oldPath = (std_path.GetUserConfigDir() +s + _T("plugins") +s + _T("uktides"));
-        if (wxDirExists(oldPath) && !wxDirExists(stdPath)) {
-            wxLogMessage("UKTides_pi: moving config dir %s to %s", oldPath, stdPath);
-            wxRenameFile(oldPath, stdPath);
-        }
-    }
-#endif
-
     return stdPath;
 }
 
@@ -1100,13 +1083,7 @@ void Dlg::SaveTidalEventsToXml(list<myPort>myPorts)
 	wxString filename = "tidalevents.xml";
 	wxString tidal_events_path;
 
-	wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
-    	tidal_events_path = std_path.GetUserConfigDir() + "/.opencpn/plugins/UKTides_pi";
-
-#if defined(__WXMSW__)
-	wxString win_stdPath = std_path.GetConfigDir();
-	tidal_events_path = win_stdPath + "/plugins/UKTides_pi";
-#endif	
+	tidal_events_path = StandardPath();
 
     /* ensure the directory exists */
     wxFileName fn;
@@ -1127,21 +1104,20 @@ list<myPort>Dlg::LoadTidalEventsFromXml()
 	TidalEvent thisEvent;
 
 	TiXmlDocument doc;
-	wxString name;
+	//wxString name;
+
 	wxString tidal_events_path;
 
-  	wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
-    	tidal_events_path = std_path.GetUserConfigDir() + "/.opencpn/plugins/UKTides_pi";
+	tidal_events_path = StandardPath();
+    wxString filename = tidal_events_path + "/tidalevents.xml";
 
-#if defined(__WXMSW__)
-	wxString win_stdPath = std_path.GetConfigDir();
-	tidal_events_path = win_stdPath + "/plugins/UKTides_pi";
-#endif
+	/* ensure the directory exists */
+	wxFileName fn;
+	if (!wxDirExists(tidal_events_path)) {
+		fn.Mkdir(tidal_events_path, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+	}
 
 	list<TidalEvent> listEvents;
-
-	wxString filename = tidal_events_path + "/tidalevents.xml";
-	wxFileName fn(filename);
 
 	SetTitle(_("Tidal Events"));
 
