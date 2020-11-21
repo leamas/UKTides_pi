@@ -54,41 +54,6 @@ Dlg::Dlg(UKTides_pi &_UKTides_pi, wxWindow* parent)
 	b_clearSavedIcons = false;
 	b_clearAllIcons = false;
 
-	tmp_path = GetPluginDataDir("UKTides_pi");
-	fn.SetPath(tmp_path);
-	fn.AppendDir(_T("data"));
-	fn.SetFullName("blank.ico");
-	wxString blank_name = fn.GetFullPath();
-
-	wxIcon icon(blank_name, wxBITMAP_TYPE_ICO);
-	SetIcon(icon);
-
-	fn.SetFullName("station_icon.png");
-	wxString station_icon_name = fn.GetFullPath();
-
-    wxString myOpenCPNiconsPath;
-
-  	wxStandardPathsBase& std_path = wxStandardPathsBase::Get();
-    	myOpenCPNiconsPath = std_path.GetUserConfigDir() + "/.opencpn/UserIcons";
-
-#if defined(__WXMSW__)
-	wxString win_stdPath = std_path.GetConfigDir();
-	myOpenCPNiconsPath = win_stdPath + "/UserIcons";
-
-#endif
- 	//wxMessageBox(myOpenCPNiconsPath);
-
-	if (!wxDirExists(myOpenCPNiconsPath)) {
-		fn.Mkdir(myOpenCPNiconsPath,wxS_DIR_DEFAULT,wxPATH_MKDIR_FULL);
-	}
-
-    wxString destination = myOpenCPNiconsPath + "/station_icon.png";
-
-	if (!wxFileExists(destination)) {
-		wxCopyFile(station_icon_name, destination, false);
-		wxMessageBox(_("On first use please re-start OpenCPN\n... to enable the tidal station icons"));
-	}	
-	
 	LoadTidalEventsFromXml();
 	RemoveOldDownloads();
 	
@@ -180,10 +145,6 @@ void Dlg::DrawAllStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList,
 	double plon = 0.0;
 	myPort outPort;
 	
-	if (myports.size()== 0) {
-		return;
-	}
-
 	for (std::list<myPort>::iterator it = myports.begin(); it != myports.end(); it++) {
 		
 		plat = (*it).coordLat;
@@ -222,10 +183,6 @@ void Dlg::DrawAllSavedStationIcons(PlugIn_ViewPort *BBox, bool bRebuildSelList,
 	double plat = 0.0;
 	double plon = 0.0;
 	myPort outPort;
-
-	if (mySavedPorts.size() == 0) {
-		return;
-	}
 
 	for (list<myPort>::iterator it = mySavedPorts.begin(); it != mySavedPorts.end(); it++) {
 
