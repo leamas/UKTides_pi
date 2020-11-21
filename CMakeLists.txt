@@ -39,30 +39,25 @@ message(STATUS "Building: ${BUILD_TYPE}")
 # -------- Options ----------
 #
 set(OCPN_UNSTABLE_REPO
-    "mike-rossiter/uktides-beta"
+    "opencpn/uktides-beta"
     CACHE STRING "Default repository for untagged builds"
 )
 set(OCPN_STABLE_REPO
-    "mike-rossiter/uktides-prod"
+    "opencpn/uktides-prod"
     CACHE STRING "Default repository for tagged builds"
 )
-option(UKTIDES_USE_SVG "Use SVG graphics" ON)
+option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 
 
 # -------  Plugin setup --------
 #
-project(UKTides_pi VERSION 1.0.134)
+project(UKTides_pi VERSION 1.0.135)
 
 set(DISPLAY_NAME UKTides)    # Dialogs, installer artifacts, ...
 set(PLUGIN_API_NAME UKTides) # As of GetCommonName() in plugin API
 set(CPACK_PACKAGE_CONTACT "Mike Rossiter")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Simulate ship movements")
-set(CPACK_PACKAGE_DESCRIPTION [=[
-Simulates navigation of a vessel. Using the sail option and a current
-grib file for wind data, simulates how a sailing vessel might react in
-those conditions. Using 'Preferences' the simulator is able to record AIS
-data from itself. This can be replayed to simulate collision situations.
-]=])
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Show UK tidal heights")
+set(CPACK_PACKAGE_DESCRIPTION "Show UK Tides at over 600 ports")
 
 set(PKG_RELEASE "1")
 set(PKG_AUTHOR "Mike Rossiter")
@@ -101,8 +96,8 @@ set(PACKAGE_NAME ${CMAKE_PROJECT_NAME})
 string(REGEX REPLACE "\([0-9]\)\.\([0-9]\).*" "ov\\1\\2"
        OCPN_MIN_VERSION ${API_OCPN_MIN_VERSION})
 
-if (UKTIDES_USE_SVG)
-  add_definitions(-DUKTIDES_USE_SVG)
+if (PLUGIN_USE_SVG)
+  add_definitions(-DPLUGIN_USE_SVG)
 endif ()
 
 
