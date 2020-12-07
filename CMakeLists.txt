@@ -113,7 +113,7 @@ endif ()
 #
 include(Targets)
 create_targets(
-  ${PROJECT_SOURCE_DIR}/flatpak/org.opencpn.OpenCPN.Plugin.uktides.yaml
+  ${PROJECT_SOURCE_DIR}/flatpak/org.opencpn.OpenCPN.Plugin.UKTides.yaml
 )
 if ("${BUILD_TYPE}" STREQUAL "")
   return ()
