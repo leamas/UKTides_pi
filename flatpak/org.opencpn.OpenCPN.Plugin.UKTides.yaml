@@ -1,4 +1,4 @@
-id: org.opencpn.OpenCPN.Plugin.uktides
+id: org.opencpn.OpenCPN.Plugin.UKTides
 runtime: org.opencpn.OpenCPN
 # runtime-version: stable   # official build at flathub
 runtime-version: master   # for nightly builds
