@@ -15,6 +15,21 @@ include(PluginSetup)
 
 # some helper vars (_ prefix)
 
+execute_process(
+  COMMAND git log -1 --format=%h
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE _git_hash
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+execute_process(
+  COMMAND git tag --contains HEAD
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE _git_tag
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+
 if (NOT "$ENV{CIRCLE_BUILD_NUM}" STREQUAL "")
   set(_build_id "$ENV{CIRCLE_BUILD_NUM}")
 elseif (NOT "$ENV{TRAVIS_BUILD_NUMBER}" STREQUAL "")
@@ -25,10 +40,10 @@ else ()
   string(TIMESTAMP _build_id "%y%m%d%H%M" UTC)
 endif ()
 
-if ("${GIT_TAG}" STREQUAL "")
-  set(_gitversion "${GIT_HASH}")
+if ("${_git_tag}" STREQUAL "")
+  set(_gitversion "${_git_hash}")
 else ()
-  set(_gitversion "${GIT_TAG}")
+  set(_gitversion "${_git_tag}")
 endif ()
 
 if (WIN32)
@@ -38,30 +53,40 @@ else ()
 endif ()
 
 # pkg_repo: Repository to use for upload
-if ("${GIT_TAG}" STREQUAL "")
-  if ("$ENV{CLOUDSMITH_UNSTABLE_REPO}" STREQUAL "")
-    set(pkg_repo ${OCPN_UNSTABLE_REPO})
-  else ()
-    set(pkg_repo "$ENV{CLOUDSMITH_UNSTABLE_REPO}")
+if ("${_git_tag}" STREQUAL "")
+  set(pkg_repo "$ENV{CLOUDSMITH_UNSTABLE_REPO}")
+  if ("${pkg_repo}" STREQUAL "")
+    set(pkg_repo ${OCPN_TEST_REPO})
   endif ()
 else ()
-  if ("$ENV{CLOUDSMITH_STABLE_REPO}" STREQUAL "")
-    set(pkg_repo ${OCPN_STABLE_REPO})
+  string(TOLOWER  ${_git_tag}  _lc_git_tag)
+  if (_lc_git_tag MATCHES "beta")
+    set(pkg_repo "$ENV{CLOUDSMITH_BETA_REPO}")
+    if ("${pkg_repo}" STREQUAL "")
+      set(pkg_repo ${OCPN_BETA_REPO})
+    endif ()
   else ()
     set(pkg_repo "$ENV{CLOUDSMITH_STABLE_REPO}")
-  endif ()
+    if ("${pkg_repo}" STREQUAL "")
+      set(pkg_repo ${OCPN_RELEASE_REPO})
+    endif ()
+  endif()
 endif ()
+message(STATUS "Selected upload repository: ${pkg_repo}")
 
 # pkg_semver: Complete version including build info
 set(pkg_semver "${PROJECT_VERSION}+${_build_id}.${_gitversion}")
 
 # pkg_displayname: Used for xml metadata and GUI name
-set(pkg_displayname "${PLUGIN_API_NAME}-${PKG_TARGET}-${PKG_TARGET_VERSION}")
+string(CONCAT pkg_displayname
+  "${PLUGIN_API_NAME}-${VERSION_MAJOR}.${VERSION_MINOR}"
+  "-${plugin_target}-${plugin_target_version}"
+)
 
 # pkg_tarname: Tarball basename
 string(CONCAT pkg_tarname 
   "${PLUGIN_API_NAME}-${pkg_semver}_"
-  "${PKG_TARGET}-${PKG_TARGET_VERSION}-${_pkg_arch}"
+  "${plugin_target}-${plugin_target_version}-${_pkg_arch}"
 )
 
 # pkg_tarball_url: Tarball location at cloudsmith
@@ -85,10 +110,10 @@ endif ()
 # pkg_target_arch: os + optional -arch suffix. See: Opencpn bug #2003
 if ("${BUILD_TYPE}" STREQUAL "flatpak")
   set(pkg_target_arch "flatpak-${ARCH}")
-elseif ("${PKG_TARGET}" MATCHES "ubuntu|raspbian|debian|mingw")
-  set(pkg_target_arch "${PKG_TARGET}-${ARCH}")
+elseif ("${plugin_target}" MATCHES "ubuntu|raspbian|debian|mingw")
+  set(pkg_target_arch "${plugin_target}-${ARCH}")
 else ()
-  set(pkg_target_arch "${PKG_TARGET}")
+  set(pkg_target_arch "${plugin_target}")
 endif ()
 
 #cmake-format: on

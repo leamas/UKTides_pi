@@ -1,4 +1,4 @@
-id: org.opencpn.OpenCPN.Plugin.UKTides
+id: org.opencpn.OpenCPN.Plugin.uktides
 runtime: org.opencpn.OpenCPN
 # runtime-version: stable   # official build at flathub
 runtime-version: master   # for nightly builds
@@ -13,17 +13,19 @@ finish-args:
     - --device=all
 
 modules:
-    - name: UKTides
+    - name: uktides
       no-autogen: true
       buildsystem: cmake
       config-opts:
-          - -DCMAKE_INSTALL_PREFIX=/app/extensions/UKTides/
-          - -DPREFIX_PLUGINS=lib/opencpn
+          - -DCMAKE_INSTALL_PREFIX=/app/extensions/uktides/
+          - -DCMAKE_BUILD_TYPE:STRING=Release
+          - -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
           - -DBUILD_TYPE:STRING=tarball
-          - -UPKG_TARGET
+          - -Uplugin_target
       build-options:
-          cxxflags: -DFLATPAK
-          cflags: -DFLATPAK
+          cxxflags: -DFLATPAK -O3
+          cflags: -DFLATPAK -O3
+          # The flatpak-builder default CFLAGS adds -g
           strip: true
       sources:
           - type: git

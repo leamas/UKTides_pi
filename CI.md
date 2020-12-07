@@ -1,4 +1,4 @@
-Shipdriver Continous Integration README
+UKTides Continous Integration README
 ---------------------------------------
 
 This document is designed to be generic and terse. More complete 
@@ -19,7 +19,7 @@ deployment server.
 In a last step, the metadata XML file is pushed to a remote git clone
 of the opencpn plugins project.
 
-All steps could be configured after cloning the shipdriver\_pi sources.
+All steps could be configured after cloning the UKTides_pi sources.
 
 Builders
 --------
@@ -44,8 +44,9 @@ To get the built artifacts pushed to cloudsmith after build (assuming all
 builders are up & running):
 
   - Register a free account on cloudsmith.
-  - Create two open-source repositories [[10]](#fn10) called for example
-    *opencpn-plugins-stable* and *opencpn-plugins-unstable*
+  - Create three open-source repositories [[10]](#fn10) called for example
+    *opencpn-plugins-stable*, *opencpn-plugins-unstable* and
+    *opencpn-plugins-beta*.
   - Set up the following environment variables in the travis[[7]](#fn7),
     circleci[[8]](#fn8) and appveyour[[9]](#fn9) builders:
 
@@ -53,8 +54,10 @@ builders are up & running):
        account (available in the cloudsmith ui).
      - **CLOUDSMITH_UNSTABLE_REPO**: The name of the repo for unstable
        (untagged) commits. My is *alec-leamas/opencpn-plugins-unstable*
+     - **CLOUDSMITH_BETA_REPO**: The name of the repo for tagged builds
+       with a tag name matching "beta".
      - **CLOUDSMITH_STABLE_REPO**: The name of the repo for stable (tagged)
-       commits.
+       commits which doesn't go inte the beta repository.
 
 After these steps, the artifacts built should start to show up in cloudsmith
 when built. The builder logs usually reveals possible errors.
@@ -66,47 +69,17 @@ the actual url to the tarball.
 Git plugins repository sync
 ---------------------------
 
-Syncing to a remote plugins repository basically automates the following
-a flow like:
+The git sync basically automates pushing built metadata files to a git
+repository using a flow like:
 
-    $ git clone  ${PLUGINS_REPO}
+    $ git clone ${PLUGINS_REPO}
     $ cp plugin_pi.xml plugins/metadata
     $ cd plugins
     $ git commit -am "Updating plugins_pi.xml"
     $ git push origin master:master
 
-For this to work, the builder needs access to a valid ssh key. This means
-that the key must be available in the git tree. Since this is public, the
-key must be encrypted. Create a encrypted key like:
-
-     $ mkdir git-ssh
-     $ ssh-keygen -f git-ssh/id_ocpn
-     $ chmod 700 git-ssh
-     $ tar cf git-ssh.tar  git-ssh
-     $ ccencrypt git-ssh.tar 
-     Enter encryption key: 
-     Enter encryption key: (repeat) 
-     $
-
-Use a reasonably lock encryption key, and don't forget it...Then copy to
-project's ci directory and check in:
-
-     $ cp git-ssh.tar.cpt ci/
-     $ git add ci/git-ssh.tar.cpt
-     $ git commit -am "Add ssh deployment key"
-
-At this point the id\_ocpn.pub key should be registered on for example
-github so the ssh user can push data to the server.
-
-The git repository sync is activated by two environment variables in
-the builder:
-
-GIT\_REMOTE\_REPO is the ssh url to the clone of github.com/OpenCPN/plugins
-which should be updated.
-
-GIT\_ENCRYPTION\_KEY is the key used to decrypt the ssh key, the same as
-used when encrypting.
-
+This makes it easy to make a pull request against the plugins project
+to publish new plugin versions. The details are described in README-git.md
 
 
 

@@ -38,20 +38,26 @@ message(STATUS "Building: ${BUILD_TYPE}")
 
 # -------- Options ----------
 #
-set(OCPN_UNSTABLE_REPO
-    "opencpn/uktides-beta"
-    CACHE STRING "Default repository for untagged builds"
-)
-set(OCPN_STABLE_REPO
+#set(OCPN_TEST_REPO
+#    "opencpn/uktides-alpha"
+#    CACHE STRING "Default repository for untagged builds"
+#)
+#set(OCPN_BETA_REPO
+#    "opencpn/uktides-beta"
+#    CACHE STRING 
+#    "Default repository for tagged builds matching 'beta'"
+#)
+set(OCPN_RELEASE_REPO
     "opencpn/uktides-prod"
-    CACHE STRING "Default repository for tagged builds"
+    CACHE STRING 
+    "Default repository for tagged builds not matching 'beta'"
 )
 option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 
 
 # -------  Plugin setup --------
 #
-project(UKTides_pi VERSION 1.0.136)
+project(UKTides_pi VERSION 1.0.137)
 
 set(DISPLAY_NAME UKTides)    # Dialogs, installer artifacts, ...
 set(PLUGIN_API_NAME UKTides) # As of GetCommonName() in plugin API
@@ -107,7 +113,7 @@ endif ()
 #
 include(Targets)
 create_targets(
-  ${PROJECT_SOURCE_DIR}/flatpak/org.opencpn.OpenCPN.Plugin.UKTides.yaml
+  ${PROJECT_SOURCE_DIR}/flatpak/org.opencpn.OpenCPN.Plugin.uktides.yaml
 )
 if ("${BUILD_TYPE}" STREQUAL "")
   return ()

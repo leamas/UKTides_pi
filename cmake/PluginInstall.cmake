@@ -50,7 +50,8 @@ if (${BUILD_TYPE} STREQUAL "tarball" OR ${BUILD_TYPE} STREQUAL "flatpak")
     configure_file(
       ${CMAKE_BINARY_DIR}/${pkg_displayname}.xml.in
       ${CMAKE_BINARY_DIR}/app/files/metadata.xml
-      @ONLY)
+      @ONLY
+    )
   ")
 endif()
 
@@ -59,15 +60,32 @@ endif()
 if (${BUILD_TYPE} STREQUAL "tarball" AND APPLE)
   install(CODE
     "execute_process(
-      COMMAND bash -c ${PROJECT_SOURCE_DIR}/cmake/fix-macos-libs.sh)"
+      COMMAND bash -c ${PROJECT_SOURCE_DIR}/cmake/fix-macos-libs.sh
+    )"
   )
 endif()
 
-if (${BUILD_TYPE} STREQUAL "tarball" AND MINGW)
-  find_program(STRIP_UTIL NAMES strip REQUIRED)
-  install(CODE
-    "execute_process(
-      COMMAND ${STRIP_UTIL} app/files/plugins/lib${PACKAGE_NAME}.dll
-      WORKING_DIRECTORY ${CMAKE_BINARY_DIR})"
-  )
+if (CMAKE_BUILD_TYPE MATCHES "Release|MinSizeRel")
+  if (APPLE)
+    set(_striplib OpenCPN.app/Contents/PlugIns/lib${PACKAGE_NAME}.dylib)
+  elseif (MINGW)
+    set(_striplib plugins/lib${PACKAGE_NAME}.dll)
+  elseif (UNIX)  # linux
+    set(_striplib lib/opencpn/lib${PACKAGE_NAME}.so)
+  endif ()
+  if (BUILD_TYPE STREQUAL "tarball" AND DEFINED _striplib)
+    find_program(STRIP_UTIL NAMES strip REQUIRED)
+    if (APPLE)
+      set(STRIP_UTIL "${STRIP_UTIL} -x")
+    endif ()
+    install(CODE
+      "execute_process(COMMAND cmake -E echo Stripping ${_striplib})"
+    )
+    install(CODE
+      "execute_process(
+        COMMAND ${STRIP_UTIL} app/files/${_striplib}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+      )"
+    )
+  endif ()
 endif ()
