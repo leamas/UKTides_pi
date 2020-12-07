@@ -1,4 +1,4 @@
-PLUGIN = org.opencpn.OpenCPN.Plugin.uktides
+PLUGIN = org.opencpn.OpenCPN.Plugin.UKTides
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
