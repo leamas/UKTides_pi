@@ -37,16 +37,16 @@ message(STATUS "Building: ${BUILD_TYPE}")
 
 
 # -------- Options ----------
-#
-#set(OCPN_TEST_REPO
-#    "opencpn/uktides-alpha"
-#    CACHE STRING "Default repository for untagged builds"
-#)
-#set(OCPN_BETA_REPO
-#    "opencpn/uktides-beta"
-#    CACHE STRING 
-#    "Default repository for tagged builds matching 'beta'"
-#)
+
+set(OCPN_TEST_REPO
+    "opencpn/uktides-alpha"
+    CACHE STRING "Default repository for untagged builds"
+)
+set(OCPN_BETA_REPO
+    "opencpn/uktides-beta"
+    CACHE STRING 
+    "Default repository for tagged builds matching 'beta'"
+)
 set(OCPN_RELEASE_REPO
     "opencpn/uktides-prod"
     CACHE STRING 
@@ -81,7 +81,6 @@ set(SRC
 	src/NavFunc.h
 	src/tidetable.cpp
 	src/tidetable.h
-    
 )
 
 
@@ -127,15 +126,6 @@ if (NOT ${BUILD_TYPE} STREQUAL "flatpak")
   include(PluginLocalization)
   include(PluginInstall)
   include(PluginPackage)
-
-  add_subdirectory("libs/jsoncpp")
-  target_link_libraries(${PACKAGE_NAME} ocpn::jsoncpp)
-  
-  add_subdirectory("libs/tinyxml")
-  target_link_libraries(${PACKAGE_NAME} ocpn::tinyxml)
-  
-  add_subdirectory("libs/wxJSON")
-  target_link_libraries(${PACKAGE_NAME} ocpn::wxjson)
 endif ()
 
 configure_file(
