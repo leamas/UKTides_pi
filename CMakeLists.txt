@@ -81,7 +81,6 @@ set(SRC
 	src/NavFunc.h
 	src/tidetable.cpp
 	src/tidetable.h
-    
 )
 
 
@@ -127,15 +126,6 @@ if (NOT ${BUILD_TYPE} STREQUAL "flatpak")
   include(PluginLocalization)
   include(PluginInstall)
   include(PluginPackage)
-
-  add_subdirectory("libs/jsoncpp")
-  target_link_libraries(${PACKAGE_NAME} ocpn::jsoncpp)
-  
-  add_subdirectory("libs/tinyxml")
-  target_link_libraries(${PACKAGE_NAME} ocpn::tinyxml)
-  
-  add_subdirectory("libs/wxJSON")
-  target_link_libraries(${PACKAGE_NAME} ocpn::wxjson)
 endif ()
 
 configure_file(
