@@ -37,16 +37,16 @@ message(STATUS "Building: ${BUILD_TYPE}")
 
 
 # -------- Options ----------
-#
-#set(OCPN_TEST_REPO
-#    "opencpn/uktides-alpha"
-#    CACHE STRING "Default repository for untagged builds"
-#)
-#set(OCPN_BETA_REPO
-#    "opencpn/uktides-beta"
-#    CACHE STRING 
-#    "Default repository for tagged builds matching 'beta'"
-#)
+
+set(OCPN_TEST_REPO
+    "opencpn/uktides-alpha"
+    CACHE STRING "Default repository for untagged builds"
+)
+set(OCPN_BETA_REPO
+    "opencpn/uktides-beta"
+    CACHE STRING 
+    "Default repository for tagged builds matching 'beta'"
+)
 set(OCPN_RELEASE_REPO
     "opencpn/uktides-prod"
     CACHE STRING 
