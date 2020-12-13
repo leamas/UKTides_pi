@@ -143,6 +143,12 @@ configure_file(
   @ONLY
 )
 
+configure_file(
+  # The cloudsmith upload script, windows bat file.
+  ${CMAKE_SOURCE_DIR}/ci/upload.bat.in ${CMAKE_BINARY_DIR}/upload.bat
+  @ONLY
+)
+
 set(checksum "@checksum@")
 configure_file(
   # The XML metadata file
