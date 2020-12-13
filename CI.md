@@ -82,16 +82,36 @@ This makes it easy to make a pull request against the plugins project
 to publish new plugin versions. The details are described in README-git.md
 
 
+Making a beta release
+---------------------
+
+First, create a tagged release which is stored in the cloudsmith beta
+directory. After making some kind of edit, just anything, do
+
+    $ git commit -am "Preparing 1.2.0-beta1"
+    $ git tag 1.2.0-beta1
+    $ git push --tags origin master
+
+This should eventually create tarballs in the cloudsmith beta directory.
+Verify that they are in place. Then, working in the plugins project:
+
+    $ git checkout auto
+    $ git rebase beta
+    $ git checkout beta
+    $ git merge --squash auto
+
+This will create an updated beta branch which can be used to make a PR.
+
+
 
 Using the generated artifacts
 -----------------------------
 
 The generated tarball could be installed using the "Import Plugin" button in
-the plugin manager window (assuming version 5.2.0+)
+the plugin manager window (assuming version 5.2.0+).
 
-To make the generated plugins visible in the list of available plugins a new
-ocpn-plugins.xml file needs to be generated. This is out of scope for this
-document, see the opencpn plugins project [[5]](#fn5).
+To be included in the catalog, plugin needs to make PR against the plugins
+project. See 'Making a beta release'.
 
 <div id="fn1"/> [1] https://www.appveyor.com/ <br>
 <div id="fn2"/> [2] https://circleci.com/ <br>
