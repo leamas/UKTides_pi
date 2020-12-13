@@ -26,7 +26,7 @@ install:
   - choco install poedit
 
   # Download and unzip wxwidgets
-  - ps: Start-FileDownload http://opencpn.navnux.org/build_deps/wxWidgets-3.1.2.7z
+  - ps: Start-FileDownload https://download.opencpn.org/s/E2p4nLDzeqx4SdX/download -FileName wxWidgets-3.1.2.7z
   - cmd: 7z x wxWidgets-3.1.2.7z -o%WXWIN% > null
 
   # some debugging information
@@ -39,39 +39,23 @@ install:
   #- cmd: nmake -f makefile.vc BUILD=debug SHARED=1 CFLAGS=/D_USING_V120_SDK71_ CXXFLAGS=/D_USING_V120_SDK71_
 
 before_build:
-  - cd c:\project\opencpn\UKTides_pi
-  - mkdir build
-  - cd build
-#  - ps: Start-FileDownload http://opencpn.navnux.org/build_deps/OpenCPN_buildwin-4.99a.7z
-#  - cmd: 7z x -y OpenCPN_buildwin-4.99a.7z -oc:\project\opencpn\buildwin
-  - cmake -T v141_xp ..
+  # Unless removed, this interferes with the 32-bit python installation
+  - rmdir /Q /S C:\Python38-x64
+
+  # python stuff required by upload.bat and git-push
+  - cmd: SET PATH=C:\Python38;C:\Python38\Scripts;%PATH%
+  - py --version
+  - py -m ensurepip
+  - py -m pip install --upgrade pip
+  - pip install -q setuptools wheel
+  - pip install -q cloudsmith-cli
+  - pip install -q cryptography
 
 build_script:
+  - mkdir build
+  - cd build
+  - cmake -T v141_xp ..
   - cmake -G "Visual Studio 15 2017" --config RelWithDebInfo  ..
   - cmake --build . --target tarball --config RelWithDebInfo
-  - choco install git
-  - py -m ensurepip
-  - py -m pip install -q setuptools
-  - py -m pip install -q cloudsmith-cli
-  - bash ./upload.sh
-  - PATH=C:\Python38;%PATH%
-  - python --version
-  - python -m pip install -q cryptography
-  - cd ..\ci
-  - python git-push
-
-artifacts:
-  - path: 'build\*.exe'
-    name: installer
-
-deploy:
-  description: 'release created by AppVeyor CI'
-  provider: GitHub
-  auth_token:
-    secure: 7c7f490c533dab87ca6592dcae9d5cd158ad0f58
-  artifact: installer,portable
-  draft: true
-  prerelease: true
-  tag: $(APPVEYOR_REPO_TAG_NAME)
-  on:
-    APPVEYOR_REPO_TAG: true # deploy on tag push only
+  - cmd: upload.bat
+  - py ..\ci\git-push
