@@ -1,14 +1,9 @@
 #!/usr/bin/env bash
 
-
 #
-# Build the flatpak artifacts. Uses docker to run Fedora on
+# Build the mingw artifacts. Uses docker to run Fedora
 # in full-fledged VM; the actual build is done in the Fedora
-# container. 
-#
-# flatpak-builder can be run in a docker image. However, this
-# must then be run in privileged mode, which means we need 
-# a full-fledged VM to run it.
+# container (Fedora's mingw support is better).
 #
 
 set -xe
@@ -26,14 +21,15 @@ echo "DOCKER_OPTS=\"-H tcp://127.0.0.1:2375 -H $DOCKER_SOCK -s devicemapper\"" \
     | sudo tee /etc/default/docker > /dev/null
 
 sudo systemctl restart docker.service
-sudo docker pull fedora:31
+sudo docker pull fedora:33
 docker run --privileged -d -ti -e "container=docker"  \
     -v /sys/fs/cgroup:/sys/fs/cgroup \
     -v "$(pwd):/project:rw" \
     -e "CLOUDSMITH_STABLE_REPO=$CLOUDSMITH_STABLE_REPO" \
+    -e "CLOUDSMITH_BETA_REPO=$CLOUDSMITH_BETA_REPO" \
     -e "CLOUDSMITH_UNSTABLE_REPO=$CLOUDSMITH_UNSTABLE_REPO" \
     -e "CIRCLE_BUILD_NUM=$CIRCLE_BUILD_NUM" \
-    fedora:31   /bin/bash
+    fedora:33   /bin/bash
 DOCKER_CONTAINER_ID=$(docker ps | awk '/fedora/ {print $1}')
 docker logs $DOCKER_CONTAINER_ID
 
@@ -44,8 +40,11 @@ sudo dnf -y copr enable leamas/opencpn-mingw
 sudo dnf -q builddep  -y /project/mingw/fedora/opencpn-deps.spec
 cd /project
 rm -rf build; mkdir build; cd build
-cmake -DCMAKE_TOOLCHAIN_FILE=../mingw/fedora/toolchain.cmake ..
-make tarball
+cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_TOOLCHAIN_FILE=../mingw/fedora/toolchain.cmake \
+    ..
+make -j $(nproc) VERBOSE=1 tarball
 EOF
 
 # Run the build in docker
@@ -62,5 +61,12 @@ echo -n "Waiting for apt_daily lock..."
 sudo flock /var/lib/apt/daily_lock echo done
 
 # Select latest available python, install cloudsmith required by upload script
-pyenv local $(pyenv versions | sed 's/*//' | awk '{print $1}' | tail -1)
-pip3 install cloudsmith-cli
+pyenv versions | sed 's/*//' | awk '{print $1}' | tail -1 \
+    > $HOME/.python-version
+python3 -m pip install --user cloudsmith-cli
+
+# Required by git-push
+python3 -m pip install --user cryptography
+
+# python install scripts in ~/.local/bin:
+echo 'export PATH=$PATH:$HOME/.local/bin' >> ~/.uploadrc

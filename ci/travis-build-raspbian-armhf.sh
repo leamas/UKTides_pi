@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 #
 # Build for raspbian armhf in a qemu docker container
 #
@@ -18,6 +17,7 @@ docker run --privileged -d -ti \
       -v $(pwd):/ci-source:rw \
       -e "container=docker" \
       -e "CLOUDSMITH_STABLE_REPO=$CLOUDSMITH_STABLE_REPO" \
+      -e "CLOUDSMITH_BETA_REPO=$CLOUDSMITH_BETA_REPO" \
       -e "CLOUDSMITH_UNSTABLE_REPO=$CLOUDSMITH_UNSTABLE_REPO" \
       -e "TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER" \
       $DOCKER_IMAGE /bin/bash
@@ -51,4 +51,12 @@ rm -f build.sh
 # Install cloudsmith-cli, required by upload.sh
 sudo apt-get -qq update
 sudo apt -q install python3-pip python3-setuptools
-pip3 install -q cloudsmith-cli
+
+pyenv versions | sed 's/*//' | awk '{print $1}' | tail -1 \
+    > $HOME/.python-version
+python3 -m pip install --upgrade pip
+python3 -m pip install --user -q cloudsmith-cli
+python3 -m pip install --user -q cryptography
+
+# python install scripts in ~/.local/bin:
+echo 'export PATH=$PATH:$HOME/.local/bin' >> ~/.bashrc

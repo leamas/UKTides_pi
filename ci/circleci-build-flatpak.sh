@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 #
 # Build the flatpak artifacts. Uses docker to run Fedora on
 # in full-fledged VM; the actual build is done in the Fedora
@@ -29,16 +28,19 @@ flatpak remote-add --user --if-not-exists flathub \
     https://flathub.org/repo/flathub.flatpakrepo
 flatpak install --user -y flathub org.opencpn.OpenCPN > /dev/null
 flatpak install --user -y flathub org.freedesktop.Sdk//18.08  >/dev/null
-cp flatpak/org.opencpn.OpenCPN.Plugin.UKTides.yaml flatpak.yaml.bak
 sed -i '/^runtime-version/s/:.*/: stable/' \
-    flatpak/org.opencpn.OpenCPN.Plugin.UKTides.yaml
+    flatpak/org.opencpn.OpenCPN.Plugin.shipdriver.yaml
+
+# The flatpak checksumming needs python3:
+pyenv local $(pyenv versions | sed 's/*//' | awk '{print $1}' | tail -1)
+cp .python-version $HOME
 
 mkdir build; cd build
-cmake  ..
-make flatpak
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j $(nproc) VERBOSE=1 flatpak
 
 # Restore file so the cache checksumming is ok.
-cp ../flatpak.yaml.bak org.opencpn.OpenCPN.Plugin.UKTides.yaml
+git checkout ../flatpak/org.opencpn.OpenCPN.Plugin.shipdriver.yaml
 
 # Wait for apt-daily to complete, install cloudsmith-cli required by upload.sh.
 # apt-daily should not restart, it's masked.
@@ -46,5 +48,12 @@ cp ../flatpak.yaml.bak org.opencpn.OpenCPN.Plugin.UKTides.yaml
 echo -n "Waiting for apt_daily lock..."
 sudo flock /var/lib/apt/daily_lock echo done
 
-pyenv local $(pyenv versions | sed 's/*//' | awk '{print $1}' | tail -1)
-pip3 install cloudsmith-cli
+# Install cloudsmith, requiered by upload script
+python3 -m pip install --user --upgrade pip
+python3 -m pip install --user cloudsmith-cli
+
+# Required by git-push
+python3 -m pip install --user cryptography
+
+# python install scripts in ~/.local/bin:
+echo 'export PATH=$PATH:$HOME/.local/bin' >> ~/.uploadrc
