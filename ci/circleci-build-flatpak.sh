@@ -12,6 +12,8 @@
 
 set -xe
 
+MANIFEST="org.opencpn.OpenCPN.Plugin.UKTides.yaml"
+
 # Give the apt update daemons a chance to leave the scene.
 sudo systemctl stop apt-daily.service apt-daily.timer
 sudo systemctl kill --kill-who=all apt-daily.service apt-daily-upgrade.service
@@ -28,8 +30,7 @@ flatpak remote-add --user --if-not-exists flathub \
     https://flathub.org/repo/flathub.flatpakrepo
 flatpak install --user -y flathub org.opencpn.OpenCPN > /dev/null
 flatpak install --user -y flathub org.freedesktop.Sdk//18.08  >/dev/null
-sed -i '/^runtime-version/s/:.*/: stable/' \
-    flatpak/org.opencpn.OpenCPN.Plugin.UKTides.yaml
+sed -i '/^runtime-version/s/:.*/: stable/' flatpak/$MANIFEST
 
 # The flatpak checksumming needs python3:
 pyenv local $(pyenv versions | sed 's/*//' | awk '{print $1}' | tail -1)
@@ -40,7 +41,7 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 make -j $(nproc) VERBOSE=1 flatpak
 
 # Restore file so the cache checksumming is ok.
-git checkout ../flatpak/org.opencpn.OpenCPN.Plugin.UKTides.yaml
+git checkout ../flatpak/$MANIFEST
 
 # Wait for apt-daily to complete, install cloudsmith-cli required by upload.sh.
 # apt-daily should not restart, it's masked.
